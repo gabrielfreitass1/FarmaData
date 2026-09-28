@@ -75,11 +75,12 @@ cid10 ────────────────────────�
 
 ## Fontes de dados
 
-| Fonte | URL |
-|-------|-----|
-| SNGPC / Anvisa | https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados |
-| CID-10 DATASUS | https://datasus.saude.gov.br/transferencia-de-arquivos/ |
-| Municípios IBGE | https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html |
+| Fonte | URL | Script |
+|-------|-----|--------|
+| SNGPC / Anvisa | https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados | `scripts/carregar_sngpc.js` |
+| CID-10 DATASUS | https://datasus.saude.gov.br/transferencia-de-arquivos/ | `scripts/carregar_cid10.js` |
+
+> Os municípios são extraídos automaticamente dos próprios CSVs do SNGPC durante a carga — não requerem fonte ou script separados.
 
 ---
 
