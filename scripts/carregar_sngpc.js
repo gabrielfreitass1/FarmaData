@@ -5,6 +5,7 @@
 'use strict';
 
 const fs   = require('fs');
+const readline = require('readline');
 const path = require('path');
 const https = require('https');
 const http  = require('http');
@@ -72,7 +73,7 @@ function baixarArquivo(url, destino) {
         return baixarArquivo(res.headers.location, destino).then(resolve).catch(reject);
       }
       if (res.statusCode !== 200) {
-        file.close();
+        file.close(() => fs.unlinkSync(destino));
         return reject(new Error(`HTTP ${res.statusCode} ao baixar ${url}`));
       }
       res.pipe(file);
@@ -92,21 +93,29 @@ function baixarArquivo(url, destino) {
 /**
  * Lê o arquivo CSV (codificado em latin1) e retorna array de objetos.
  * Lida com campos entre aspas e separador ;
+ *
+ * Lê linha a linha (readline) em vez de fs.readFileSync: arquivos do SNGPC
+ * passam de 900MB e estouram o limite de string do V8 (~512MB) se lidos
+ * inteiros de uma vez.
  */
-function lerCSV(caminhoArquivo) {
-  const conteudo = fs.readFileSync(caminhoArquivo, CSV_ENCODING);
-  const linhas   = conteudo.split('\n');
-  if (linhas.length < 2) return [];
+async function lerCSV(caminhoArquivo) {
+  const rl = readline.createInterface({
+    input: fs.createReadStream(caminhoArquivo, { encoding: CSV_ENCODING }),
+    crlfDelay: Infinity
+  });
 
-  // Cabeçalho: normaliza para lowercase sem espaços
-  const cabecalho = linhas[0].split(CSV_SEPARADOR).map(h =>
-    h.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_')
-  );
-
+  let cabecalho = null;
   const registros = [];
-  for (let i = 1; i < linhas.length; i++) {
-    const linha = linhas[i].trim();
+  for await (const linhaBruta of rl) {
+    const linha = linhaBruta.trim();
     if (!linha) continue;
+
+    if (!cabecalho) {
+      cabecalho = linha.split(CSV_SEPARADOR).map(h =>
+        h.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_')
+      );
+      continue;
+    }
 
     // Split respeitando aspas duplas (rudimentar mas suficiente para o SNGPC)
     const cols = linha.split(CSV_SEPARADOR);
@@ -192,7 +201,7 @@ const cacheMedicamento = new Map();
 
 async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano) {
   console.log(`  [→] Processando ${path.basename(caminhoArquivo)} (antimicrobiano=${ehAntimicrobiano})...`);
-  const registros = lerCSV(caminhoArquivo);
+  const registros = await lerCSV(caminhoArquivo);
   console.log(`      ${registros.length} linhas lidas.`);
 
   let inseridos = 0;
@@ -316,8 +325,9 @@ async function main() {
     ];
 
     for (const arq of arquivos) {
-      // Download (pula se já existe localmente)
-      if (!fs.existsSync(arq.destino)) {
+      // Download (pula se já existe localmente; arquivo de 0 bytes = download anterior
+      // incompleto/falho, não conta como cache válido)
+      if (!fs.existsSync(arq.destino) || fs.statSync(arq.destino).size === 0) {
         console.log(`  [↓] Baixando ${arq.label} ${yyyymm}...`);
         try {
           await baixarArquivo(arq.url, arq.destino);
