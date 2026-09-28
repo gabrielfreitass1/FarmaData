@@ -1,13 +1,5 @@
-/**
- * Script de Carga do Catálogo de CID-10 (DATASUS)
- * 
- * Baixa os arquivos oficiais de categorias e subcategorias da CID-10,
- * decodifica de Latin-1 (ISO-8859-1) para UTF-8 e gera a carga em lote
- * para a tabela cid10 do PostgreSQL.
- * 
- * Execução:
- *   node scripts/carregar_cid10.js [--gerar-sql]
- */
+// Etapa 3 — Gera sql/05_carga_catalogo_cid10.sql a partir do catálogo DATASUS
+// Uso: node scripts/carregar_cid10.js
 
 const fs = require('fs');
 const path = require('path');

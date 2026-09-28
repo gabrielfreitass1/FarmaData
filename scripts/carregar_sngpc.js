@@ -1,22 +1,6 @@
-#!/usr/bin/env node
-/**
- * Script de Download e Carga dos Dados SNGPC (Anvisa)
- * =====================================================
- * Etapa 6 — FarmaData
- *
- * Baixa automaticamente os 12 arquivos CSV mensais de venda de medicamentos
- * controlados e antimicrobianos do Portal de Dados Abertos da Anvisa (2020),
- * decodifica de Windows-1252 (ANSI) para UTF-8 e insere os registros nas
- * tabelas do banco PostgreSQL criadas nas etapas 2 a 5.
- *
- * Execução:
- *   node scripts/carregar_sngpc.js
- *
- * Variáveis de ambiente (ou arquivo .env):
- *   DATABASE_URL  — string de conexão PostgreSQL
- *                   ex: postgres://usuario:senha@localhost:5432/farmadata
- *   ANO_RECORTE   — ano dos arquivos a baixar (padrão: 2020)
- */
+// Etapa 6 — Download e carga dos CSVs SNGPC/Anvisa
+// Uso: DATABASE_URL=postgres://... node scripts/carregar_sngpc.js
+// Variável ANO_RECORTE define o ano (padrão: 2020)
 
 'use strict';
 
