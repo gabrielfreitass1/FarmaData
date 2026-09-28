@@ -1,0 +1,30 @@
+1 — Coordenação e ADR
+Junta o que as outras 6 pessoas produzirem e escreve o documento de decisão (ADR) da E1, explicando por que escolhemos insert-only normalizado em vez de outras opções, e registrando o motivo de termos escolhido só 1 ano (arquivo pesado, tempo do projeto).
+Entrega: o arquivo do ADR, seguindo o modelo de 6 passos da disciplina.
+
+2 — Tabelas de geografia e tempo
+Cria as tabelas de UF, município e período (ano/mês). UF é uma lista fixa das 27 unidades, pode entrar pronta no script. Município vem do próprio dado, então só precisa da estrutura da tabela. Período: gerar só os 12 meses do ano escolhido.
+Entrega: os 3 arquivos de criação de tabela, rodando em ordem num banco vazio.
+
+3 — Tabelas de medicamento e CID-10
+Cria a tabela de medicamento (princípio ativo + apresentação) e a tabela de CID-10 (catálogo oficial de doenças, baixado do DATASUS, carregado uma vez).
+Entrega: as 2 tabelas + o script que carrega o catálogo de CID-10.
+
+4 — Tabelas de prescritor e listas fixas
+Cria a tabela de conselho profissional (quem prescreveu) e as listas de valores fixos que já vêm definidas no dicionário da Anvisa: tipo de receituário (5 opções), unidade de medida (caixa/frasco) e unidade de idade (anos/meses).
+Entrega: as tabelas + os valores fixos já inseridos (não é para vir do CSV, é fixo).
+
+5 — Tabela principal (fato de vendas)
+Cria a tabela central, onde cada linha é uma venda: liga com as tabelas das pessoas 2, 3 e 4, e guarda a quantidade vendida. Os campos de CID-10, sexo e idade do paciente só existem para antimicrobianos — nas outras vendas, ficam vazios, e a tabela precisa aceitar isso.
+Entrega: a tabela principal + os índices para consulta rápida por data/medicamento/município.
+
+6 — Download e carga dos dados
+Escreve o script que baixa os 12 arquivos CSV do site da Anvisa automaticamente (sem ninguém baixar na mão) e depois insere tudo nas tabelas que as pessoas 2 a 5 criaram. Atenção: o CSV usa ; como separador e uma codificação de texto diferente do padrão (ANSI, não UTF-8) — se isso não for tratado, os acentos saem errados.
+Entrega: um único comando que, rodando do zero, baixa e popula o banco inteiro.
+
+7 — Medição e ambiente para rodar o projeto
+Depois que a carga estiver pronta (depende da pessoa 6), mede o volume real (quantas linhas, quanto espaço em disco, quanto tempo demora uma consulta típica) e monta o ambiente Docker para qualquer pessoa de fora conseguir rodar o projeto do zero. Testa isso com alguém do grupo que não mexeu no código.
+Entrega: a configuração do Docker + o texto de instruções (README) + os números medidos.
+
+dados: https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados 
+https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html
