@@ -157,13 +157,17 @@ async function upsertMedicamento(client, principioAtivo, apresentacao) {
   return res.rows[0].id_medicamento;
 }
 
-/** Resolve id_periodo a partir de YYYYMM (inteiro) */
+const cachePeriodo = new Map();
+
+/** Resolve id_periodo a partir de YYYYMM (inteiro), com cache em memória */
 async function resolverPeriodo(client, yyyymm) {
+  if (cachePeriodo.has(yyyymm)) return cachePeriodo.get(yyyymm);
   const res = await client.query(
     'SELECT id_periodo FROM periodo WHERE id_periodo = $1',
     [parseInt(yyyymm, 10)]
   );
   if (res.rows.length === 0) throw new Error(`Período ${yyyymm} não encontrado. Execute garantirPeriodos() antes da carga.`);
+  cachePeriodo.set(yyyymm, res.rows[0].id_periodo);
   return res.rows[0].id_periodo;
 }
 
@@ -202,17 +206,48 @@ const cacheMedicamento = new Map();
 // Carga de um arquivo CSV
 // ---------------------------------------------------------------------------
 
+/** Uma linha do CSV é válida para inserção (mesmo critério usado no INSERT) */
+function linhaValida(r) {
+  const ano = nvl(r['nu_ano_venda']);
+  const mes = nvl(r['nu_mes_venda']);
+  const yyyymm = (ano && mes) ? `${ano}${mes.padStart(2, '0')}` : null;
+  const qtd = parseFloat((r['qt_vendida'] || '0').replace(',', '.')) || 0;
+  return !!(yyyymm && nvl(r['sg_uf_venda']) && qtd > 0);
+}
+
 async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano) {
-  console.log(`  [→] Processando ${path.basename(caminhoArquivo)} (antimicrobiano=${ehAntimicrobiano})...`);
+  const nomeArquivo = path.basename(caminhoArquivo);
+
+  console.log(`  [→] Processando ${nomeArquivo} (antimicrobiano=${ehAntimicrobiano})...`);
   const registros = await lerCSV(caminhoArquivo);
   console.log(`      ${registros.length} linhas lidas.`);
+
+  const esperados = registros.filter(linhaValida).length;
+  const existentes = await client.query(
+    'SELECT COUNT(*)::int AS n FROM venda_medicamento WHERE arquivo_origem = $1',
+    [nomeArquivo]
+  );
+  const qtdExistente = existentes.rows[0].n;
+
+  if (qtdExistente > 0 && qtdExistente === esperados) {
+    console.log(`  [PULADO] ${nomeArquivo} já foi carregado por completo (${qtdExistente} registros).`);
+    return 0;
+  }
+  if (qtdExistente > 0) {
+    console.log(`  [RECARGA] ${nomeArquivo} tinha carga parcial (${qtdExistente}/${esperados}), refazendo...`);
+    await client.query('DELETE FROM venda_medicamento WHERE arquivo_origem = $1', [nomeArquivo]);
+  }
 
   let inseridos = 0;
   let erros     = 0;
 
+  const COLUNAS = 11;
+
   // Processa em lotes
   for (let i = 0; i < registros.length; i += BATCH_SIZE) {
     const lote = registros.slice(i, i + BATCH_SIZE);
+    const valores = [];
+    const placeholders = [];
     await client.query('BEGIN');
     try {
       for (const r of lote) {
@@ -257,28 +292,36 @@ async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano
         const sexoPaciente  = ehAntimicrobiano ? nvl(r['sg_sexo']) : null;
         const idadePaciente = ehAntimicrobiano ? (parseInt(r['nu_idade'], 10) || null) : null;
 
+        const base = valores.length;
+        placeholders.push(
+          `(${Array.from({ length: COLUNAS }, (_, k) => `$${base + k + 1}`).join(', ')})`
+        );
+        valores.push(
+          idPeriodo,
+          dataVenda,
+          idMunicipio,
+          idMedicamento,
+          qtd,
+          ehAntimicrobiano,
+          codigoCid10,
+          sexoPaciente,
+          idadePaciente,
+          numNotif,
+          path.basename(caminhoArquivo)
+        );
+        inseridos++;
+      }
+
+      if (placeholders.length > 0) {
         await client.query(
           `INSERT INTO venda_medicamento
              (id_periodo, data_venda, id_municipio, id_medicamento,
               quantidade_vendida, eh_antimicrobiano,
               codigo_cid10, sexo_paciente, idade_paciente,
               numero_notificacao, arquivo_origem)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-          [
-            idPeriodo,
-            dataVenda,
-            idMunicipio,
-            idMedicamento,
-            qtd,
-            ehAntimicrobiano,
-            codigoCid10,
-            sexoPaciente,
-            idadePaciente,
-            numNotif,
-            path.basename(caminhoArquivo)
-          ]
+           VALUES ${placeholders.join(', ')}`,
+          valores
         );
-        inseridos++;
       }
       await client.query('COMMIT');
     } catch (err) {
