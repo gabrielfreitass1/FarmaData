@@ -1,0 +1,25 @@
+# Dependências Node.js
+node_modules/
+
+# Arquivos CSV baixados automaticamente (podem ser gigabytes)
+tmp/
+*.csv
+
+# Arquivo de configuração local com credenciais
+.env
+
+# Arquivos gerados automaticamente (podem ser regenerados com carregar_cid10.js)
+# sql/05_carga_catalogo_cid10.sql
+
+# Logs
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

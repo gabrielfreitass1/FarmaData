@@ -1,0 +1,18 @@
+{
+  "name": "farmadata",
+  "version": "1.0.0",
+  "description": "Plataforma de análise de venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)",
+  "main": "scripts/carregar_sngpc.js",
+  "scripts": {
+    "carregar-cid10": "node scripts/carregar_cid10.js",
+    "carregar-sngpc": "node scripts/carregar_sngpc.js",
+    "carregar-tudo": "node scripts/carregar_cid10.js && node scripts/carregar_sngpc.js"
+  },
+  "dependencies": {
+    "pg": "^8.12.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
+}
