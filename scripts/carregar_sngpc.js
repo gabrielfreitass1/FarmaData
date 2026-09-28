@@ -117,10 +117,13 @@ async function lerCSV(caminhoArquivo) {
       continue;
     }
 
-    // Split respeitando aspas duplas (rudimentar mas suficiente para o SNGPC)
+    // Split simples + remoção de aspas envolventes (cada campo do SNGPC vem
+    // como "valor"; rudimentar mas suficiente pois os campos não têm ';' interno)
     const cols = linha.split(CSV_SEPARADOR);
     const obj  = {};
-    cabecalho.forEach((h, idx) => { obj[h] = (cols[idx] || '').trim(); });
+    cabecalho.forEach((h, idx) => {
+      obj[h] = (cols[idx] || '').trim().replace(/^"(.*)"$/, '$1').trim();
+    });
     registros.push(obj);
   }
   return registros;
@@ -214,13 +217,19 @@ async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano
     try {
       for (const r of lote) {
         // -------- Campos comuns --------
-        const yyyymm       = nvl(r['ano_mes_competen'] || r['ano_mes'] || r['competencia']);
-        const dataVenda    = nvl(r['data_venda'] || r['dt_venda']);
-        const nomeUf       = nvl(r['uf_venda'] || r['uf']);
-        const nomeMunicipio = sanitizar(r['municipio_venda'] || r['municipio'] || 'NAO_INFORMADO');
-        const principioAtivo = sanitizar(r['principio_ativo'] || r['descricao_apresentacao'] || 'SEM_PRINCIPIO');
-        const apresentacao   = sanitizar(r['descricao_apresentacao'] || r['apresentacao'] || 'SEM_APRESENTACAO');
-        const qtd           = parseFloat((r['qtd_vendida'] || r['quantidade'] || '0').replace(',', '.')) || 0;
+        // Colunas reais do SNGPC/Anvisa: NU_ANO_VENDA, NU_MES_VENDA, SG_UF_VENDA,
+        // NO_MUNICIPIO_VENDA, DS_PRINCIPIO_ATIVO, DS_DESCRICAO_APRESENTACAO, QT_VENDIDA,
+        // CO_CID10, SG_SEXO, NU_IDADE (exclusivos de antimicrobianos)
+        const ano  = nvl(r['nu_ano_venda']);
+        const mes  = nvl(r['nu_mes_venda']);
+        const yyyymm = (ano && mes) ? `${ano}${mes.padStart(2, '0')}` : null;
+        // Não há data diária no arquivo, só ano/mês: usa o 1º dia do mês
+        const dataVenda    = yyyymm ? `${ano}-${mes.padStart(2, '0')}-01` : null;
+        const nomeUf       = nvl(r['sg_uf_venda']);
+        const nomeMunicipio = sanitizar(r['no_municipio_venda'] || 'NAO_INFORMADO');
+        const principioAtivo = sanitizar(r['ds_principio_ativo'] || 'SEM_PRINCIPIO');
+        const apresentacao   = sanitizar(r['ds_descricao_apresentacao'] || 'SEM_APRESENTACAO');
+        const qtd           = parseFloat((r['qt_vendida'] || '0').replace(',', '.')) || 0;
         const numNotif      = nvl(r['numero_notificacao'] || r['nr_notificacao']);
 
         if (!yyyymm || !nomeUf || qtd <= 0) { erros++; continue; }
@@ -244,9 +253,9 @@ async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano
         }
 
         // -------- Campos exclusivos de antimicrobianos --------
-        const codigoCid10   = ehAntimicrobiano ? nvl(r['cid10'] || r['codigo_cid10']) : null;
-        const sexoPaciente  = ehAntimicrobiano ? nvl(r['sexo_paciente'] || r['sexo']) : null;
-        const idadePaciente = ehAntimicrobiano ? (parseInt(r['idade_paciente'] || r['idade'], 10) || null) : null;
+        const codigoCid10   = ehAntimicrobiano ? nvl(r['co_cid10']) : null;
+        const sexoPaciente  = ehAntimicrobiano ? nvl(r['sg_sexo']) : null;
+        const idadePaciente = ehAntimicrobiano ? (parseInt(r['nu_idade'], 10) || null) : null;
 
         await client.query(
           `INSERT INTO venda_medicamento
