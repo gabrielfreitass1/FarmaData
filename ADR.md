@@ -17,7 +17,7 @@
 | **Taxa de leitura** | Consultas analíticas pontuais, baixa concorrência, latência tolerada de até 3 s |
 | **Padrão de acesso** | Scan parcial com filtros por período, UF/município e princípio ativo; GROUP BY frequente; sem UPDATE nem DELETE |
 | **Latência tolerada** | < 2 s para agregações mensais por UF; < 10 s para joins completos com CID-10 |
-| **Crescimento** | Dados históricos fixos (2020); extensão para outros anos é possível sem alterar o esquema |
+| **Crescimento** | Recorte de 1 ano configurável via `ANO_RECORTE` (padrão: 2020); extensão para outros anos não exige alteração de esquema |
 
 ---
 
@@ -60,7 +60,7 @@ O sistema de origem precisa:
 **Alternativa B — Esquema normalizado insert-only.**
 
 1. **O dado do SNGPC é imutável.** Cada CSV mensal é uma publicação oficial; insert-only é a representação fiel do domínio.
-2. **Recorte de 1 ano (2020).** Os CSVs somam ~6–8 GB. Um recorte maior ultrapassaria os limites práticos do projeto semestral; 2020 é analiticamente relevante (pandemia + pico de antimicrobianos).
+2. **Recorte de 1 ano configurável.** O ano é definido pela variável `ANO_RECORTE` (padrão: 2020). Os CSVs de um único ano somam ~6–8 GB; um recorte maior ultrapassaria os limites práticos do projeto semestral. O ano de 2020 é analiticamente relevante (pandemia + pico de antimicrobianos). Os períodos são gerados dinamicamente pelo script de carga, sem alteração de esquema para mudar o ano.
 3. **Normalização viabiliza a E3.** Dimensões limpas são a base do modelo dimensional. Desnormalizar agora custaria refatoração completa na entrega seguinte.
 4. **FKs como documentação viva.** O banco rejeita dados inválidos na inserção, eliminando erros de qualidade que apareceriam só na E3.
 

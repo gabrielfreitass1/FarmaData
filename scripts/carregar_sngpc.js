@@ -145,14 +145,41 @@ async function upsertMedicamento(client, principioAtivo, apresentacao) {
   return res.rows[0].id_medicamento;
 }
 
-/** Resolve id_periodo a partir de YYYYMM */
+/** Resolve id_periodo a partir de YYYYMM (inteiro) */
 async function resolverPeriodo(client, yyyymm) {
   const res = await client.query(
     'SELECT id_periodo FROM periodo WHERE id_periodo = $1',
     [parseInt(yyyymm, 10)]
   );
-  if (res.rows.length === 0) throw new Error(`Período ${yyyymm} não encontrado na tabela periodo`);
+  if (res.rows.length === 0) throw new Error(`Período ${yyyymm} não encontrado. Execute garantirPeriodos() antes da carga.`);
   return res.rows[0].id_periodo;
+}
+
+/**
+ * Garante que os 12 períodos do ano de recorte existem na tabela periodo.
+ * Chamado automaticamente antes da carga dos CSVs.
+ */
+async function garantirPeriodos(client, ano) {
+  const NOMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  for (let m = 1; m <= 12; m++) {
+    const idPeriodo = ano * 100 + m;
+    const dInicio  = new Date(ano, m - 1, 1);
+    const dFim     = new Date(ano, m, 0);   // dia 0 do mês seguinte = último dia do mês
+    const fmt      = d => d.toISOString().slice(0, 10);
+    await client.query(
+      `INSERT INTO periodo (id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       ON CONFLICT (id_periodo) DO NOTHING`,
+      [
+        idPeriodo, ano, m, NOMES[m - 1],
+        Math.ceil(m / 3),
+        m <= 6 ? 1 : 2,
+        fmt(dInicio), fmt(dFim)
+      ]
+    );
+  }
+  console.log(`[OK] Períodos de ${ano} verificados/inseridos na tabela periodo.`);
 }
 
 // Cache em memória para dimensões (evita round-trips repetidos)
@@ -262,7 +289,9 @@ async function main() {
   const client = new Client({ connectionString: dbUrl });
 
   await client.connect();
-  console.log('[OK] Conectado ao PostgreSQL.\n');
+  console.log('[OK] Conectado ao PostgreSQL.');
+
+  await garantirPeriodos(client, ANO);
 
   let totalInseridos = 0;
 
