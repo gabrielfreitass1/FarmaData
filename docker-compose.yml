@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  # ---------------------------------------------------------------------------
+  # Banco de Dados PostgreSQL
+  # ---------------------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: farmadata_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB:       ${POSTGRES_DB:-farmadata}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Migra o esquema automaticamente na primeira execução (ordem garantida)
+      - ./sql/01_geografia_uf.sql:/docker-entrypoint-initdb.d/01_geografia_uf.sql:ro
+      - ./sql/02_geografia_municipio.sql:/docker-entrypoint-initdb.d/02_geografia_municipio.sql:ro
+      - ./sql/03_tempo_periodo.sql:/docker-entrypoint-initdb.d/03_tempo_periodo.sql:ro
+      - ./sql/04_medicamento.sql:/docker-entrypoint-initdb.d/04_medicamento.sql:ro
+      - ./sql/05_cid10.sql:/docker-entrypoint-initdb.d/05_cid10.sql:ro
+      - ./sql/05_carga_catalogo_cid10.sql:/docker-entrypoint-initdb.d/05a_carga_cid10.sql:ro
+      - ./sql/06_prescritor_listas.sql:/docker-entrypoint-initdb.d/06_prescritor_listas.sql:ro
+      - ./sql/07_venda_medicamento.sql:/docker-entrypoint-initdb.d/07_venda_medicamento.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-farmadata}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------------------
+  # Serviço de Carga — baixa os CSVs e popula o banco
+  # ---------------------------------------------------------------------------
+  carga:
+    image: node:20-alpine
+    container_name: farmadata_carga
+    depends_on:
+      db:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - ./tmp:/app/tmp
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-farmadata}
+      ANO_RECORTE:  ${ANO_RECORTE:-2020}
+    command: >
+      sh -c "npm install --omit=dev && node scripts/carregar_cid10.js && node scripts/carregar_sngpc.js"
+    # Roda uma vez e termina (restart: no)
+    restart: "no"
+
+volumes:
+  pgdata:
+  node_modules:
