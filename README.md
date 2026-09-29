@@ -84,16 +84,15 @@ cid10 ────────────────────────�
 
 ---
 
-## Volume estimado (2020)
+## Volume (2020)
 
 | Métrica | Valor |
 |---------|-------|
-| Registros em `venda_medicamento` | ~18 milhões |
-| Municípios distintos | ~5.500 |
-| Princípios ativos distintos | ~1.200 |
-| Tamanho em disco (com índices) | ~8 GB |
+| Registros em `venda_medicamento` | 68.264.756 (12 arquivos mensais) |
+| Municípios distintos | 5088 |
+| Princípios ativos distintos | 1231 |
+| Tamanho em disco (com índices) | 10 GB |
 
-> Execute `\dt+` no psql após a carga para os valores reais.
 
 ---
 
