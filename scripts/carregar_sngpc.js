@@ -1,411 +1,467 @@
-// Etapa 6 — Download e carga dos CSVs SNGPC/Anvisa
+// Carga dos CSVs SNGPC/Anvisa (EDA_Industrializados_AAAAMM.csv) via COPY.
 // Uso: DATABASE_URL=postgres://... node scripts/carregar_sngpc.js
-// Variável ANO_RECORTE define o ano (padrão: 2020)
+//
+// Características:
+//  - 1 arquivo por mês, baixado para .part e renomeado só ao terminar
+//  - 2 passadas por arquivo: (1) resolve dimensões, (2) COPY em streaming
+//    (nenhuma consulta na conexão enquanto o COPY está aberto, sem acumular linhas em memória)
+//  - cada arquivo é carregado em UMA transação junto com o registro em carga_arquivo
+//    => rodar de novo pula o que já foi carregado (idempotente)
+//  - linhas inválidas são rejeitadas e contadas por motivo (nada de valores default)
+//  - índices são removidos antes da carga e criados no final
 
 'use strict';
 
-const fs   = require('fs');
+const fs = require('fs');
 const readline = require('readline');
 const path = require('path');
 const https = require('https');
-const http  = require('http');
 const { Client } = require('pg');
+const { from: copyFrom } = require('pg-copy-streams');
+const { pipeline } = require('stream/promises');
+const { Readable } = require('stream');
 
 // ---------------------------------------------------------------------------
 // Configuração
 // ---------------------------------------------------------------------------
 const ANO = parseInt(process.env.ANO_RECORTE || '2020', 10);
-
-/**
- * URLs dos arquivos CSV mensais de medicamentos controlados e antimicrobianos.
- * Fonte: https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados
- *
- * Padrão do nome do arquivo: EDA_Industrializados_YYYYMM.csv
- * Os arquivos são publicados no Portal de Dados Abertos com URLs estáveis.
- */
 const BASE_URL = 'https://dados.anvisa.gov.br/dados/SNGPC/Industrializados';
-
 const MESES = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-
-// Separador do CSV e codificação
 const CSV_SEPARADOR = ';';
-const CSV_ENCODING  = 'latin1'; // Windows-1252 / ANSI
-
-// Tamanho do lote para INSERT em batch
-const BATCH_SIZE = 1000;
-
-// Diretório temporário para armazenar CSVs baixados
+const CSV_ENCODING = 'latin1'; // arquivos da Anvisa: Windows-1252
 const TMP_DIR = path.resolve(__dirname, '../tmp');
+const LOTE_COPY = 5000;
+const SEP = '\u0001'; // separador interno de chaves
+
+const UFS = new Set(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA',
+  'PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']);
+const SEXO = { '1': 'M', '2': 'F' };
+
+const cachePeriodo = new Map();
+const cacheMunicipio = new Map();
+const cacheMedicamento = new Map();
+let catalogoCid = null; // Set de códigos CID-10 (null = indisponível)
 
 // ---------------------------------------------------------------------------
 // Utilitários
 // ---------------------------------------------------------------------------
+const limpar = (v) => {
+  if (v === undefined || v === null) return null;
+  const s = String(v).trim().replace(/^"(.*)"$/, '$1').trim();
+  return s.length ? s : null;
+};
 
-/** Garante que o diretório temporário existe */
-function garantirDiretorio(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-}
+// Escape para COPY FORMAT text
+const esc = (v) =>
+  v === null || v === undefined
+    ? '\\N'
+    : String(v).replace(/\\/g, '\\\\').replace(/[\t\r\n]/g, ' ');
 
-/** Sanitiza uma string para inserção SQL segura */
-function sanitizar(val) {
-  if (val === undefined || val === null || val.toString().trim() === '') return null;
-  return val.toString().replace(/[\r\n\t]/g, ' ').replace(/'/g, "''").trim();
-}
+const fmtSeg = (ms) => `${Math.round(ms / 1000)}s`;
 
-/** Converte string vazia em null */
-function nvl(val) {
-  const s = (val || '').toString().trim();
-  return s.length > 0 ? s : null;
-}
-
-/** Baixa uma URL e salva no disco, retorna o caminho do arquivo */
-function baixarArquivo(url, destino) {
+function baixarArquivo(url, destino, redirecoes = 0) {
   return new Promise((resolve, reject) => {
-    // Escolhe http ou https conforme a URL
-    const lib = url.startsWith('https') ? https : http;
-    const file = fs.createWriteStream(destino);
-
-    lib.get(url, (res) => {
-      if (res.statusCode === 301 || res.statusCode === 302) {
-        // Segue redirecionamento uma vez
-        file.close();
-        fs.unlinkSync(destino);
-        return baixarArquivo(res.headers.location, destino).then(resolve).catch(reject);
+    if (redirecoes > 5) return reject(new Error('redirecionamentos demais'));
+    const tmp = destino + '.part';
+    const req = https.get(url, (res) => {
+      if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
+        res.resume();
+        return baixarArquivo(new URL(res.headers.location, url).toString(), destino, redirecoes + 1)
+          .then(resolve, reject);
       }
       if (res.statusCode !== 200) {
-        file.close(() => fs.unlinkSync(destino));
+        res.resume();
         return reject(new Error(`HTTP ${res.statusCode} ao baixar ${url}`));
       }
-      res.pipe(file);
-      file.on('finish', () => file.close(resolve));
-    }).on('error', (err) => {
-      file.close();
-      if (fs.existsSync(destino)) fs.unlinkSync(destino);
+      const esperado = parseInt(res.headers['content-length'] || '0', 10);
+      let recebido = 0;
+      res.on('data', (c) => (recebido += c.length));
+      const out = fs.createWriteStream(tmp);
+      res.pipe(out);
+      const falhar = (err) => {
+        out.destroy();
+        fs.rmSync(tmp, { force: true });
+        reject(err);
+      };
+      res.on('error', falhar);
+      res.on('aborted', () => falhar(new Error('conexão interrompida')));
+      out.on('error', falhar);
+      out.on('finish', () => {
+        if (esperado && recebido !== esperado) {
+          return falhar(new Error(`download incompleto (${recebido}/${esperado} bytes)`));
+        }
+        fs.renameSync(tmp, destino);
+        resolve();
+      });
+    });
+    req.setTimeout(60000, () => req.destroy(new Error('timeout no download')));
+    req.on('error', (err) => {
+      fs.rmSync(tmp, { force: true });
       reject(err);
     });
   });
 }
 
-// ---------------------------------------------------------------------------
-// Leitura e parse do CSV
-// ---------------------------------------------------------------------------
-
-/**
- * Lê o arquivo CSV (codificado em latin1) e retorna array de objetos.
- * Lida com campos entre aspas e separador ;
- *
- * Lê linha a linha (readline) em vez de fs.readFileSync: arquivos do SNGPC
- * passam de 900MB e estouram o limite de string do V8 (~512MB) se lidos
- * inteiros de uma vez.
- */
-async function lerCSV(caminhoArquivo) {
-  const rl = readline.createInterface({
-    input: fs.createReadStream(caminhoArquivo, { encoding: CSV_ENCODING }),
-    crlfDelay: Infinity
-  });
-
-  let cabecalho = null;
-  const registros = [];
-  for await (const linhaBruta of rl) {
-    const linha = linhaBruta.trim();
-    if (!linha) continue;
-
-    if (!cabecalho) {
-      cabecalho = linha.split(CSV_SEPARADOR).map(h =>
-        h.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_')
-      );
-      continue;
+async function baixarComRetry(url, destino, tentativas = 3) {
+  let ultimo;
+  for (let i = 1; i <= tentativas; i++) {
+    try {
+      return await baixarArquivo(url, destino);
+    } catch (err) {
+      ultimo = err;
+      if (/HTTP 404/.test(err.message)) break; // não adianta repetir
+      console.warn(`  [AVISO] tentativa ${i}/${tentativas} falhou: ${err.message}`);
     }
-
-    // Split simples + remoção de aspas envolventes (cada campo do SNGPC vem
-    // como "valor"; rudimentar mas suficiente pois os campos não têm ';' interno)
-    const cols = linha.split(CSV_SEPARADOR);
-    const obj  = {};
-    cabecalho.forEach((h, idx) => {
-      obj[h] = (cols[idx] || '').trim().replace(/^"(.*)"$/, '$1').trim();
-    });
-    registros.push(obj);
   }
-  return registros;
+  throw ultimo;
 }
 
 // ---------------------------------------------------------------------------
-// Lógica de upsert nas dimensões
+// Banco: estrutura auxiliar e caches
 // ---------------------------------------------------------------------------
-
-/** Garante que o município existe e retorna seu id */
-async function upsertMunicipio(client, nome, siglaUf) {
-  const res = await client.query(
-    `INSERT INTO municipio (nome_municipio, sigla_uf)
-     VALUES ($1, $2)
-     ON CONFLICT (nome_municipio, sigla_uf) DO UPDATE SET nome_municipio = EXCLUDED.nome_municipio
-     RETURNING id_municipio`,
-    [nome, siglaUf]
-  );
-  return res.rows[0].id_municipio;
+async function garantirCargaArquivo(client) {
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS carga_arquivo (
+      arquivo          TEXT PRIMARY KEY,
+      linhas_lidas     BIGINT NOT NULL,
+      linhas_inseridas BIGINT NOT NULL,
+      linhas_rejeitadas BIGINT NOT NULL,
+      motivos_rejeicao JSONB NOT NULL DEFAULT '{}'::jsonb,
+      carregado_em     TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`);
 }
 
-/** Garante que o medicamento existe e retorna seu id */
-async function upsertMedicamento(client, principioAtivo, apresentacao) {
-  const res = await client.query(
-    `INSERT INTO medicamento (principio_ativo, descricao_apresentacao)
-     VALUES ($1, $2)
-     ON CONFLICT (principio_ativo, descricao_apresentacao) DO UPDATE SET principio_ativo = EXCLUDED.principio_ativo
-     RETURNING id_medicamento`,
-    [principioAtivo, apresentacao]
-  );
-  return res.rows[0].id_medicamento;
-}
-
-const cachePeriodo = new Map();
-
-/** Resolve id_periodo a partir de YYYYMM (inteiro), com cache em memória */
-async function resolverPeriodo(client, yyyymm) {
-  if (cachePeriodo.has(yyyymm)) return cachePeriodo.get(yyyymm);
-  const res = await client.query(
-    'SELECT id_periodo FROM periodo WHERE id_periodo = $1',
-    [parseInt(yyyymm, 10)]
-  );
-  if (res.rows.length === 0) throw new Error(`Período ${yyyymm} não encontrado. Execute garantirPeriodos() antes da carga.`);
-  cachePeriodo.set(yyyymm, res.rows[0].id_periodo);
-  return res.rows[0].id_periodo;
-}
-
-/**
- * Garante que os 12 períodos do ano de recorte existem na tabela periodo.
- * Chamado automaticamente antes da carga dos CSVs.
- */
 async function garantirPeriodos(client, ano) {
   const NOMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const p2 = (n) => String(n).padStart(2, '0');
   for (let m = 1; m <= 12; m++) {
-    const idPeriodo = ano * 100 + m;
-    const dInicio  = new Date(ano, m - 1, 1);
-    const dFim     = new Date(ano, m, 0);   // dia 0 do mês seguinte = último dia do mês
-    const fmt      = d => d.toISOString().slice(0, 10);
+    const id = ano * 100 + m;
+    const ultimoDia = new Date(Date.UTC(ano, m, 0)).getUTCDate();
     await client.query(
       `INSERT INTO periodo (id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-       ON CONFLICT (id_periodo) DO NOTHING`,
-      [
-        idPeriodo, ano, m, NOMES[m - 1],
-        Math.ceil(m / 3),
-        m <= 6 ? 1 : 2,
-        fmt(dInicio), fmt(dFim)
-      ]
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id_periodo) DO NOTHING`,
+      [id, ano, m, NOMES[m - 1], Math.ceil(m / 3), m <= 6 ? 1 : 2,
+        `${ano}-${p2(m)}-01`, `${ano}-${p2(m)}-${p2(ultimoDia)}`]
+    );
+    cachePeriodo.set(String(id), id);
+  }
+  console.log(`[OK] Períodos de ${ano} verificados.`);
+}
+
+async function recarregarCacheMunicipio(client) {
+  const r = await client.query('SELECT id_municipio, nome_municipio, sigla_uf FROM municipio');
+  cacheMunicipio.clear();
+  for (const x of r.rows) cacheMunicipio.set(x.nome_municipio + SEP + x.sigla_uf, x.id_municipio);
+}
+
+async function recarregarCacheMedicamento(client) {
+  const r = await client.query(
+    'SELECT id_medicamento, principio_ativo, descricao_apresentacao FROM medicamento');
+  cacheMedicamento.clear();
+  for (const x of r.rows) {
+    cacheMedicamento.set(x.principio_ativo + SEP + x.descricao_apresentacao, x.id_medicamento);
+  }
+}
+
+async function carregarCatalogoCid(client) {
+  try {
+    const pk = await client.query(`
+      SELECT a.attname FROM pg_index i
+      JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+      WHERE i.indrelid = 'cid10'::regclass AND i.indisprimary LIMIT 1`);
+    const col = pk.rows[0].attname;
+    const r = await client.query(`SELECT "${col}" AS codigo FROM cid10`);
+    catalogoCid = new Set(r.rows.map((x) => String(x.codigo).toUpperCase()));
+    console.log(`[OK] Catálogo CID-10: ${catalogoCid.size} códigos (coluna ${col}).`);
+    if (catalogoCid.size === 0) throw new Error('tabela cid10 vazia');
+  } catch (err) {
+    catalogoCid = null;
+    console.warn(`[AVISO] Catálogo CID-10 indisponível (${err.message}). CID será gravado como NULL.`);
+  }
+}
+
+const INDICES_ANTIGOS = [
+  'idx_venda_periodo', 'idx_venda_data', 'idx_venda_medicamento', 'idx_venda_municipio',
+  'idx_venda_municipio_periodo', 'idx_venda_medicamento_periodo', 'idx_venda_antimicrobiano',
+  'idx_venda_periodo_municipio'
+];
+
+async function removerIndices(client) {
+  console.log('[+] Removendo índices para acelerar a carga...');
+  for (const i of INDICES_ANTIGOS) await client.query(`DROP INDEX IF EXISTS ${i}`);
+}
+
+async function criarIndices(client) {
+  console.log('[+] Criando índices (pode levar alguns minutos)...');
+  await client.query("SET maintenance_work_mem = '1GB'");
+  const t0 = Date.now();
+  await client.query('CREATE INDEX IF NOT EXISTS idx_venda_periodo_municipio ON venda_medicamento(id_periodo, id_municipio)');
+  await client.query('CREATE INDEX IF NOT EXISTS idx_venda_municipio_periodo ON venda_medicamento(id_municipio, id_periodo)');
+  await client.query('CREATE INDEX IF NOT EXISTS idx_venda_medicamento_periodo ON venda_medicamento(id_medicamento, id_periodo)');
+  await client.query('CREATE INDEX IF NOT EXISTS idx_venda_antimicrobiano ON venda_medicamento(id_periodo, id_municipio) WHERE eh_antimicrobiano = TRUE');
+  await client.query('ANALYZE venda_medicamento');
+  console.log(`[OK] Índices criados em ${fmtSeg(Date.now() - t0)}.`);
+}
+
+// ---------------------------------------------------------------------------
+// Leitura do CSV
+// ---------------------------------------------------------------------------
+async function* lerRegistros(caminho) {
+  const rl = readline.createInterface({
+    input: fs.createReadStream(caminho, { encoding: CSV_ENCODING }),
+    crlfDelay: Infinity
+  });
+  let col = null;
+  for await (const bruta of rl) {
+    const linha = bruta.replace(/^\uFEFF/, '').trim();
+    if (!linha) continue;
+    if (!col) {
+      col = {};
+      linha.split(CSV_SEPARADOR).forEach((h, i) => {
+        col[h.trim().replace(/^"(.*)"$/, '$1').toLowerCase().replace(/[^a-z0-9_]/g, '_')] = i;
+      });
+      if (col.nu_ano_venda === undefined) {
+        throw new Error(`cabeçalho inesperado: ${linha.slice(0, 200)}`);
+      }
+      continue;
+    }
+    const c = linha.split(CSV_SEPARADOR);
+    const g = (n) => (col[n] === undefined ? null : limpar(c[col[n]]));
+    yield {
+      ano: g('nu_ano_venda'),
+      mes: g('nu_mes_venda'),
+      uf: (g('sg_uf_venda') || '').toUpperCase() || null,
+      mun: g('no_municipio_venda'),
+      pa: g('ds_principio_ativo'),
+      apr: g('ds_descricao_apresentacao'),
+      qtdBruta: g('qtd_vendida') ?? g('qt_vendida'),
+      cid: g('co_cid10'),
+      sexoBruto: g('sg_sexo'),
+      idadeBruta: g('nu_idade'),
+      unidIdade: g('nu_unidade_idade'),
+      rec: g('tp_receituario')
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Carga de um arquivo
+// ---------------------------------------------------------------------------
+async function resolverDimensoes(client, caminho) {
+  const muns = new Set();
+  const meds = new Set();
+  for await (const r of lerRegistros(caminho)) {
+    if (r.mun && r.uf && UFS.has(r.uf)) muns.add(r.mun + SEP + r.uf);
+    if (r.pa && r.apr) meds.add(r.pa + SEP + r.apr);
+  }
+
+  const novosMun = [...muns].filter((k) => !cacheMunicipio.has(k));
+  for (let i = 0; i < novosMun.length; i += 5000) {
+    const parte = novosMun.slice(i, i + 5000).map((k) => k.split(SEP));
+    await client.query(
+      `INSERT INTO municipio (nome_municipio, sigla_uf)
+       SELECT * FROM unnest($1::text[], $2::text[])
+       ON CONFLICT (nome_municipio, sigla_uf) DO NOTHING`,
+      [parte.map((p) => p[0]), parte.map((p) => p[1])]
     );
   }
-  console.log(`[OK] Períodos de ${ano} verificados/inseridos na tabela periodo.`);
+  if (novosMun.length) await recarregarCacheMunicipio(client);
+
+  const novosMed = [...meds].filter((k) => !cacheMedicamento.has(k));
+  for (let i = 0; i < novosMed.length; i += 5000) {
+    const parte = novosMed.slice(i, i + 5000).map((k) => k.split(SEP));
+    await client.query(
+      `INSERT INTO medicamento (principio_ativo, descricao_apresentacao)
+       SELECT * FROM unnest($1::text[], $2::text[])
+       ON CONFLICT (principio_ativo, descricao_apresentacao) DO NOTHING`,
+      [parte.map((p) => p[0]), parte.map((p) => p[1])]
+    );
+  }
+  if (novosMed.length) await recarregarCacheMedicamento(client);
+
+  console.log(`      dimensões: +${novosMun.length} municípios, +${novosMed.length} medicamentos`);
 }
 
-// Cache em memória para dimensões (evita round-trips repetidos)
-const cacheMunicipio   = new Map();
-const cacheMedicamento = new Map();
+async function carregarArquivo(client, caminho) {
+  const arq = path.basename(caminho);
+  let lidas = 0;
+  let inseridas = 0;
+  let cidForaCatalogo = 0;
+  const motivos = {};
+  const rejeitar = (m) => { motivos[m] = (motivos[m] || 0) + 1; };
 
-// ---------------------------------------------------------------------------
-// Carga de um arquivo CSV
-// ---------------------------------------------------------------------------
+  console.log(`  [→] ${arq}: passada 1 (dimensões)`);
+  await resolverDimensoes(client, caminho);
 
-/** Uma linha do CSV é válida para inserção (mesmo critério usado no INSERT) */
-function linhaValida(r) {
-  const ano = nvl(r['nu_ano_venda']);
-  const mes = nvl(r['nu_mes_venda']);
-  const yyyymm = (ano && mes) ? `${ano}${mes.padStart(2, '0')}` : null;
-  const qtd = parseFloat((r['qt_vendida'] || '0').replace(',', '.')) || 0;
-  return !!(yyyymm && nvl(r['sg_uf_venda']) && qtd > 0);
-}
+  console.log(`  [→] ${arq}: passada 2 (COPY)`);
 
-async function carregarArquivo(client, caminhoArquivo, nomeMes, ehAntimicrobiano) {
-  const nomeArquivo = path.basename(caminhoArquivo);
+  async function* lotes() {
+    let buf = [];
+    for await (const r of lerRegistros(caminho)) {
+      lidas++;
 
-  console.log(`  [→] Processando ${nomeArquivo} (antimicrobiano=${ehAntimicrobiano})...`);
-  const registros = await lerCSV(caminhoArquivo);
-  console.log(`      ${registros.length} linhas lidas.`);
+      const mes2 = (r.mes || '').padStart(2, '0');
+      const idPeriodo = cachePeriodo.get(`${r.ano}${mes2}`);
+      if (!idPeriodo) { rejeitar('periodo_fora_do_recorte'); continue; }
+      if (!r.uf || !UFS.has(r.uf)) { rejeitar('uf_invalida'); continue; }
+      if (!r.mun) { rejeitar('sem_municipio'); continue; }
+      if (!r.pa) { rejeitar('sem_principio_ativo'); continue; }
+      if (!r.apr) { rejeitar('sem_apresentacao'); continue; }
 
-  const esperados = registros.filter(linhaValida).length;
-  const existentes = await client.query(
-    'SELECT COUNT(*)::int AS n FROM venda_medicamento WHERE arquivo_origem = $1',
-    [nomeArquivo]
-  );
-  const qtdExistente = existentes.rows[0].n;
+      const qtd = Number((r.qtdBruta || '').replace(',', '.'));
+      if (!Number.isFinite(qtd) || qtd <= 0) { rejeitar('quantidade_invalida'); continue; }
 
-  if (qtdExistente > 0 && qtdExistente === esperados) {
-    console.log(`  [PULADO] ${nomeArquivo} já foi carregado por completo (${qtdExistente} registros).`);
-    return 0;
-  }
-  if (qtdExistente > 0) {
-    console.log(`  [RECARGA] ${nomeArquivo} tinha carga parcial (${qtdExistente}/${esperados}), refazendo...`);
-    await client.query('DELETE FROM venda_medicamento WHERE arquivo_origem = $1', [nomeArquivo]);
-  }
+      const idMun = cacheMunicipio.get(r.mun + SEP + r.uf);
+      const idMed = cacheMedicamento.get(r.pa + SEP + r.apr);
+      if (!idMun || !idMed) { rejeitar('dimensao_nao_resolvida'); continue; }
 
-  let inseridos = 0;
-  let erros     = 0;
-
-  const COLUNAS = 11;
-
-  // Processa em lotes
-  for (let i = 0; i < registros.length; i += BATCH_SIZE) {
-    const lote = registros.slice(i, i + BATCH_SIZE);
-    const valores = [];
-    const placeholders = [];
-    await client.query('BEGIN');
-    try {
-      for (const r of lote) {
-        // -------- Campos comuns --------
-        // Colunas reais do SNGPC/Anvisa: NU_ANO_VENDA, NU_MES_VENDA, SG_UF_VENDA,
-        // NO_MUNICIPIO_VENDA, DS_PRINCIPIO_ATIVO, DS_DESCRICAO_APRESENTACAO, QT_VENDIDA,
-        // CO_CID10, SG_SEXO, NU_IDADE (exclusivos de antimicrobianos)
-        const ano  = nvl(r['nu_ano_venda']);
-        const mes  = nvl(r['nu_mes_venda']);
-        const yyyymm = (ano && mes) ? `${ano}${mes.padStart(2, '0')}` : null;
-        // Não há data diária no arquivo, só ano/mês: usa o 1º dia do mês
-        const dataVenda    = yyyymm ? `${ano}-${mes.padStart(2, '0')}-01` : null;
-        const nomeUf       = nvl(r['sg_uf_venda']);
-        const nomeMunicipio = sanitizar(r['no_municipio_venda'] || 'NAO_INFORMADO');
-        const principioAtivo = sanitizar(r['ds_principio_ativo'] || 'SEM_PRINCIPIO');
-        const apresentacao   = sanitizar(r['ds_descricao_apresentacao'] || 'SEM_APRESENTACAO');
-        const qtd           = parseFloat((r['qt_vendida'] || '0').replace(',', '.')) || 0;
-        const numNotif      = nvl(r['numero_notificacao'] || r['nr_notificacao']);
-
-        if (!yyyymm || !nomeUf || qtd <= 0) { erros++; continue; }
-
-        const idPeriodo = await resolverPeriodo(client, yyyymm);
-
-        // Upsert município com cache
-        const chaveMun = `${nomeMunicipio}|${nomeUf}`;
-        let idMunicipio = cacheMunicipio.get(chaveMun);
-        if (!idMunicipio) {
-          idMunicipio = await upsertMunicipio(client, nomeMunicipio, nomeUf);
-          cacheMunicipio.set(chaveMun, idMunicipio);
-        }
-
-        // Upsert medicamento com cache
-        const chaveMed = `${principioAtivo}|${apresentacao}`;
-        let idMedicamento = cacheMedicamento.get(chaveMed);
-        if (!idMedicamento) {
-          idMedicamento = await upsertMedicamento(client, principioAtivo, apresentacao);
-          cacheMedicamento.set(chaveMed, idMedicamento);
-        }
-
-        // -------- Campos exclusivos de antimicrobianos --------
-        const codigoCid10   = ehAntimicrobiano ? nvl(r['co_cid10']) : null;
-        const sexoPaciente  = ehAntimicrobiano ? nvl(r['sg_sexo']) : null;
-        const idadePaciente = ehAntimicrobiano ? (parseInt(r['nu_idade'], 10) || null) : null;
-
-        const base = valores.length;
-        placeholders.push(
-          `(${Array.from({ length: COLUNAS }, (_, k) => `$${base + k + 1}`).join(', ')})`
-        );
-        valores.push(
-          idPeriodo,
-          dataVenda,
-          idMunicipio,
-          idMedicamento,
-          qtd,
-          ehAntimicrobiano,
-          codigoCid10,
-          sexoPaciente,
-          idadePaciente,
-          numNotif,
-          path.basename(caminhoArquivo)
-        );
-        inseridos++;
+      // CID-10: normaliza e só aceita o que existe no catálogo (FK)
+      let cid = r.cid ? r.cid.toUpperCase().replace(/[.\s]/g, '') : null;
+      if (cid && (!catalogoCid || !catalogoCid.has(cid))) {
+        if (catalogoCid) cidForaCatalogo++;
+        cid = null;
       }
 
-      if (placeholders.length > 0) {
-        await client.query(
-          `INSERT INTO venda_medicamento
-             (id_periodo, data_venda, id_municipio, id_medicamento,
-              quantidade_vendida, eh_antimicrobiano,
-              codigo_cid10, sexo_paciente, idade_paciente,
-              numero_notificacao, arquivo_origem)
-           VALUES ${placeholders.join(', ')}`,
-          valores
-        );
+      // Sexo: 1 -> M, 2 -> F
+      const sexo = SEXO[r.sexoBruto] || null;
+
+      // Idade gravada em ANOS. Unidade 1 = anos, 2 = meses. Sem unidade => NULL.
+      let idade = null;
+      const n = parseInt(r.idadeBruta, 10);
+      if (Number.isFinite(n) && n >= 0) {
+        if (r.unidIdade === '1') idade = n;
+        else if (r.unidIdade === '2') idade = Math.floor(n / 12);
+        if (idade !== null && idade > 130) idade = null;
       }
-      await client.query('COMMIT');
-    } catch (err) {
-      await client.query('ROLLBACK');
-      console.error(`      [ERRO no lote ${i}–${i + BATCH_SIZE}]:`, err.message);
-      erros += lote.length;
+
+      // Antimicrobiano: receituário 5 (dicionário 2026) ou qualquer campo exclusivo preenchido
+      const ehAntimicrobiano = r.rec === '5' || !!(r.cid || r.sexoBruto || r.idadeBruta);
+
+      buf.push([
+        idPeriodo, `${r.ano}-${mes2}-01`, idMun, idMed, qtd,
+        ehAntimicrobiano ? 't' : 'f', cid, sexo, idade, arq
+      ].map(esc).join('\t'));
+      inseridas++;
+
+      if (buf.length >= LOTE_COPY) { yield buf.join('\n') + '\n'; buf = []; }
     }
+    if (buf.length) yield buf.join('\n') + '\n';
   }
-  console.log(`      ✓ ${inseridos} inseridos | ✗ ${erros} com erro`);
-  return inseridos;
+
+  await client.query('BEGIN');
+  try {
+    await pipeline(
+      Readable.from(lotes()),
+      client.query(copyFrom(
+        `COPY venda_medicamento
+           (id_periodo, data_venda, id_municipio, id_medicamento, quantidade_vendida,
+            eh_antimicrobiano, codigo_cid10, sexo_paciente, idade_paciente, arquivo_origem)
+         FROM STDIN WITH (FORMAT text)`))
+    );
+    const rejeitadas = lidas - inseridas;
+    await client.query(
+      `INSERT INTO carga_arquivo (arquivo, linhas_lidas, linhas_inseridas, linhas_rejeitadas, motivos_rejeicao)
+       VALUES ($1,$2,$3,$4,$5)`,
+      [arq, lidas, inseridas, rejeitadas, JSON.stringify(motivos)]
+    );
+    await client.query('COMMIT');
+    console.log(`      ✓ ${inseridas} inseridas | ✗ ${rejeitadas} rejeitadas`
+      + (rejeitadas ? ` ${JSON.stringify(motivos)}` : '')
+      + (cidForaCatalogo ? ` | CID fora do catálogo (→NULL): ${cidForaCatalogo}` : ''));
+    return inseridas;
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-
 async function main() {
-  console.log('╔══════════════════════════════════════════════════════╗');
-  console.log('║  FarmaData — Carga SNGPC (Anvisa)                   ║');
-  console.log(`║  Ano de recorte: ${ANO}                               ║`);
-  console.log('╚══════════════════════════════════════════════════════╝\n');
+  const inicio = Date.now();
+  console.log(`FarmaData — carga SNGPC (ano ${ANO})\n`);
+  fs.mkdirSync(TMP_DIR, { recursive: true });
 
-  garantirDiretorio(TMP_DIR);
-
-  const dbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/farmadata';
-  const client = new Client({ connectionString: dbUrl });
-
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/farmadata'
+  });
   await client.connect();
   console.log('[OK] Conectado ao PostgreSQL.');
 
+  await garantirCargaArquivo(client);
   await garantirPeriodos(client, ANO);
+  await recarregarCacheMunicipio(client);
+  await recarregarCacheMedicamento(client);
+  await carregarCatalogoCid(client);
 
-  let totalInseridos = 0;
+  const jaCarregados = new Set(
+    (await client.query('SELECT arquivo FROM carga_arquivo')).rows.map((r) => r.arquivo));
+  const nome = (mes) => `EDA_Industrializados_${ANO}${mes}.csv`;
+  const pendentes = MESES.filter((m) => !jaCarregados.has(nome(m)));
 
-  for (const mes of MESES) {
-    const yyyymm = `${ANO}${mes}`;
-    console.log(`\n── Mês ${yyyymm} ──`);
+  if (pendentes.length) await removerIndices(client);
 
-    // Tipos de arquivo: controlados e antimicrobianos
-    const arquivos = [
-      {
-        url: `${BASE_URL}/EDA_Industrializados_${yyyymm}.csv`,
-        destino: path.join(TMP_DIR, `controlados_${yyyymm}.csv`),
-        ehAntimicrobiano: false,
-        label: 'Controlados'
-      },
-      {
-        url: `${BASE_URL}/EDA_Antimicrobianos_${yyyymm}.csv`,
-        destino: path.join(TMP_DIR, `antimicrobianos_${yyyymm}.csv`),
-        ehAntimicrobiano: true,
-        label: 'Antimicrobianos'
+  const faltando = [];
+  const falhas = [];
+  let total = 0;
+
+  try {
+    for (const mes of MESES) {
+      const arq = nome(mes);
+      console.log(`\n── ${ANO}${mes} ──`);
+      if (jaCarregados.has(arq)) {
+        console.log('  [SKIP] já carregado (carga_arquivo).');
+        continue;
       }
-    ];
 
-    for (const arq of arquivos) {
-      // Download (pula se já existe localmente; arquivo de 0 bytes = download anterior
-      // incompleto/falho, não conta como cache válido)
-      if (!fs.existsSync(arq.destino) || fs.statSync(arq.destino).size === 0) {
-        console.log(`  [↓] Baixando ${arq.label} ${yyyymm}...`);
+      const destino = path.join(TMP_DIR, arq);
+      const legado = path.join(TMP_DIR, `controlados_${ANO}${mes}.csv`); // nome usado antes
+      if (!fs.existsSync(destino) && fs.existsSync(legado)) fs.renameSync(legado, destino);
+
+      if (!fs.existsSync(destino) || fs.statSync(destino).size === 0) {
+        console.log('  [↓] baixando...');
         try {
-          await baixarArquivo(arq.url, arq.destino);
-          console.log(`  [OK] Arquivo salvo em ${arq.destino}`);
+          await baixarComRetry(`${BASE_URL}/${arq}`, destino);
         } catch (err) {
-          console.warn(`  [AVISO] Falha no download de ${arq.label} ${yyyymm}: ${err.message}`);
-          console.warn(`          Pulando este arquivo.`);
+          console.warn(`  [ERRO] download falhou: ${err.message}`);
+          faltando.push(arq);
           continue;
         }
       } else {
-        console.log(`  [CACHE] ${arq.destino} já existe, pulando download.`);
+        console.log('  [CACHE] arquivo local encontrado.');
       }
 
-      // Carga
-      totalInseridos += await carregarArquivo(client, arq.destino, yyyymm, arq.ehAntimicrobiano);
+      const t0 = Date.now();
+      try {
+        total += await carregarArquivo(client, destino);
+        console.log(`  [OK] ${arq} em ${fmtSeg(Date.now() - t0)}`);
+      } catch (err) {
+        console.error(`  [ERRO] ${arq}: ${err.message}`);
+        falhas.push(arq);
+      }
     }
+  } finally {
+    await criarIndices(client);
   }
 
+  const r = await client.query(
+    'SELECT count(*) AS arquivos, coalesce(sum(linhas_inseridas),0) AS linhas FROM carga_arquivo');
   await client.end();
 
-  console.log('\n╔══════════════════════════════════════════════════════╗');
-  console.log(`║  Carga concluída! Total inserido: ${totalInseridos.toLocaleString('pt-BR')} registros`);
-  console.log('╚══════════════════════════════════════════════════════╝');
+  console.log('\n══════════════════════════════════════════════');
+  console.log(` Inseridas nesta execução: ${total.toLocaleString('pt-BR')}`);
+  console.log(` Total no banco: ${Number(r.rows[0].linhas).toLocaleString('pt-BR')} linhas em ${r.rows[0].arquivos} arquivos`);
+  console.log(` Tempo: ${fmtSeg(Date.now() - inicio)}`);
+  if (faltando.length) console.log(` Sem download: ${faltando.join(', ')}`);
+  if (falhas.length) console.log(` Falharam na carga: ${falhas.join(', ')}`);
+  console.log('══════════════════════════════════════════════');
+
+  if (faltando.length || falhas.length) process.exit(1);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('\n[ERRO CRÍTICO]:', err.message);
   process.exit(1);
 });

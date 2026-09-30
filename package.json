@@ -9,7 +9,8 @@
     "carregar-tudo": "node scripts/carregar_cid10.js && node scripts/carregar_sngpc.js"
   },
   "dependencies": {
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "pg-copy-streams": "^7.0.0"
   },
   "engines": {
     "node": ">=20.0.0"
