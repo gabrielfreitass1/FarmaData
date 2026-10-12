@@ -58,7 +58,9 @@ async function main() {
   // nome normalizado + UF -> código IBGE
   const codigoPorNomeUf = new Map();
   for (const m of municipiosIbge) {
-    const uf = m.microrregiao.mesorregiao.UF.sigla;
+    // Alguns municípios não têm microrregiao preenchida na API; regiao-imediata é o caminho alternativo.
+    const uf = m.microrregiao?.mesorregiao?.UF?.sigla || m['regiao-imediata']?.['regiao-intermediaria']?.UF?.sigla;
+    if (!uf) continue;
     codigoPorNomeUf.set(normalizar(m.nome) + '|' + uf, m.id);
   }
   console.log(`[OK] ${codigoPorNomeUf.size} municípios do IBGE carregados.`);
@@ -95,22 +97,18 @@ async function main() {
     }
     console.log(`[OK] codigo_ibge preenchido em ${atualizacoes.length} municípios (${semCorrespondencia} sem correspondência por nome/UF).`);
 
-    const popRows = [];
-    for (const [, codigo] of atualizacoes) {
+    // Mais de um id_municipio pode casar com o mesmo codigo_ibge (municípios duplicados na
+    // origem SNGPC) — usar Map por id_municipio evita duas linhas da mesma chave no mesmo INSERT.
+    const popPorIdMunicipio = new Map();
+    for (const [idMunicipio, codigo] of atualizacoes) {
       const pop = populacaoPorCodigo.get(codigo);
-      if (pop !== undefined) popRows.push([codigo, pop]);
+      if (pop !== undefined) popPorIdMunicipio.set(idMunicipio, pop);
     }
-    const { rows: idsPorCodigo } = await client.query(
-      'SELECT id_municipio, codigo_ibge FROM municipio WHERE codigo_ibge = ANY($1::int[])',
-      [popRows.map((p) => p[0])]
-    );
-    const idPorCodigo = new Map(idsPorCodigo.map((r) => [r.codigo_ibge, r.id_municipio]));
+    const popRows = [...popPorIdMunicipio.entries()];
 
     let inseridas = 0;
     for (let i = 0; i < popRows.length; i += 2000) {
-      const parte = popRows.slice(i, i + 2000)
-        .map(([codigo, pop]) => [idPorCodigo.get(codigo), pop])
-        .filter(([id]) => id !== undefined);
+      const parte = popRows.slice(i, i + 2000);
       if (!parte.length) continue;
       await client.query(
         `INSERT INTO ibge_populacao_municipio (id_municipio, ano, populacao)
