@@ -25,6 +25,7 @@ services:
       - ./sql/05_carga_catalogo_cid10.sql:/docker-entrypoint-initdb.d/05a_carga_cid10.sql:ro
       - ./sql/06_prescritor_listas.sql:/docker-entrypoint-initdb.d/06_prescritor_listas.sql:ro
       - ./sql/07_venda_medicamento.sql:/docker-entrypoint-initdb.d/07_venda_medicamento.sql:ro
+      - ./sql/08_ibge_populacao_municipio.sql:/docker-entrypoint-initdb.d/08_ibge_populacao_municipio.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-farmadata}"]
       interval: 10s
@@ -49,7 +50,7 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
       ANO_RECORTE:  ${ANO_RECORTE:-2020}
     command: >
-      sh -c "npm install --omit=dev pg-copy-streams && node scripts/carregar_cid10.js && node scripts/carregar_sngpc.js"
+      sh -c "npm install --omit=dev pg-copy-streams && node scripts/carregar_cid10.js && node scripts/carregar_sngpc.js && node scripts/carregar_ibge_populacao.js"
     # Roda uma vez e termina (restart: no)
     restart: "no"
 

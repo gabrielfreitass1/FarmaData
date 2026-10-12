@@ -17,13 +17,19 @@ município (frágil, sujeito a divergência de grafia).
 
 ## Bases avaliadas
 
-### 1. IBGE — População por município (Estimativas de População / Censo 2022)
+### 1. IBGE — População por município (Estimativas de População / Censo 2022) ✅ incorporada
 - **URL:** https://sidra.ibge.gov.br/ (SIDRA, tabela 6579 ou Censo 2022)
 - **Granularidade:** município, anual
 - **Formato/licença:** API REST ou CSV, dados abertos (sem restrição de uso)
 - **Pergunta nova:** dispensações per capita por município — hoje só temos volume absoluto, que
   favorece município populoso independente de padrão de consumo real.
 - **Pré-requisito:** popular `codigo_ibge` em `municipio`.
+- **Status:** incorporada nesta entrega. `scripts/carregar_ibge_populacao.js` preenche
+  `municipio.codigo_ibge` (casando nome normalizado + UF contra a lista oficial de municípios
+  do IBGE) e grava a população do ano de recorte em `ibge_populacao_municipio`
+  (`sql/08_ibge_populacao_municipio.sql`). O casamento por nome é best-effort — municípios com
+  grafia muito divergente entre Anvisa e IBGE ficam sem `codigo_ibge` e sem população; o script
+  loga quantos casaram e quantos não.
 
 ### 2. IBGE — Censo 2022, população por faixa etária e município
 - **URL:** https://sidra.ibge.gov.br/ (Censo 2022, tabela de população por idade)
@@ -35,13 +41,19 @@ município (frágil, sujeito a divergência de grafia).
   sua fração populacional).
 - **Pré-requisito:** mesmo de #1 (`codigo_ibge`).
 
-### 3. DATASUS/CNES — Estabelecimentos de saúde por município
+### 3. DATASUS/CNES — Estabelecimentos de saúde por município ⚠️ avaliada, não incorporada
 - **URL:** https://cnes.datasus.gov.br/ (download CSV mensal por competência)
 - **Granularidade:** município, mensal
 - **Formato/licença:** CSV/FTP, dados públicos DATASUS
 - **Pergunta nova:** correlacionar densidade de farmácias/estabelecimentos no município com
   volume de dispensação — distingue "pouco consumo" de "pouca oferta".
 - **Pré-requisito:** mesmo de #1.
+- **Status:** investigada nesta entrega, mas não incorporada. A API de serviços do CNES
+  (`cnes.datasus.gov.br/services/...`) recusou conexão no ambiente de carga, e o FTP oficial
+  (`ftp.datasus.gov.br`) não respondeu — os dois caminhos exigem acesso de rede que não deu
+  para validar. O download direto do portal também é em formato DBC (compressão proprietária
+  do DATASUS), que exige um parser dedicado, maior custo de ETL do que inicialmente avaliado.
+  Fica como candidata para a E3, com o passo de descoberta de acesso já feito.
 
 ### 4. DATASUS/SIA-SUS — Atendimentos ambulatoriais por CID
 - **URL:** https://datasus.saude.gov.br/transferencia-de-arquivos/ (SIA, produção ambulatorial)
@@ -78,13 +90,16 @@ município (frágil, sujeito a divergência de grafia).
 
 ## Recomendação para esta entrega
 
-Priorizar **IBGE — população por município (#1)** e **CNES — estabelecimentos de saúde (#3)**:
-mesma chave de integração (`codigo_ibge`), dados abertos em CSV/API prontos para uso, e
-respondem diretamente a perguntas que a professora citou (per capita e oferta de saúde).
+Priorizar **IBGE — população por município (#1)**: mesma chave de integração (`codigo_ibge`),
+API REST pronta para uso, resolve a dívida técnica do `codigo_ibge` em `municipio` como
+subproduto, e responde diretamente à pergunta de per capita citada pela professora. **Foi a
+única incorporada ao banco nesta entrega** (ver `sql/08_ibge_populacao_municipio.sql` e
+`scripts/carregar_ibge_populacao.js`).
 
-Isso implica resolver antes a dívida técnica do `codigo_ibge` em `municipio` — tarefa prévia
-e necessária para qualquer uma das bases listadas, não só para esta entrega.
+**CNES — estabelecimentos de saúde (#3)** era a segunda prioridade, mas a investigação mostrou
+custo de integração maior que o esperado (acesso de API/FTP bloqueado no ambiente de carga,
+formato DBC no download direto) — fica para a E3.
 
-As demais (SIA-SUS, FIRJAN/Atlas Brasil, INMET) ficam registradas como candidatas para a E3,
+As demais (SIA-SUS, FIRJAN/Atlas Brasil, INMET) seguem registradas como candidatas para a E3,
 por exigirem conversão de formato (SIA-SUS) ou terem granularidade temporal/espacial mais
 grosseira que o SNGPC (FIRJAN/Atlas Brasil, INMET).

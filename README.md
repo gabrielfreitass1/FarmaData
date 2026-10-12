@@ -48,10 +48,12 @@ FarmaData/
 │   ├── 05_cid10.sql                # Estrutura da tabela CID-10
 │   ├── 05_carga_catalogo_cid10.sql # Carga do catálogo DATASUS (gerado)
 │   ├── 06_prescritor_listas.sql    # Conselhos + listas fixas Anvisa
-│   └── 07_venda_medicamento.sql    # Tabela fato + índices
+│   ├── 07_venda_medicamento.sql    # Tabela fato + índices
+│   └── 08_ibge_populacao_municipio.sql # Estrutura: população por município/ano (IBGE)
 ├── scripts/
 │   ├── carregar_cid10.js           # Gera 05_carga_catalogo_cid10.sql
-│   └── carregar_sngpc.js           # Download + carga dos CSVs SNGPC
+│   ├── carregar_sngpc.js           # Download + carga dos CSVs SNGPC
+│   └── carregar_ibge_populacao.js  # codigo_ibge + população por município (IBGE/SIDRA)
 ├── docker-compose.yml
 ├── ADR.md                          # Decisão de modelagem
 └── README.md
@@ -79,8 +81,11 @@ cid10 ────────────────────────�
 |-------|-----|--------|
 | SNGPC / Anvisa | https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados | `scripts/carregar_sngpc.js` |
 | CID-10 DATASUS | https://datasus.saude.gov.br/transferencia-de-arquivos/ | `scripts/carregar_cid10.js` |
+| População por município (IBGE/SIDRA) | https://servicodados.ibge.gov.br/api/v3/agregados/6579 | `scripts/carregar_ibge_populacao.js` |
 
 > Os municípios são extraídos automaticamente dos próprios CSVs do SNGPC durante a carga — não requerem fonte ou script separados.
+>
+> Outras bases públicas avaliadas para cruzamento com o SNGPC (e o motivo de ainda não terem entrado no banco) estão em [`BASES_PUBLICAS.md`](BASES_PUBLICAS.md).
 
 ---
 
@@ -109,5 +114,7 @@ node scripts/carregar_cid10.js
 psql -d farmadata -f sql/05_carga_catalogo_cid10.sql
 psql -d farmadata -f sql/06_prescritor_listas.sql
 psql -d farmadata -f sql/07_venda_medicamento.sql
+psql -d farmadata -f sql/08_ibge_populacao_municipio.sql
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/farmadata node scripts/carregar_sngpc.js
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/farmadata node scripts/carregar_ibge_populacao.js
 ```
