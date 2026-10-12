@@ -78,28 +78,41 @@ município (frágil, sujeito a divergência de grafia).
   grosseira que os dados mensais do SNGPC; serve para cruzar "perfil do município", não
   tendência mensal.
 
-### 6. INMET — Dados climáticos
+### 6. INMET — Dados climáticos ✅ incorporada
 - **URL:** https://portal.inmet.gov.br/dadoshistoricos
-- **Granularidade:** estação meteorológica (não município), diária
-- **Formato/licença:** CSV por ano/estação, dados públicos
+- **Granularidade:** estação meteorológica (não município), horária
+- **Formato/licença:** ZIP anual com um CSV por estação, dados públicos
 - **Pergunta nova:** sazonalidade de antimicrobianos por região/mês (ex.: pico de infecções
   respiratórias no inverno).
 - **Observação:** granularidade por estação exige mapear estação → município/UF antes de
   juntar — maior esforço de ETL que as demais opções, e a correlação é só por UF/região, não
   por município.
+- **Status:** incorporada nesta entrega. A API JSON do INMET (`apitempo.inmet.gov.br`) se
+  mostrou instável nos testes (rotas documentadas respondendo `404`/`204`/`500` de forma
+  inconsistente); o caminho usado foi o ZIP histórico estático
+  (`portal.inmet.gov.br/uploads/dadoshistoricos/{ano}.zip`), que é confiável. O cabeçalho de
+  cada CSV já traz a UF da estação, então `scripts/carregar_inmet.js` agrega direto por
+  UF/mês — sem precisar resolver estação → município — e grava em `clima_mensal_uf`
+  (`sql/09_clima_mensal_uf.sql`).
 
 ## Recomendação para esta entrega
 
 Priorizar **IBGE — população por município (#1)**: mesma chave de integração (`codigo_ibge`),
 API REST pronta para uso, resolve a dívida técnica do `codigo_ibge` em `municipio` como
-subproduto, e responde diretamente à pergunta de per capita citada pela professora. **Foi a
-única incorporada ao banco nesta entrega** (ver `sql/08_ibge_populacao_municipio.sql` e
-`scripts/carregar_ibge_populacao.js`).
+subproduto, e responde diretamente à pergunta de per capita citada pela professora.
 
-**CNES — estabelecimentos de saúde (#3)** era a segunda prioridade, mas a investigação mostrou
-custo de integração maior que o esperado (acesso de API/FTP bloqueado no ambiente de carga,
-formato DBC no download direto) — fica para a E3.
+**INMET — clima mensal por UF (#6)** entrou também: o ZIP histórico é estável e o cabeçalho de
+cada CSV já traz a UF, então não precisou resolver estação → município como o esforço inicial
+sugeria.
 
-As demais (SIA-SUS, FIRJAN/Atlas Brasil, INMET) seguem registradas como candidatas para a E3,
-por exigirem conversão de formato (SIA-SUS) ou terem granularidade temporal/espacial mais
-grosseira que o SNGPC (FIRJAN/Atlas Brasil, INMET).
+Essas duas foram **incorporadas ao banco nesta entrega** (ver `sql/08_ibge_populacao_municipio.sql`
++ `scripts/carregar_ibge_populacao.js`, e `sql/09_clima_mensal_uf.sql` +
+`scripts/carregar_inmet.js`).
+
+**CNES — estabelecimentos de saúde (#3)** era a segunda prioridade original, mas a investigação
+mostrou custo de integração maior que o esperado (acesso de API/FTP bloqueado no ambiente de
+carga, formato DBC no download direto) — fica para a E3.
+
+As demais (SIA-SUS, FIRJAN/Atlas Brasil) seguem registradas como candidatas para a E3, por
+exigirem conversão de formato (SIA-SUS) ou terem granularidade temporal mais grosseira que o
+SNGPC (FIRJAN/Atlas Brasil).
