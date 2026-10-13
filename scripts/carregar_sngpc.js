@@ -8,7 +8,18 @@
 //  - cada arquivo é carregado em UMA transação junto com o registro em carga_arquivo
 //    => rodar de novo pula o que já foi carregado (idempotente)
 //  - linhas inválidas são rejeitadas e contadas por motivo (nada de valores default)
-//  - índices são removidos antes da carga e criados no final
+//  - índices são removidos antes da carga e criados no final (só quando há >= 3 arquivos a carregar)
+//
+// Idempotência (chave = arquivo de origem):
+//  - dentro da MESMA transação: DELETE das linhas do arquivo -> COPY -> upsert em carga_arquivo
+//    => reexecutar/forçar recarga nunca duplica; se algo falha, o ROLLBACK preserva o estado anterior
+//  - índice em venda_medicamento(arquivo_origem) torna o DELETE barato
+//  - advisory lock impede duas cargas simultâneas
+//
+// Variáveis de ambiente opcionais:
+//  - ANO_RECORTE=2020          ano a carregar
+//  - SNGPC_MESES=202001,202002 limita os meses processados (aceita também 01,02). Vazio = todos
+//  - SNGPC_FORCE=1             recarrega mesmo os arquivos já registrados em carga_arquivo
 
 'use strict';
 
@@ -32,6 +43,11 @@ const CSV_ENCODING = 'latin1'; // arquivos da Anvisa: Windows-1252
 const TMP_DIR = path.resolve(__dirname, '../tmp');
 const LOTE_COPY = 5000;
 const SEP = '\u0001'; // separador interno de chaves
+const LOCK_ID = 727001; // advisory lock: uma carga SNGPC por vez
+const FORCE = ['1', 'true', 'sim'].includes((process.env.SNGPC_FORCE || '').toLowerCase());
+// "202001,202002" ou "01,02" -> ['01','02']
+const MESES_ALVO = (process.env.SNGPC_MESES || '')
+  .split(',').map((s) => s.trim()).filter(Boolean).map((s) => s.slice(-2));
 
 const UFS = new Set(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA',
   'PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']);
@@ -129,6 +145,9 @@ async function garantirCargaArquivo(client) {
       motivos_rejeicao JSONB NOT NULL DEFAULT '{}'::jsonb,
       carregado_em     TIMESTAMPTZ NOT NULL DEFAULT now()
     )`);
+  // Torna barato o DELETE por arquivo (idempotência). Não faz parte de INDICES_ANTIGOS: nunca é removido.
+  await client.query(
+    'CREATE INDEX IF NOT EXISTS idx_venda_arquivo_origem ON venda_medicamento(arquivo_origem)');
 }
 
 async function garantirPeriodos(client, ano) {
@@ -351,6 +370,11 @@ async function carregarArquivo(client, caminho) {
 
   await client.query('BEGIN');
   try {
+    // Idempotência: remove o que já existe deste arquivo (recarga forçada ou tabela de controle perdida)
+    const antigas = await client.query('DELETE FROM venda_medicamento WHERE arquivo_origem = $1', [arq]);
+    if (antigas.rowCount) {
+      console.log(`      [↻] ${antigas.rowCount} linhas anteriores de ${arq} removidas (recarga)`);
+    }
     await pipeline(
       Readable.from(lotes()),
       client.query(copyFrom(
@@ -362,7 +386,13 @@ async function carregarArquivo(client, caminho) {
     const rejeitadas = lidas - inseridas;
     await client.query(
       `INSERT INTO carga_arquivo (arquivo, linhas_lidas, linhas_inseridas, linhas_rejeitadas, motivos_rejeicao)
-       VALUES ($1,$2,$3,$4,$5)`,
+       VALUES ($1,$2,$3,$4,$5)
+       ON CONFLICT (arquivo) DO UPDATE SET
+         linhas_lidas = EXCLUDED.linhas_lidas,
+         linhas_inseridas = EXCLUDED.linhas_inseridas,
+         linhas_rejeitadas = EXCLUDED.linhas_rejeitadas,
+         motivos_rejeicao = EXCLUDED.motivos_rejeicao,
+         carregado_em = now()`,
       [arq, lidas, inseridas, rejeitadas, JSON.stringify(motivos)]
     );
     await client.query('COMMIT');
@@ -390,6 +420,19 @@ async function main() {
   await client.connect();
   console.log('[OK] Conectado ao PostgreSQL.');
 
+  const lock = await client.query('SELECT pg_try_advisory_lock($1) AS ok', [LOCK_ID]);
+  if (!lock.rows[0].ok) {
+    console.error('[ERRO] outra carga SNGPC já está em execução (advisory lock). Abortando.');
+    process.exit(1);
+  }
+  const invalidos = MESES_ALVO.filter((m) => !MESES.includes(m));
+  if (invalidos.length) {
+    console.error(`[ERRO] SNGPC_MESES inválido: ${invalidos.join(', ')}`);
+    process.exit(1);
+  }
+  const mesesProcessar = MESES_ALVO.length ? MESES.filter((m) => MESES_ALVO.includes(m)) : MESES;
+  if (FORCE) console.log('[!] SNGPC_FORCE=1: arquivos já carregados serão recarregados.');
+
   await garantirCargaArquivo(client);
   await garantirPeriodos(client, ANO);
   await recarregarCacheMunicipio(client);
@@ -399,19 +442,24 @@ async function main() {
   const jaCarregados = new Set(
     (await client.query('SELECT arquivo FROM carga_arquivo')).rows.map((r) => r.arquivo));
   const nome = (mes) => `EDA_Industrializados_${ANO}${mes}.csv`;
-  const pendentes = MESES.filter((m) => !jaCarregados.has(nome(m)));
+  const pendentes = mesesProcessar.filter((m) => FORCE || !jaCarregados.has(nome(m)));
 
-  if (pendentes.length) await removerIndices(client);
+  // Em cargas pequenas (1-2 arquivos) manter os índices sai mais barato que reconstruí-los.
+  let indicesRemovidos = false;
+  if (pendentes.length >= 3) {
+    await removerIndices(client);
+    indicesRemovidos = true;
+  }
 
   const faltando = [];
   const falhas = [];
   let total = 0;
 
   try {
-    for (const mes of MESES) {
+    for (const mes of mesesProcessar) {
       const arq = nome(mes);
       console.log(`\n── ${ANO}${mes} ──`);
-      if (jaCarregados.has(arq)) {
+      if (!FORCE && jaCarregados.has(arq)) {
         console.log('  [SKIP] já carregado (carga_arquivo).');
         continue;
       }
@@ -443,7 +491,8 @@ async function main() {
       }
     }
   } finally {
-    await criarIndices(client);
+    if (indicesRemovidos) await criarIndices(client);
+    else await client.query('ANALYZE venda_medicamento');
   }
 
   const r = await client.query(
