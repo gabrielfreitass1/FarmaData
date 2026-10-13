@@ -56,6 +56,30 @@ services:
     # Roda uma vez e termina (restart: no)
     restart: "no"
 
+  # ---------------------------------------------------------------------------
+  # Camada analítica — exporta para Delta Lake/Parquet e valida com DuckDB
+  # Só roda sob demanda: make lakehouse
+  # ---------------------------------------------------------------------------
+  lakehouse:
+    image: python:3.12-slim
+    container_name: farmadata_lakehouse
+    profiles: ["lakehouse"]
+    depends_on:
+      db:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - pip_cache:/root/.cache/pip
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
+      ANO_RECORTE:  ${ANO_RECORTE:-2020}
+      LAKEHOUSE_DIR: /app/data/lakehouse
+    entrypoint: ["sh", "-c", "pip install -q -r scripts/lakehouse/requirements.txt && cd scripts/lakehouse && exec \"$$@\"", "--"]
+    command: ["sh", "-c", "python exportar_delta.py && python compactar_delta.py && python validar_duckdb.py"]
+    restart: "no"
+
 volumes:
   pgdata:
   node_modules:
+  pip_cache:
