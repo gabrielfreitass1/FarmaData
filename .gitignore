@@ -23,3 +23,13 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Camada analitica (gerada por scripts/lakehouse)
+data/lakehouse/*
+!data/lakehouse/.gitkeep
+__pycache__/
+
+# Documentos de apoio locais (nao versionar)
+entrega2
+issues
+

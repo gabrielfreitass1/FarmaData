@@ -34,6 +34,17 @@ POSTGRES_PORT=5432
 ANO_RECORTE=2020
 ```
 
+### Camada analítica (Delta Lake + Parquet)
+
+Com o banco já carregado:
+
+```bash
+make lakehouse        # exporta para data/lakehouse/delta, compacta e valida com DuckDB
+make lakehouse-bench  # benchmark de layout antes/depois
+```
+
+Detalhes e justificativas em [`docs/CAMADA_ANALITICA.md`](docs/CAMADA_ANALITICA.md).
+
 ---
 
 ## Estrutura
