@@ -100,6 +100,19 @@ cid10 ────────────────────────�
 | População por faixa etária/município (IBGE/SIDRA, Censo 2022) | https://servicodados.ibge.gov.br/api/v3/agregados/9514 | `scripts/carregar_ibge_faixa_etaria.js` |
 | Clima mensal por UF (INMET) | https://portal.inmet.gov.br/dadoshistoricos | `scripts/carregar_inmet.js` |
 
+### Bases complementares ao SNGPC
+
+Levantamento completo em [`BASES_PUBLICAS.md`](BASES_PUBLICAS.md). Status:
+
+| Base | Status |
+|------|--------|
+| IBGE — população por município | ✅ incorporada |
+| IBGE — população por faixa etária/município | ✅ incorporada |
+| INMET — clima mensal por UF | ✅ incorporada |
+| DATASUS/CNES — estabelecimentos de saúde | ⚠️ avaliada, não incorporada (fica para a E3) |
+| DATASUS/SIA-SUS — atendimentos ambulatoriais | ⚠️ avaliada, não incorporada (fica para a E3) |
+| FIRJAN (IFDM) / Atlas Brasil (IDHM) | ⚠️ avaliada, não incorporada (fica para a E3) |
+
 > Os municípios são extraídos automaticamente dos próprios CSVs do SNGPC durante a carga — não requerem fonte ou script separados.
 >
 > Outras bases públicas avaliadas para cruzamento com o SNGPC (e o motivo de ainda não terem entrado no banco) estão em [`BASES_PUBLICAS.md`](BASES_PUBLICAS.md).
