@@ -107,6 +107,28 @@ cid10 ────────────────────────�
 
 ---
 
+## Ingestão em lote (SNGPC) — idempotência e reexecução
+ 
+**Chave de idempotência:** o arquivo de origem (`EDA_Industrializados_AAAAMM.csv` → `venda_medicamento.arquivo_origem`).
+Cada arquivo é carregado numa única transação: `DELETE` das linhas do arquivo → `COPY` → upsert em `carga_arquivo`.
+Se algo falha, o `ROLLBACK` mantém o estado anterior; reexecutar nunca duplica linhas.
+ 
+**Carga incremental:** `carga_arquivo` registra o que já foi carregado; uma nova execução processa só os meses ainda
+ausentes (`make carga-incremental`). Um mês novo publicado pela Anvisa entra sozinho, sem tocar nos demais.
+ 
+| Quero... | Comando |
+|---|---|
+| Carga completa/incremental | `make carga-incremental` |
+| Só alguns meses | `make carga-sngpc MESES=202001,202002` |
+| Recarregar mesmo já carregado | `make carga-sngpc MESES=202001 FORCE=1` |
+| Provar a idempotência | `make test-idempotencia MES=202001` (evidência em `docs/evidencias/idempotencia.txt`) |
+ 
+**O que esperar:** arquivo já carregado → `[SKIP]`; recarga → `[↻] N linhas anteriores removidas` e contagem final idêntica;
+~260 s por mês (6 milhões de linhas). Duas cargas simultâneas são bloqueadas por advisory lock.
+ 
+**Limitações assumidas:** a granularidade de reprocessamento é o arquivo mensal (não a linha); o `DELETE` de ~6 milhões
+de linhas gera bloat — a evolução natural é particionar `venda_medicamento` por `id_periodo` e usar `TRUNCATE` da partição.
+
 ## Sem Docker
 
 ```bash
