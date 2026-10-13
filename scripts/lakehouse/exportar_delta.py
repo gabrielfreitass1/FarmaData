@@ -11,7 +11,7 @@ import sys
 import psycopg
 import pyarrow as pa
 import pyarrow.compute as pc
-from deltalake import DeltaTable, write_deltalake
+from deltalake import DeltaTable, WriterProperties, write_deltalake
 
 import config
 
@@ -57,7 +57,10 @@ WHERE v.id_periodo = %s
 {ordem}
 """
 
-ORDEM = ""  # sobrescrito no commit de particionamento
+# Ordenar dentro do mês por UF e medicamento deixa as estatísticas min/max de
+# cada row group estreitas => DuckDB/Trino pulam row groups em filtros por UF
+# ou princípio ativo sem precisar de partições extras (que gerariam small files).
+ORDEM = "ORDER BY mu.sigla_uf, v.id_medicamento"
 
 
 def lotes_do_mes(conn, id_periodo):
@@ -78,7 +81,14 @@ def lotes_do_mes(conn, id_periodo):
 
 
 def opcoes_escrita():
-    return {}
+    return {
+        "writer_properties": WriterProperties(
+            compression=config.CODEC,
+            compression_level=config.NIVEL_CODEC,
+            max_row_group_size=config.LINHAS_POR_ROW_GROUP,
+        ),
+        # Tamanho final dos arquivos (~128 MB) é garantido por compactar_delta.py.
+    }
 
 
 def exportar_mes(conn, ano, mes):
