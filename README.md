@@ -7,6 +7,16 @@
 
 ---
 
+##  Navegação da Documentação (Entrega E2)
+
+* [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
+* [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-E2.md)
+* [Camada Analítica e Benchmark](docs/CAMADA_ANALITICA.md)
+* [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
+* [Uso de IA no Projeto](AI-USAGE.md)
+
+---
+
 ## Pré-requisitos
 
 | Ferramenta | Versão |
