@@ -177,6 +177,8 @@ Um atraso de dias que permanece no mesmo mês não muda a janela: a publicação
 
 `make simular-atraso` carrega `scripts/fixtures/dado_atrasado/EDA_Industrializados_202002.csv` num banco descartável. A saída fica em `docs/evidencias/dado_atrasado.txt`.
 
+`make reprocessar-janela` carrega o CSV de janeiro, em seguida o de fevereiro, e recarrega fevereiro. A saída fica em `docs/evidencias/reprocessamento_janela.txt`.
+
 ## Sem Docker
 
 ```bash

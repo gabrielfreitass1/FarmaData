@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -61,5 +61,10 @@ test-idempotencia:
 # Evidência em docs/evidencias/dado_atrasado.txt. Não grava no banco farmadata.
 simular-atraso:
 	bash ./test_dado_atrasado.sh
+
+# Janeiro já carregado; fevereiro traz uma venda de janeiro e é recarregado.
+# Evidência em docs/evidencias/reprocessamento_janela.txt. Não grava no banco farmadata.
+reprocessar-janela:
+	bash ./test_reprocessar_janela.sh
 
 

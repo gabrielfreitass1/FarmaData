@@ -56,7 +56,7 @@ Uma linha pode trazer `nu_ano_venda`/`nu_mes_venda` diferente do mês codificado
 3. **Mês da venda fora do recorte:** a linha não é inserida. O motivo `periodo_fora_do_recorte` entra em `carga_arquivo.motivos_rejeicao`. Nenhum período é criado fora de `ANO_RECORTE`.
 4. **Dias dentro do mesmo mês:** `id_periodo` não muda. A carga não lê dia; o mês da venda já é a janela.
 
-O reprocessamento do CSV é `DELETE` das linhas daquele `arquivo_origem` seguido de `COPY`, na mesma transação.
+O reprocessamento do CSV é `DELETE` das linhas daquele `arquivo_origem` seguido de `COPY`, na mesma transação. Linhas do mesmo `id_periodo` que vieram de outro arquivo não entram nesse `DELETE`.
 
 ---
 
