@@ -4,6 +4,7 @@ node_modules/
 # Arquivos CSV baixados automaticamente (podem ser gigabytes)
 tmp/
 *.csv
+!scripts/fixtures/**/*.csv
 
 # Arquivo de configuração local com credenciais
 .env

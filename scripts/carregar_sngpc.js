@@ -26,6 +26,7 @@
 //  - ANO_RECORTE=2020          ano a carregar
 //  - SNGPC_MESES=202001,202002 limita os meses processados (aceita também 01,02). Vazio = todos
 //  - SNGPC_FORCE=1             recarrega mesmo os arquivos já registrados em carga_arquivo
+//  - SNGPC_DIR=caminho        diretório dos CSVs (padrão: tmp/). Arquivo presente não é baixado de novo.
 
 'use strict';
 
@@ -46,7 +47,7 @@ const BASE_URL = 'https://dados.anvisa.gov.br/dados/SNGPC/Industrializados';
 const MESES = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 const CSV_SEPARADOR = ';';
 const CSV_ENCODING = 'latin1'; // arquivos da Anvisa: Windows-1252
-const TMP_DIR = path.resolve(__dirname, '../tmp');
+const TMP_DIR = path.resolve(process.env.SNGPC_DIR || path.join(__dirname, '../tmp'));
 const LOTE_COPY = 5000;
 const SEP = '\u0001'; // separador interno de chaves
 const LOCK_ID = 727001; // advisory lock: uma carga SNGPC por vez

@@ -175,6 +175,8 @@ A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o m�
 
 Um atraso de dias que permanece no mesmo mês não muda a janela: a publicação não traz o dia.
 
+`make simular-atraso` carrega `scripts/fixtures/dado_atrasado/EDA_Industrializados_202002.csv` num banco descartável. A saída fica em `docs/evidencias/dado_atrasado.txt`.
+
 ## Sem Docker
 
 ```bash

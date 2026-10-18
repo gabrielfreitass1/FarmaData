@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -56,5 +56,10 @@ carga-incremental:
 # Prova de idempotência (gera docs/evidencias/idempotencia.txt). Ex.: make test-idempotencia MES=202001
 test-idempotencia:
 	bash ./test_idempotencia.sh $(or $(MES),202001)
+
+# CSV de fevereiro/2020 com venda de janeiro e venda fora do recorte.
+# Evidência em docs/evidencias/dado_atrasado.txt. Não grava no banco farmadata.
+simular-atraso:
+	bash ./test_dado_atrasado.sh
 
 
