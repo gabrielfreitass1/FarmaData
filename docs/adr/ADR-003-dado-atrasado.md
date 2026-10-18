@@ -1,7 +1,7 @@
 # ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
 
 **Status:** Proposto
-**Data:** 2026-10-18  
+**Data:** 2026-10-18 
 **Squad:** FarmaData (UnB — Sistemas de Bancos de Dados 2)
 
 ---
