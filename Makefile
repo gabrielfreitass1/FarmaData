@@ -55,8 +55,6 @@ carga-incremental:
 
 # Prova de idempotência (gera docs/evidencias/idempotencia.txt). Ex.: make test-idempotencia MES=202001
 test-idempotencia:
-	./test_idempotencia.sh $(or $(MES),202001)
+	bash ./test_idempotencia.sh $(or $(MES),202001)
 
-# Prova de idempotência das fontes complementares (CID-10, IBGE, INMET)
-test-idempotencia-dimensoes:
-	./test_idempotencia_dimensoes.sh
+

@@ -444,6 +444,11 @@ async function main() {
   const nome = (mes) => `EDA_Industrializados_${ANO}${mes}.csv`;
   const pendentes = mesesProcessar.filter((m) => FORCE || !jaCarregados.has(nome(m)));
 
+  // Auto-cura: Se o processo morreu no passado com os índices removidos, reconstrói-os.
+  if (pendentes.length < 3) {
+    await criarIndices(client);
+  }
+
   // Em cargas pequenas (1-2 arquivos) manter os índices sai mais barato que reconstruí-los.
   let indicesRemovidos = false;
   if (pendentes.length >= 3) {
