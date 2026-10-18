@@ -1,0 +1,64 @@
+# Semântica de Entrega e Garantia de Idempotência - Entrega 2
+
+## 1. Semântica de Entrega Declarada
+O pipeline de dados deste projeto opera sob a semântica de entrega **At-Least-Once (Pelo menos uma vez)**.
+Isso significa que, em caso de falhas de rede, reinicialização de containers, ou falhas no orquestrador durante a ingestão de Lotes, o sistema pode tentar processar e reenviar o mesmo arquivo/evento mais de uma vez.
+
+**O Problema (Erro Comum):** Em sistemas puramente "append-only" (que apenas fazem INSERT), a semântica At-Least-Once resulta em duplicação ("rodar duas vezes dobra as linhas").
+
+## 2. Estratégias de Idempotência Implementadas
+Para mitigar a duplicação e alcançar um estado final consistente equivalente ao **Exactly-Once**, o sistema garante idempotência na camada de destino (Banco de Dados) usando duas abordagens distintas, dependendo do volume:
+
+*   **Abordagem 1: Upsert via ON CONFLICT (Tabelas de Dimensão / Catálogos)**
+    *   **Onde é usado:** Tabelas como `cid10`.
+    *   **Chave de Idempotência:** Código da dimensão (ex: `codigo` para o CID-10).
+    *   **Como funciona:** A carga utiliza `INSERT INTO ... ON CONFLICT (chave) DO UPDATE`. Se o registro já existir em um reprocessamento, ele não é duplicado, apenas atualizado para o estado mais recente.
+
+*   **Abordagem 2: Deleção Transacional Lógica (Tabelas Fato / Big Data)**
+    *   **Onde é usado:** Lotes de dispensação do SNGPC na tabela `venda_medicamento`.
+    *   **Chave de Idempotência:** A chave primária do controle de lote é a coluna `arquivo_origem` (ex: `EDA_Industrializados_202001.csv`).
+    *   **Como funciona:** Devido ao volume massivo (milhões de linhas), usar `ON CONFLICT` linha a linha é inviável em performance. O script Node.js encapsula a carga em uma transação (`BEGIN`). Antes de fazer o `COPY` dos dados, ele executa um `DELETE FROM venda_medicamento WHERE arquivo_origem = X`. Se o arquivo for reprocessado, a carga anterior é limpa antes da nova ser inserida. Se a carga falhar no meio, o `ROLLBACK` garante que os dados antigos permaneçam intactos.
+
+## 3. Evidência de Demonstração (Prova de Idempotência)
+O script `test_idempotencia.sh` foi construído para forçar a reexecução do arquivo do SNGPC, apagando o registro de controle e forçando flag de recarga. O log abaixo demonstra matematicamente (linhas e soma de quantidades) que a volumetria não sofre alterações com o reprocessamento.
+
+=== Teste de idempotência — EDA_Industrializados_202001.csv — 2026-10-12T22:27:31-03:00 ===
+[0] Estado inicial  (total | arquivo: linhas|soma_qtd)
+   estado: 68264756 | 6143427|31521491.000
+
+[1] Reexecução simples (esperado: SKIP, nada muda)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+  [SKIP] já carregado (carga_arquivo).
+ Total no banco: 68.264.756 linhas em 12 arquivos
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+
+[2] Tabela de controle perdida: apago o registro e reexecuto (esperado: recarrega SEM duplicar)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+      [↻] 6143427 linhas anteriores de EDA_Industrializados_202001.csv removidas (recarga)
+      ✓ 6143427 inseridas | ✗ 4269 rejeitadas {"sem_principio_ativo":3796,"quantidade_invalida":473}
+ Total no banco: 68.264.756 linhas em 12 arquivos
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+
+[3] Recarga forçada com SNGPC_FORCE=1 (esperado: recarrega SEM duplicar)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+[!] SNGPC_FORCE=1: arquivos já carregados serão recarregados.
+      [↻] 6143427 linhas anteriores de EDA_Industrializados_202001.csv removidas (recarga)
+      ✓ 6143427 inseridas | ✗ 4269 rejeitadas {"sem_principio_ativo":3796,"quantidade_invalida":473}
+ Total no banco: 68.264.756 linhas em 12 arquivos
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+=== RESULTADO: carga idempotente e reexecutável ✓ ===

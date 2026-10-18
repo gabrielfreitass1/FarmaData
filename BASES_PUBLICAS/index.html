@@ -1,0 +1,1064 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../diario/DIARIO_DE_BORDO/">
+      
+      
+        <link rel="next" href="../CAMADA_ANALITICA/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Bases de Dados - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bases-publicas-complementares" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bases de Dados
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../adr/ADR/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADR
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de Bordo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bases de Dados
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bases de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-da-base-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto da base atual
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bases-avaliadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bases avaliadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bases avaliadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ibge-populacao-por-municipio-estimativas-de-populacao-censo-2022-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. IBGE — População por município (Estimativas de População / Censo 2022) ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ibge-censo-2022-populacao-por-faixa-etaria-e-municipio-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. IBGE — Censo 2022, população por faixa etária e município ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-datasuscnes-estabelecimentos-de-saude-por-municipio-avaliada-nao-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. DATASUS/CNES — Estabelecimentos de saúde por município ⚠️ avaliada, não incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-datasussia-sus-atendimentos-ambulatoriais-por-cid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. DATASUS/SIA-SUS — Atendimentos ambulatoriais por CID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-firjan-ifdm-atlas-brasil-idhm-indice-de-desenvolvimento-municipal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FIRJAN (IFDM) / Atlas Brasil (IDHM) — Índice de desenvolvimento municipal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-inmet-dados-climaticos-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. INMET — Dados climáticos ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recomendacao-para-esta-entrega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recomendação para esta entrega
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Camada Analítica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consultas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-da-base-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto da base atual
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bases-avaliadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bases avaliadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bases avaliadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ibge-populacao-por-municipio-estimativas-de-populacao-censo-2022-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. IBGE — População por município (Estimativas de População / Censo 2022) ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ibge-censo-2022-populacao-por-faixa-etaria-e-municipio-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. IBGE — Censo 2022, população por faixa etária e município ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-datasuscnes-estabelecimentos-de-saude-por-municipio-avaliada-nao-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. DATASUS/CNES — Estabelecimentos de saúde por município ⚠️ avaliada, não incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-datasussia-sus-atendimentos-ambulatoriais-por-cid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. DATASUS/SIA-SUS — Atendimentos ambulatoriais por CID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-firjan-ifdm-atlas-brasil-idhm-indice-de-desenvolvimento-municipal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. FIRJAN (IFDM) / Atlas Brasil (IDHM) — Índice de desenvolvimento municipal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-inmet-dados-climaticos-incorporada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. INMET — Dados climáticos ✅ incorporada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recomendacao-para-esta-entrega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recomendação para esta entrega
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="bases-publicas-complementares">Bases públicas complementares</h1>
+<blockquote>
+<p>Levantamento para a Entrega 2 (issue #10): a professora pediu para confrontar o SNGPC com
+outras fontes, respondendo perguntas que a base isolada não permite (ex.: correlacionar
+venda de medicamentos com indicadores externos).</p>
+</blockquote>
+<h2 id="contexto-da-base-atual">Contexto da base atual</h2>
+<p>A granularidade do <code>venda_medicamento</code> é por <strong>município × período (mês/2020) × medicamento
+× (CID-10 quando antimicrobiano)</strong>. Qualquer base externa só agrega valor se puder ser
+cruzada numa dessas chaves.</p>
+<p><strong>Bloqueio atual:</strong> <code>municipio.codigo_ibge</code> existe na tabela mas <strong>não é populado</strong> na carga
+(dívida técnica registrada no <code>ADR.md</code>). Esse é o pré-requisito para qualquer cruzamento com
+IBGE/DATASUS por município — sem ele, só dá para cruzar por UF (<code>sigla_uf</code>) ou por nome de
+município (frágil, sujeito a divergência de grafia).</p>
+<h2 id="bases-avaliadas">Bases avaliadas</h2>
+<h3 id="1-ibge-populacao-por-municipio-estimativas-de-populacao-censo-2022-incorporada">1. IBGE — População por município (Estimativas de População / Censo 2022) ✅ incorporada</h3>
+<ul>
+<li><strong>URL:</strong> https://sidra.ibge.gov.br/ (SIDRA, tabela 6579 ou Censo 2022)</li>
+<li><strong>Granularidade:</strong> município, anual</li>
+<li><strong>Formato/licença:</strong> API REST ou CSV, dados abertos (sem restrição de uso)</li>
+<li><strong>Pergunta nova:</strong> dispensações per capita por município — hoje só temos volume absoluto, que
+  favorece município populoso independente de padrão de consumo real.</li>
+<li><strong>Pré-requisito:</strong> popular <code>codigo_ibge</code> em <code>municipio</code>.</li>
+<li><strong>Status:</strong> incorporada nesta entrega. <code>scripts/carregar_ibge_populacao.js</code> preenche
+  <code>municipio.codigo_ibge</code> (casando nome normalizado + UF contra a lista oficial de municípios
+  do IBGE) e grava a população do ano de recorte em <code>ibge_populacao_municipio</code>
+  (<code>sql/08_ibge_populacao_municipio.sql</code>). O casamento por nome é best-effort — municípios com
+  grafia muito divergente entre Anvisa e IBGE ficam sem <code>codigo_ibge</code> e sem população; o script
+  loga quantos casaram e quantos não.</li>
+</ul>
+<h3 id="2-ibge-censo-2022-populacao-por-faixa-etaria-e-municipio-incorporada">2. IBGE — Censo 2022, população por faixa etária e município ✅ incorporada</h3>
+<ul>
+<li><strong>URL:</strong> https://sidra.ibge.gov.br/ (Censo 2022, tabela 9514 — população por idade)</li>
+<li><strong>Granularidade:</strong> município, faixa etária (grupos de 5 anos)</li>
+<li><strong>Formato/licença:</strong> API REST, dados abertos</li>
+<li><strong>Pergunta nova:</strong> a base já tem <code>idade_paciente</code>/<code>unidade_idade</code> para antimicrobianos —
+  cruzando com a pirâmide etária do município dá para saber se o consumo por faixa etária é
+  proporcional à população daquela faixa ou desproporcional (ex.: idosos consumindo mais que
+  sua fração populacional).</li>
+<li><strong>Pré-requisito:</strong> mesmo de #1 (<code>codigo_ibge</code>).</li>
+<li><strong>Status:</strong> incorporada nesta entrega. <code>scripts/carregar_ibge_faixa_etaria.js</code> grava em
+  <code>ibge_populacao_faixa_etaria_municipio</code> (<code>sql/10_ibge_populacao_faixa_etaria_municipio.sql</code>),
+  reaproveitando o <code>codigo_ibge</code> preenchido pelo script da base #1. A API da tabela 9514 rejeita
+  pedir todas as 21 faixas etárias numa única chamada (HTTP 500 por excesso de combinações) — o
+  script faz uma chamada por faixa. Dado é do Censo 2022 (não varia por <code>ANO_RECORTE</code>, só existe
+  esse ano). Municípios muito pequenos têm faixas com sigilo estatístico do IBGE (valor não
+  numérico) — essas ficam sem registro para a faixa em questão.</li>
+</ul>
+<h3 id="3-datasuscnes-estabelecimentos-de-saude-por-municipio-avaliada-nao-incorporada">3. DATASUS/CNES — Estabelecimentos de saúde por município ⚠️ avaliada, não incorporada</h3>
+<ul>
+<li><strong>URL:</strong> https://cnes.datasus.gov.br/ (download CSV mensal por competência)</li>
+<li><strong>Granularidade:</strong> município, mensal</li>
+<li><strong>Formato/licença:</strong> CSV/FTP, dados públicos DATASUS</li>
+<li><strong>Pergunta nova:</strong> correlacionar densidade de farmácias/estabelecimentos no município com
+  volume de dispensação — distingue "pouco consumo" de "pouca oferta".</li>
+<li><strong>Pré-requisito:</strong> mesmo de #1.</li>
+<li><strong>Status:</strong> reinvestigada e ainda não incorporada. O bloqueio de rede de entregas anteriores
+  não se repetiu (FTP <code>ftp.datasus.gov.br/cnes/</code> respondeu normalmente), mas o dump disponível é
+  <code>BASE_DE_DADOS_CNES_{competência}.ZIP</code> — um banco completo do CNES (todas as tabelas, não só
+  estabelecimentos), com ~330 MB por mês. Maior custo de ETL do que uma base recortada
+  justificaria para esta entrega. Fica como candidata para a E3.</li>
+</ul>
+<h3 id="4-datasussia-sus-atendimentos-ambulatoriais-por-cid">4. DATASUS/SIA-SUS — Atendimentos ambulatoriais por CID</h3>
+<ul>
+<li><strong>URL:</strong> https://datasus.saude.gov.br/transferencia-de-arquivos/ (SIA, produção ambulatorial)</li>
+<li><strong>Granularidade:</strong> município, mensal, por CID-10</li>
+<li><strong>Formato/licença:</strong> CSV (formato DBC do DATASUS, requer conversão), dados públicos</li>
+<li><strong>Pergunta nova:</strong> a base já tem <code>cid10</code> em <code>venda_medicamento</code> — cruzar com atendimentos
+  ambulatoriais pelo mesmo CID mostra se o volume de antimicrobiano dispensado acompanha o
+  volume de diagnóstico, ou se há dispensação fora do atendimento formal (indício de uso
+  indevido/automedicação).</li>
+<li><strong>Observação:</strong> formato DBC é mais trabalhoso de converter que CSV simples — maior custo de
+  integração que as opções 1-3.</li>
+</ul>
+<h3 id="5-firjan-ifdm-atlas-brasil-idhm-indice-de-desenvolvimento-municipal">5. FIRJAN (IFDM) / Atlas Brasil (IDHM) — Índice de desenvolvimento municipal</h3>
+<ul>
+<li><strong>URL:</strong> https://www.firjan.com.br/ifdm/ ou http://www.atlasbrasil.org.br/</li>
+<li><strong>Granularidade:</strong> município, anual (FIRJAN defasado ~2 anos; Atlas Brasil é por Censo)</li>
+<li><strong>Formato/licença:</strong> planilha XLS/CSV para download, dados públicos (Atlas Brasil é
+  convênio PNUD/IPEA/FJP, uso livre com atribuição)</li>
+<li><strong>Pergunta nova:</strong> correlacionar renda/desenvolvimento socioeconômico do município com
+  padrão de consumo (ex.: antimicrobianos de maior custo concentrados em municípios de IDHM
+  mais alto).</li>
+<li><strong>Observação:</strong> Atlas Brasil é anual por Censo (2010/2022) — granularidade temporal mais
+  grosseira que os dados mensais do SNGPC; serve para cruzar "perfil do município", não
+  tendência mensal.</li>
+<li><strong>Status:</strong> reinvestigada e ainda não incorporada. Os dois portais são aplicações client-side
+  (conteúdo renderizado em JS, sem link direto e estável para planilha/CSV por município) — não
+  há uma URL de download fixa para automatizar como nas bases já incorporadas. Exigiria raspagem
+  da aplicação ou localizar uma API interna não documentada. Fica como candidata para a E3.</li>
+</ul>
+<h3 id="6-inmet-dados-climaticos-incorporada">6. INMET — Dados climáticos ✅ incorporada</h3>
+<ul>
+<li><strong>URL:</strong> https://portal.inmet.gov.br/dadoshistoricos</li>
+<li><strong>Granularidade:</strong> estação meteorológica (não município), horária</li>
+<li><strong>Formato/licença:</strong> ZIP anual com um CSV por estação, dados públicos</li>
+<li><strong>Pergunta nova:</strong> sazonalidade de antimicrobianos por região/mês (ex.: pico de infecções
+  respiratórias no inverno).</li>
+<li><strong>Observação:</strong> granularidade por estação exige mapear estação → município/UF antes de
+  juntar — maior esforço de ETL que as demais opções, e a correlação é só por UF/região, não
+  por município.</li>
+<li><strong>Status:</strong> incorporada nesta entrega. A API JSON do INMET (<code>apitempo.inmet.gov.br</code>) se
+  mostrou instável nos testes (rotas documentadas respondendo <code>404</code>/<code>204</code>/<code>500</code> de forma
+  inconsistente); o caminho usado foi o ZIP histórico estático
+  (<code>portal.inmet.gov.br/uploads/dadoshistoricos/{ano}.zip</code>), que é confiável. O cabeçalho de
+  cada CSV já traz a UF da estação, então <code>scripts/carregar_inmet.js</code> agrega direto por
+  UF/mês — sem precisar resolver estação → município — e grava em <code>clima_mensal_uf</code>
+  (<code>sql/09_clima_mensal_uf.sql</code>).</li>
+</ul>
+<h2 id="recomendacao-para-esta-entrega">Recomendação para esta entrega</h2>
+<p>Priorizar <strong>IBGE — população por município (#1)</strong>: mesma chave de integração (<code>codigo_ibge</code>),
+API REST pronta para uso, resolve a dívida técnica do <code>codigo_ibge</code> em <code>municipio</code> como
+subproduto, e responde diretamente à pergunta de per capita citada pela professora.</p>
+<p><strong>INMET — clima mensal por UF (#6)</strong> entrou também: o ZIP histórico é estável e o cabeçalho de
+cada CSV já traz a UF, então não precisou resolver estação → município como o esforço inicial
+sugeria.</p>
+<p><strong>IBGE — população por faixa etária (#2)</strong> entrou numa rodada seguinte: mesma chave
+(<code>codigo_ibge</code>), mesma API, custo de integração baixo.</p>
+<p>Essas três foram <strong>incorporadas ao banco</strong> (ver <code>sql/08_ibge_populacao_municipio.sql</code> +
+<code>scripts/carregar_ibge_populacao.js</code>, <code>sql/09_clima_mensal_uf.sql</code> + <code>scripts/carregar_inmet.js</code>,
+e <code>sql/10_ibge_populacao_faixa_etaria_municipio.sql</code> + <code>scripts/carregar_ibge_faixa_etaria.js</code>).</p>
+<p><strong>CNES — estabelecimentos de saúde (#3)</strong> foi reinvestigada: o acesso de rede que antes bloqueava
+(API/FTP) voltou a funcionar, mas o dump do FTP é o banco completo do CNES (~330 MB/mês, todas as
+tabelas) — custo de ETL maior que o justificável para esta entrega. Fica para a E3.</p>
+<p><strong>FIRJAN/Atlas Brasil (#5)</strong> também foi reinvestigada: os dois portais são aplicações client-side
+sem URL fixa de download por município, então não há um caminho de automação simples. Fica para
+a E3.</p>
+<p><strong>SIA-SUS (#4)</strong> segue registrada como candidata para a E3, por exigir conversão do formato DBC.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

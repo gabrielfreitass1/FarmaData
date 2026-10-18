@@ -1,0 +1,883 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../../adr/ADR-E2/">
+      
+      
+        <link rel="next" href="../../BASES_PUBLICAS/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Diario de Bordo - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diario-de-bordo-semanas-7-a-10" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Diario de Bordo
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../adr/ADR/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADR
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de Bordo
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de Bordo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#semana-7-2209-a-2809" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 7 — 22/09 a 28/09
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-8-2909-a-0510" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 8 — 29/09 a 05/10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-9-0610-a-1210" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 9 — 06/10 a 12/10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-10-1310-entrega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 10 — 13/10 (entrega)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bases de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Camada Analítica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consultas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#semana-7-2209-a-2809" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 7 — 22/09 a 28/09
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-8-2909-a-0510" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 8 — 29/09 a 05/10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-9-0610-a-1210" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 9 — 06/10 a 12/10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semana-10-1310-entrega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 10 — 13/10 (entrega)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="diario-de-bordo-semanas-7-a-10">Diário de bordo — Semanas 7 a 10</h1>
+<blockquote>
+<p>Registro das decisões, bloqueios e responsáveis da Squad para a Entrega 2 (issue #10).
+Ritual: reunião da Squad após as aulas de segunda e quarta de cada semana. Decisões
+pontuais fora desse ritual foram alinhadas por mensagem direta no grupo do WhatsApp da
+Squad e aplicadas direto no código/commit correspondente.</p>
+</blockquote>
+<h2 id="semana-7-2209-a-2809">Semana 7 — 22/09 a 28/09</h2>
+<p>Nos encontramos na segunda (22/09) e na quarta (24/09), logo depois da aula. Ruan modelou o
+schema completo em sete etapas incrementais: geografia (UF/município), tempo, medicamento e
+CID-10, conselho profissional e listas fixas da Anvisa, a tabela fato <code>venda_medicamento</code> com
+seus índices, e por fim o Docker Compose com o README de reprodutibilidade completa. Junto
+disso ele registrou a decisão de modelagem no ADR-001: insert-only normalizado, seguindo o
+método de 6 passos da disciplina, e tornou o recorte de ano configurável via <code>ANO_RECORTE</code>
+para não precisar recriar o schema a cada ajuste de escopo.</p>
+<p>Eu (João Paulo) rodei o pipeline pela primeira vez e esbarrei em vários bloqueios de carga:
+estouro de string no parser de CSV grande, cache de download falho e colunas reais do CSV do
+SNGPC divergentes do que estava mapeado (<code>nu_ano_venda</code>, <code>sg_uf_venda</code> etc.), além de um
+problema de idempotência no cache de período — corrigi tudo isso ainda na mesma semana e abri
+o PR #1 com o Makefile e o <code>QUERIES.md</code> para padronizar os comandos de operação do projeto.
+Eduardo documentou o uso de IA no projeto (<code>AI-USAGE.md</code>), por exigência da disciplina.</p>
+<p>Os bloqueios de CSVs maiores do que o parser inicial suportava e de colunas divergentes da
+documentação da fonte foram resolvidos ainda dentro da semana.</p>
+<h2 id="semana-8-2909-a-0510">Semana 8 — 29/09 a 05/10</h2>
+<p>Reunião na segunda (29/09) e na quarta (01/10). Eduardo otimizou o tempo de download e
+inserção das tabelas do SNGPC (PR #2), resolvendo a lentidão e os erros que vínhamos
+observando na primeira carga completa em Docker. Entre as reuniões, pelo WhatsApp da Squad,
+alinhamos priorizar a estabilização da carga antes de avançar para as bases complementares da
+E2, já que a ingestão do SNGPC ainda não rodava de ponta a ponta de forma confiável.</p>
+<p>O bloqueio da semana — carga completa dos 12 meses ainda lenta e instável em Docker — foi
+resolvido pelo próprio Eduardo nesse mesmo período.</p>
+<h2 id="semana-9-0610-a-1210">Semana 9 — 06/10 a 12/10</h2>
+<p>Na reunião de segunda (06/10) trouxemos a pauta da professora: confrontar o SNGPC com outras
+bases públicas (issue #10). Fiquei (João Paulo) responsável por levantar e avaliar as fontes,
+e entreguei o levantamento completo em <code>BASES_PUBLICAS.md</code>, avaliando seis bases candidatas —
+IBGE população, IBGE faixa etária, DATASUS/CNES, DATASUS/SIA-SUS, FIRJAN/Atlas Brasil e INMET
+— documentando para cada uma a granularidade, a licença e a pergunta nova que ela permite
+responder.</p>
+<p>Confirmamos por WhatsApp, fora da reunião de quarta, incorporar nesta entrega as três bases de
+menor custo de integração: IBGE população por município, IBGE população por faixa etária e
+INMET clima mensal por UF. CNES, SIA-SUS e FIRJAN/Atlas Brasil ficaram como candidatas para a
+E3, por terem custo de ETL maior — o CNES só disponibiliza um dump de ~330 MB sem recorte, o
+SIA-SUS exige conversão do formato DBC, e os portais do FIRJAN/Atlas Brasil são client-side e
+não têm URL fixa de download. Implementei o preenchimento de <code>municipio.codigo_ibge</code> (que
+resolveu de quebra uma dívida técnica do ADR), criei as tabelas
+<code>ibge_populacao_municipio</code>, <code>ibge_populacao_faixa_etaria_municipio</code> e <code>clima_mensal_uf</code>, e
+pluguei os respectivos scripts de carga no <code>docker-compose.yml</code>. Abri e mergeei o PR #11,
+fechando a parte de bases públicas da issue #10.</p>
+<p>Tive dois bloqueios nessa entrega: a API do INMET (<code>apitempo.inmet.gov.br</code>) respondia de
+forma instável (404/204/500 inconsistentes), contornado usando o ZIP histórico estático do
+portal; e a API do IBGE (tabela 9514, faixa etária) rejeitava pedir as 21 faixas etárias numa
+única chamada, contornado fazendo uma chamada por faixa. Municípios com grafia muito
+divergente entre Anvisa e IBGE ficaram sem <code>codigo_ibge</code> — registrei isso como limitação
+conhecida, sem bloquear a entrega.</p>
+<h2 id="semana-10-1310-entrega">Semana 10 — 13/10 (entrega)</h2>
+<p>Reunião de fechamento na segunda (13/10), antes da entrega marcada pela tag <code>e2</code>. Acertamos na
+reunião e depois ajustamos detalhes pelo WhatsApp a divisão final de trabalho da E2: Eduardo
+tornou a ingestão do SNGPC idempotente e reexecutável (PR #12, issue #3); Ruan construiu a
+camada analítica/lakehouse, exportando <code>venda_medicamento</code> para Delta Lake sobre Parquet,
+particionado por ano e mês, ordenado por UF/medicamento, com compressão ZSTD, compaction e
+validação via DuckDB (PR #13, issues #5/#6); João Pedro detalhou a semântica at-least-once e
+as chaves de idempotência de reprocessamento (PR #14, issue #7); Paola escreveu o ADR-E2 sobre
+o mecanismo de ingestão, comparando CDC com recarga e Iceberg com Delta (PR #15, issue #9); e
+eu fechei a issue #10 resumindo a tabela de status das bases complementares no <code>README.md</code> e
+escrevendo este diário de bordo. Gabriel Freitas fez a integracao com o CDC que captura as mudancas
+em tempo quase real e documenta um um arquivo texto e implementou a documentacao para um github pages.</p>
+<p>Ficaram em aberto, sem commits nesta janela, a issue #8 (tratamento de dado atrasado, atribuída ao Pedro Augusto) — candidatas
+a entrar na E3. Não houve bloqueio novo nesta semana: foi uma semana de consolidação e
+fechamento, encerrada com a tag <code>e2</code> sobre a main consolidada com todas as entregas acima.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

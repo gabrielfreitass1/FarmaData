@@ -1,0 +1,21 @@
+=== Demonstração CDC — venda_medicamento — 2026-10-17T21:41:36.632Z ===
+Marca desta execução (numero_notificacao): CDC-DEMO-1792273296632
+
+--- 1) Pipeline ---
+wal_level: logical
+Conector: RUNNING | tarefa: RUNNING
+Slot de replicação: farmadata_slot | plugin=pgoutput | active=true | confirmed_flush_lsn=8/DAD00F10
+
+--- 2) Alterações executadas no OLTP ---
+SQL> INSERT INTO venda_medicamento (id_periodo, data_venda, id_municipio, id_medicamento, quantidade_vendida, eh_antimicrobiano, numero_notificacao, arquivo_origem) SELECT (SELECT MIN(id_periodo) FROM periodo), DATE '2020-01-15', (SELECT MIN(id_municipio) FROM municipio), (SELECT MIN(id_medicamento) FROM medicamento), 1.500, FALSE, 'CDC-DEMO-1792273296632', 'cdc_demo' RETURNING id_venda
+   -> id_venda = 98981892
+SQL> UPDATE venda_medicamento SET quantidade_vendida = 5.000 WHERE id_venda = 98981892
+SQL> DELETE FROM venda_medicamento WHERE id_venda = 98981892
+
+--- 3) Eventos recebidos no tópico farmadata.public.venda_medicamento ---
+op=c (INSERT) | lsn=38030807008 | before: (sem before) | after: quantidade_vendida=1.500
+op=u (UPDATE) | lsn=38030822224 | before: quantidade_vendida=1.500 | after: quantidade_vendida=5.000
+op=d (DELETE) | lsn=38030822504 | before: quantidade_vendida=5.000 | after: (sem after)
+
+--- 4) Resultado ---
+SUCESSO: INSERT, UPDATE e DELETE feitos no OLTP chegaram ao Kafka como eventos op=c, op=u e op=d.
