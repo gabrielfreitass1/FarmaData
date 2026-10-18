@@ -1,0 +1,38 @@
+
+site_name: Documentação do Projeto
+site_description: Documentação técnica do projeto
+site_author: Equipe de desenvolvimento
+
+theme:
+  name: material
+  language: pt-BR
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Início: index.md
+  - ADR:
+    - adr/ADR.md
+    - adr/ADR-E2.md
+  - Diario de Bordo: diario/DIARIO_DE_BORDO.md
+  - Bases de Dados: BASES_PUBLICAS.md
+  - Camada Analítica: CAMADA_ANALITICA.md
+  - Consultas: QUERIES.md
+  

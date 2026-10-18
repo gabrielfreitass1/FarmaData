@@ -74,9 +74,9 @@ validação via DuckDB (PR #13, issues #5/#6); João Pedro detalhou a semântica
 as chaves de idempotência de reprocessamento (PR #14, issue #7); Paola escreveu o ADR-E2 sobre
 o mecanismo de ingestão, comparando CDC com recarga e Iceberg com Delta (PR #15, issue #9); e
 eu fechei a issue #10 resumindo a tabela de status das bases complementares no `README.md` e
-escrevendo este diário de bordo.
+escrevendo este diário de bordo. Gabriel Freitas fez a integracao com o CDC que captura as mudancas
+em tempo quase real e documenta um um arquivo texto e implementou a documentacao para um github pages.
 
-Ficaram em aberto, sem commits nesta janela, as issues #4 (CDC/captura de mudanças, atribuída
-ao Gabriel Freitas) e #8 (tratamento de dado atrasado, atribuída ao Pedro Augusto) — candidatas
+Ficaram em aberto, sem commits nesta janela, a issue #8 (tratamento de dado atrasado, atribuída ao Pedro Augusto) — candidatas
 a entrar na E3. Não houve bloqueio novo nesta semana: foi uma semana de consolidação e
 fechamento, encerrada com a tag `e2` sobre a main consolidada com todas as entregas acima.
