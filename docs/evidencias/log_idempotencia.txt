@@ -1,0 +1,28 @@
+=== Teste de idempotência — EDA_Industrializados_202001.csv — 2026-10-18T01:08:04-03:00 ===
+[0] Estado inicial  (total | arquivo: linhas|soma_qtd)
+   estado: 68264756 | 6143427|31521491.000
+[1] Reexecução simples (esperado: SKIP, nada muda)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+[2] Tabela de controle perdida: apago o registro e reexecuto (esperado: recarrega SEM duplicar)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+[3] Recarga forçada com SNGPC_FORCE=1 (esperado: recarrega SEM duplicar)
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+ Container farmadata-teste-carga Creating 
+ Container farmadata-teste-carga Created 
+   estado: 68264756 | 6143427|31521491.000
+   ✓ idêntico ao estado inicial
+=== RESULTADO: carga idempotente e reexecutável ✓ ===
