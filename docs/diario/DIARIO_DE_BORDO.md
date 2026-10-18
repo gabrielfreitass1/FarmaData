@@ -82,7 +82,7 @@ fechamento, encerrada com a tag `e2` sobre a main consolidada com todas as entre
 
 ## 18/10 — dado atrasado (issue #8)
 
-Pedro Augusto fechou o tratamento de dado atrasado. A decisão está no ADR-003: a janela da dispensação é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Se esse mês está no recorte e difere do arquivo, a linha entra nesse período e a contagem fica em `carga_arquivo.eventos_atrasados`. Se está fora do recorte, a linha é descartada e o motivo `periodo_fora_do_recorte` fica em `motivos_rejeicao`.
+Eu (Pedro Augusto), fechei o tratamento de dado atrasado. A decisão está no ADR-003: a janela da dispensação é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Se esse mês está no recorte e difere do arquivo, a linha entra nesse período e a contagem fica em `carga_arquivo.eventos_atrasados`. Se está fora do recorte, a linha é descartada e o motivo `periodo_fora_do_recorte` fica em `motivos_rejeicao`.
 
 A demonstração usa os CSVs em `scripts/fixtures/dado_atrasado/`. `make simular-atraso` carrega o arquivo de fevereiro de 2020: a venda de janeiro entra em `202001`, a de fevereiro entra em `202002` e a de dezembro de 2019 é rejeitada. A saída está em `docs/evidencias/dado_atrasado.txt`.
 
