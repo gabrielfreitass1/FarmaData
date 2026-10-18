@@ -1,0 +1,76 @@
+# -----------------------------------------------------------------------------
+# CDC (Change Data Capture) — Postgres (WAL lógico) -> Debezium -> Kafka
+#
+# Arquivo de OVERRIDE: usado junto com o docker-compose.yml principal.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.cdc.yml up -d db kafka connect
+#
+# Listar explicitamente os serviços (db kafka connect) evita que o serviço
+# "carga" rode de novo.
+# -----------------------------------------------------------------------------
+services:
+  # Mesmo serviço "db" do compose principal, agora com replicação lógica ligada.
+  # Mudar wal_level exige reiniciar o Postgres; os dados do volume pgdata são mantidos.
+  db:
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_wal_senders=10
+      - -c
+      - max_replication_slots=10
+
+  # Broker Kafka single-node em modo KRaft (sem Zookeeper)
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: farmadata_kafka
+    restart: unless-stopped
+    ports:
+      - "${KAFKA_PORT:-9094}:9094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:${KAFKA_PORT:-9094}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+  # Kafka Connect com o conector Debezium para Postgres
+  connect:
+    image: quay.io/debezium/connect:2.7
+    container_name: farmadata_connect
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "${CONNECT_PORT:-8083}:8083"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: farmadata-connect
+      CONFIG_STORAGE_TOPIC: farmadata_connect_configs
+      OFFSET_STORAGE_TOPIC: farmadata_connect_offsets
+      STATUS_STORAGE_TOPIC: farmadata_connect_status
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8083/connectors > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
