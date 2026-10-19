@@ -1,7 +1,7 @@
 # Queries principais
 
 Consultas de apoio à pergunta de gestão do projeto (README.md): quais princípios
-ativos, municípios e períodos concentram o maior volume de dispensações em 2020,
+ativos, municípios e períodos concentram o maior volume de dispensações no ano de análise,
 e como esses padrões se distribuem por região e faixa etária.
 
 Rode via `make psql` ou `docker compose exec db psql -U postgres -d farmadata`.
@@ -66,9 +66,7 @@ SELECT CASE
        END AS faixa_etaria,
        COUNT(*) AS total_dispensacoes
 FROM venda_medicamento v
-WHERE v.eh_antimicrobiano = TRUE
-  AND v.id_unidade_idade = (SELECT id_unidade_idade FROM unidade_idade WHERE descricao = 'Anos')
-  AND v.idade_paciente IS NOT NULL
+WHERE v.eh_antimicrobiano AND v.idade_paciente IS NOT NULL
 GROUP BY faixa_etaria
 ORDER BY faixa_etaria;
 ```
@@ -86,19 +84,7 @@ ORDER BY total_dispensacoes DESC
 LIMIT 10;
 ```
 
-## 7. Volume por tipo de receituário
-
-```sql
-SELECT tr.descricao,
-       SUM(v.quantidade_vendida) AS quantidade_total,
-       COUNT(*)                  AS total_dispensacoes
-FROM venda_medicamento v
-JOIN tipo_receituario tr ON tr.id_tipo_receituario = v.id_tipo_receituario
-GROUP BY tr.descricao
-ORDER BY quantidade_total DESC;
-```
-
-## 8. Cruzamento: princípio ativo x região x trimestre
+## 7. Cruzamento: princípio ativo x região x trimestre
 
 ```sql
 SELECT m.principio_ativo, uf.regiao, p.trimestre,
@@ -112,3 +98,55 @@ GROUP BY m.principio_ativo, uf.regiao, p.trimestre
 ORDER BY quantidade_total DESC
 LIMIT 20;
 ```
+
+## 8. Dispensações per capita por município (SNGPC + IBGE População)
+
+Responde à pergunta: *O alto volume de vendas num município deve-se apenas ao tamanho da população ou há um padrão de consumo elevado?*
+
+```sql
+SELECT m.nome_municipio, m.sigla_uf,
+       p.populacao,
+       SUM(v.quantidade_vendida) AS total_vendido,
+       ROUND((SUM(v.quantidade_vendida) / p.populacao) * 1000, 2) AS vendas_por_1000_hab
+FROM venda_medicamento v
+JOIN municipio m ON v.id_municipio = m.id_municipio
+JOIN ibge_populacao_municipio p ON m.id_municipio = p.id_municipio
+WHERE p.populacao > 50000 -- Filtro para evitar distorções de municípios muito pequenos
+GROUP BY m.nome_municipio, m.sigla_uf, p.populacao
+ORDER BY vendas_por_1000_hab DESC
+LIMIT 10;
+```
+
+
+## 9. Sazonalidade climática e antimicrobianos (SNGPC + INMET)
+
+Responde à pergunta: *Responde à pergunta: O volume de dispensação de antimicrobianos aumenta em meses de temperaturas mais baixas?*
+
+```sql
+WITH mensal AS (
+  SELECT c.sigla_uf, v.id_periodo, c.temp_media_c, SUM(v.quantidade_vendida) AS vol
+  FROM venda_medicamento v
+  JOIN municipio m ON m.id_municipio = v.id_municipio
+  JOIN clima_mensal_uf c ON c.sigla_uf = m.sigla_uf AND c.id_periodo = v.id_periodo
+  WHERE v.eh_antimicrobiano
+  GROUP BY c.sigla_uf, v.id_periodo, c.temp_media_c)
+SELECT sigla_uf, ROUND(corr(temp_media_c, vol)::numeric, 2) AS correlacao, COUNT(*) AS meses
+FROM mensal GROUP BY 1 ORDER BY correlacao; -- Ordena dos estados/meses mais frios para os mais quentes
+LIMIT 15;
+```
+
+## 10. Comparativo etário em municípios focais (SNGPC + IBGE Faixa Etária)
+
+Responde à pergunta: *Responde à pergunta: Como se distribui a pirâmide etária de um município específico para cruzamento futuro com as faixas de consumo de antimicrobianos?*
+
+```sql
+SELECT m.nome_municipio, m.sigla_uf, 
+       f.faixa_etaria, 
+       f.populacao
+FROM ibge_populacao_faixa_etaria_municipio f
+JOIN municipio m ON f.id_municipio = m.id_municipio
+WHERE m.sigla_uf = 'DF' AND m.nome_municipio ILIKE 'BRAS%LIA'
+ORDER BY f.populacao DESC;
+```
+
+Insight Analítico: A importação da pirâmide etária do IBGE revela que o DF tem uma forte concentração populacional entre os 20 e 49 anos, e uma base estreita (queda de natalidade em 0-4 anos). Isto viabiliza a transformação do volume absoluto de vendas de antimicrobianos (Query 5) em taxas de consumo proporcional por habitante de cada faixa etária, revelando o verdadeiro padrão de medicalização da população.

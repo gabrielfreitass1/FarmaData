@@ -35,7 +35,7 @@ joins no motor de leitura e mantém o dado autoexplicativo fora do PostgreSQL.
 
 ## Particionamento
 
-Consultas de [QUERIES.md](../QUERIES.md): Q3/Q8 agregam por mês/trimestre;
+Consultas de [QUERIES.md](QUERIES.md): Q3/Q8 agregam por mês/trimestre;
 Q2/Q4/Q8 por UF/região; Q1/Q8 por princípio ativo.
 
 - **Partição `ano, mes`** — 12 partições/ano, ~5,7 M linhas cada. Poda direta

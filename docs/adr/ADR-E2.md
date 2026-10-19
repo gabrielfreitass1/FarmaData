@@ -12,7 +12,7 @@
 |---|---|
 | **Domínio** | Ingestão e consolidação analítica de dados de saúde pública: SNGPC/Anvisa, DATASUS (CID-10), IBGE (população) e INMET (clima). |
 | **Padrão de atualização da origem** | Publicação em bateladas periódicas oficiais pelas agências de governo. Inexistência de transações OLTP contínuas. |
-| **Volume estimado** | ~68,3 milhões de registros anuais na tabela fato de dispensações (~7 GB brutos de dados relacionais + ~3 GB de índices para 2020), além de catálogos dimensionais. |
+| **Volume estimado** | ~68,3 milhões de registros anuais na tabela fato de dispensações (~7 GB brutos de dados relacionais + ~3 GB de índices para por ano de análise), além de catálogos dimensionais. |
 | **Taxa de escrita** | Bateladas volumosas esporádicas (mensais/anuais). Nenhuma concorrência de escrita durante a consulta analítica. |
 | **Latência tolerada pelo negócio** | D-1 a D-30 perfeitamente aceitável. O dado oficial é retroativo e consolidado mensalmente; não há requisitos de monitoramento operacional em tempo real. |
 | **Padrão de acesso analítico** | Leituras analíticas intensivas (*OLAP*), scans seletivos com filtros por período temporal, UF e princípio ativo, além de agregações multidimensionais (*GROUP BY*). |
