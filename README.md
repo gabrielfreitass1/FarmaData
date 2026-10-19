@@ -1,9 +1,9 @@
 # FarmaData
 
 > Projeto da disciplina Sistemas de Bancos de Dados 2 — UnB.  
-> Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, 2020).
+> Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, ano configurável).
 
-**Pergunta de gestão:** Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em 2020, e como esses padrões se distribuem por região e faixa etária?
+**Pergunta de gestão:** Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em um ano, e como esses padrões se distribuem por região e faixa etária?
 
 ---
 
@@ -64,7 +64,7 @@ FarmaData/
 ├── sql/
 │   ├── 01_geografia_uf.sql         # UF: 27 registros fixos
 │   ├── 02_geografia_municipio.sql  # Municípios (populado pela carga)
-│   ├── 03_tempo_periodo.sql        # 12 meses de 2020
+│   ├── 03_tempo_periodo.sql        # 12 meses de um ano
 │   ├── 04_medicamento.sql          # Princípio ativo + apresentação
 │   ├── 05_cid10.sql                # Estrutura da tabela CID-10
 │   ├── 05_carga_catalogo_cid10.sql # Carga do catálogo DATASUS (gerado)
@@ -129,7 +129,7 @@ Levantamento completo em [`BASES_PUBLICAS.md`](BASES_PUBLICAS.md). Status:
 
 ---
 
-## Volume (2020)
+## Volume 
 
 | Métrica | Valor |
 |---------|-------|

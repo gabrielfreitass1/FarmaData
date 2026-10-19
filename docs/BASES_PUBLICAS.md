@@ -6,7 +6,7 @@
 
 ## Contexto da base atual
 
-A granularidade do `venda_medicamento` é por **município × período (mês/2020) × medicamento
+A granularidade do `venda_medicamento` é por **município × período (mês/ano de recorte) × medicamento
 × (CID-10 quando antimicrobiano)**. Qualquer base externa só agrega valor se puder ser
 cruzada numa dessas chaves.
 
