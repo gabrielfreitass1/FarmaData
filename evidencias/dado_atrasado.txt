@@ -1,0 +1,48 @@
+=== Dado atrasado — EDA_Industrializados_202002.csv — 2026-10-18T17:58:03-0300 ===
+CSV: scripts/fixtures/dado_atrasado/EDA_Industrializados_202002.csv
+  venda 2020-01, quantidade 1 — mês anterior ao arquivo
+  venda 2020-02, quantidade 2 — mesmo mês do arquivo
+  venda 2019-12, quantidade 3 — fora de ANO_RECORTE
+
+ Container farmadata_db  Running
+ Container farmadata_db  Waiting
+ Container farmadata_db  Healthy
+NOTICE:  database "farmadata_sim_atraso" does not exist, skipping
+DROP DATABASE
+CREATE DATABASE
+[1] Carga
+ Container farmadata_db  Running
+FarmaData — carga SNGPC (ano 2020)
+
+[OK] Conectado ao PostgreSQL.
+[OK] Períodos de 2020 verificados.
+[OK] Catálogo CID-10: 0 códigos (coluna codigo).
+[AVISO] Catálogo CID-10 indisponível (tabela cid10 vazia). CID será gravado como NULL.
+[+] Criando índices (pode levar alguns minutos)...
+[OK] Índices criados em 0s.
+
+── 202002 ──
+  [CACHE] arquivo local encontrado.
+  [→] EDA_Industrializados_202002.csv: passada 1 (dimensões)
+      dimensões: +1 municípios, +1 medicamentos
+  [→] EDA_Industrializados_202002.csv: passada 2 (COPY)
+      ✓ 2 inseridas | ✗ 1 rejeitadas {"periodo_fora_do_recorte":1} | ↩ 1 realocadas ao período da venda {"202001":1}
+  [OK] EDA_Industrializados_202002.csv em 0s
+
+══════════════════════════════════════════════
+ Inseridas nesta execução: 2
+ Total no banco: 2 linhas em 1 arquivos
+ Tempo: 0s
+══════════════════════════════════════════════
+
+[2] venda_medicamento (id_periodo | data_venda | quantidade | arquivo_origem)
+202001|2020-01-01|1.000|EDA_Industrializados_202002.csv
+202002|2020-02-01|2.000|EDA_Industrializados_202002.csv
+
+[3] carga_arquivo (lidas | inseridas | rejeitadas | fora_do_recorte | realocadas | realocadas_202001)
+3|2|1|1|1|1
+
+motivos_rejeicao={"periodo_fora_do_recorte": 1}
+eventos_atrasados={"por_periodo_da_venda": {"202001": 1}, "realocado_para_periodo_da_venda": 1}
+
+=== RESULTADO: venda de janeiro entrou em 202001; 201912 foi rejeitada ✓ ===
