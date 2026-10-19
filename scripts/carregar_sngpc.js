@@ -16,10 +16,17 @@
 //  - índice em venda_medicamento(arquivo_origem) torna o DELETE barato
 //  - advisory lock impede duas cargas simultâneas
 //
+// Dado atrasado (docs/adr/ADR-003-dado-atrasado.md):
+//  - a janela é o mês da venda (nu_ano_venda, nu_mes_venda), não o mês do arquivo
+//  - mês da venda dentro do recorte e diferente do arquivo: insere nesse período
+//    e registra a contagem em carga_arquivo.eventos_atrasados (inclusive zero)
+//  - mês da venda fora do recorte: descarta e conta como periodo_fora_do_recorte
+//
 // Variáveis de ambiente opcionais:
 //  - ANO_RECORTE=2020          ano a carregar
 //  - SNGPC_MESES=202001,202002 limita os meses processados (aceita também 01,02). Vazio = todos
 //  - SNGPC_FORCE=1             recarrega mesmo os arquivos já registrados em carga_arquivo
+//  - SNGPC_DIR=caminho        diretório dos CSVs (padrão: tmp/). Arquivo presente não é baixado de novo.
 
 'use strict';
 
@@ -40,7 +47,7 @@ const BASE_URL = 'https://dados.anvisa.gov.br/dados/SNGPC/Industrializados';
 const MESES = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 const CSV_SEPARADOR = ';';
 const CSV_ENCODING = 'latin1'; // arquivos da Anvisa: Windows-1252
-const TMP_DIR = path.resolve(__dirname, '../tmp');
+const TMP_DIR = path.resolve(process.env.SNGPC_DIR || path.join(__dirname, '../tmp'));
 const LOTE_COPY = 5000;
 const SEP = '\u0001'; // separador interno de chaves
 const LOCK_ID = 727001; // advisory lock: uma carga SNGPC por vez
@@ -74,6 +81,12 @@ const esc = (v) =>
     : String(v).replace(/\\/g, '\\\\').replace(/[\t\r\n]/g, ' ');
 
 const fmtSeg = (ms) => `${Math.round(ms / 1000)}s`;
+
+// EDA_Industrializados_202002.csv -> "202002". Null se o nome não tiver AAAAMM.
+function periodoDoNomeArquivo(arq) {
+  const m = String(arq).match(/(\d{4})(\d{2})(?=\.csv$)/i);
+  return m ? `${m[1]}${m[2]}` : null;
+}
 
 function baixarArquivo(url, destino, redirecoes = 0) {
   return new Promise((resolve, reject) => {
@@ -143,8 +156,12 @@ async function garantirCargaArquivo(client) {
       linhas_inseridas BIGINT NOT NULL,
       linhas_rejeitadas BIGINT NOT NULL,
       motivos_rejeicao JSONB NOT NULL DEFAULT '{}'::jsonb,
+      eventos_atrasados JSONB NOT NULL DEFAULT '{}'::jsonb,
       carregado_em     TIMESTAMPTZ NOT NULL DEFAULT now()
     )`);
+  await client.query(`
+    ALTER TABLE carga_arquivo
+      ADD COLUMN IF NOT EXISTS eventos_atrasados JSONB NOT NULL DEFAULT '{}'::jsonb`);
   // Torna barato o DELETE por arquivo (idempotência). Não faz parte de INDICES_ANTIGOS: nunca é removido.
   await client.query(
     'CREATE INDEX IF NOT EXISTS idx_venda_arquivo_origem ON venda_medicamento(arquivo_origem)');
@@ -304,10 +321,13 @@ async function resolverDimensoes(client, caminho) {
 
 async function carregarArquivo(client, caminho) {
   const arq = path.basename(caminho);
+  const periodoArquivo = periodoDoNomeArquivo(arq);
   let lidas = 0;
   let inseridas = 0;
+  let realocados = 0;
   let cidForaCatalogo = 0;
   const motivos = {};
+  const realocadosPorPeriodo = {};
   const rejeitar = (m) => { motivos[m] = (motivos[m] || 0) + 1; };
 
   console.log(`  [→] ${arq}: passada 1 (dimensões)`);
@@ -321,7 +341,8 @@ async function carregarArquivo(client, caminho) {
       lidas++;
 
       const mes2 = (r.mes || '').padStart(2, '0');
-      const idPeriodo = cachePeriodo.get(`${r.ano}${mes2}`);
+      const chaveVenda = `${r.ano}${mes2}`;
+      const idPeriodo = cachePeriodo.get(chaveVenda);
       if (!idPeriodo) { rejeitar('periodo_fora_do_recorte'); continue; }
       if (!r.uf || !UFS.has(r.uf)) { rejeitar('uf_invalida'); continue; }
       if (!r.mun) { rejeitar('sem_municipio'); continue; }
@@ -357,6 +378,12 @@ async function carregarArquivo(client, caminho) {
       // Antimicrobiano: receituário 5 (dicionário 2026) ou qualquer campo exclusivo preenchido
       const ehAntimicrobiano = r.rec === '5' || !!(r.cid || r.sexoBruto || r.idadeBruta);
 
+      // ADR-003: mês do arquivo é chegada; a janela gravada é o mês da venda.
+      if (periodoArquivo && chaveVenda !== periodoArquivo) {
+        realocados++;
+        realocadosPorPeriodo[chaveVenda] = (realocadosPorPeriodo[chaveVenda] || 0) + 1;
+      }
+
       buf.push([
         idPeriodo, `${r.ano}-${mes2}-01`, idMun, idMed, qtd,
         ehAntimicrobiano ? 't' : 'f', cid, sexo, idade, arq
@@ -384,20 +411,26 @@ async function carregarArquivo(client, caminho) {
          FROM STDIN WITH (FORMAT text)`))
     );
     const rejeitadas = lidas - inseridas;
+    const eventosAtrasados = {
+      realocado_para_periodo_da_venda: realocados,
+      por_periodo_da_venda: realocadosPorPeriodo,
+    };
     await client.query(
-      `INSERT INTO carga_arquivo (arquivo, linhas_lidas, linhas_inseridas, linhas_rejeitadas, motivos_rejeicao)
-       VALUES ($1,$2,$3,$4,$5)
+      `INSERT INTO carga_arquivo (arquivo, linhas_lidas, linhas_inseridas, linhas_rejeitadas, motivos_rejeicao, eventos_atrasados)
+       VALUES ($1,$2,$3,$4,$5,$6)
        ON CONFLICT (arquivo) DO UPDATE SET
          linhas_lidas = EXCLUDED.linhas_lidas,
          linhas_inseridas = EXCLUDED.linhas_inseridas,
          linhas_rejeitadas = EXCLUDED.linhas_rejeitadas,
          motivos_rejeicao = EXCLUDED.motivos_rejeicao,
+         eventos_atrasados = EXCLUDED.eventos_atrasados,
          carregado_em = now()`,
-      [arq, lidas, inseridas, rejeitadas, JSON.stringify(motivos)]
+      [arq, lidas, inseridas, rejeitadas, JSON.stringify(motivos), JSON.stringify(eventosAtrasados)]
     );
     await client.query('COMMIT');
     console.log(`      ✓ ${inseridas} inseridas | ✗ ${rejeitadas} rejeitadas`
       + (rejeitadas ? ` ${JSON.stringify(motivos)}` : '')
+      + (realocados ? ` | ↩ ${realocados} realocadas ao período da venda ${JSON.stringify(realocadosPorPeriodo)}` : '')
       + (cidForaCatalogo ? ` | CID fora do catálogo (→NULL): ${cidForaCatalogo}` : ''));
     return inseridas;
   } catch (err) {

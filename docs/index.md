@@ -62,6 +62,7 @@
 
 * [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-E2.md)
+* [ADR-003: Dado atrasado e janela da dispensação](docs/adr/ADR-003-dado-atrasado.md)
 * [Camada Analítica e Benchmark](docs/CAMADA_ANALITICA.md)
 * [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
 * [Uso de IA no Projeto](AI-USAGE.md)
@@ -213,6 +214,22 @@ ausentes (`make carga-incremental`). Um mês novo publicado pela Anvisa entra so
  
 **Limitações assumidas:** a granularidade de reprocessamento é o arquivo mensal (não a linha); o `DELETE` de ~6 milhões
 de linhas gera bloat — a evolução natural é particionar `venda_medicamento` por `id_periodo` e usar `TRUNCATE` da partição.
+
+## Dado atrasado
+
+A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Decisão e motivos em [`docs/adr/ADR-003-dado-atrasado.md`](docs/adr/ADR-003-dado-atrasado.md).
+
+| Situação | O que a carga faz |
+|---|---|
+| Mês da venda = mês do arquivo, dentro do recorte | Insere nesse período |
+| Mês da venda diferente do arquivo, dentro do recorte | Insere no período da venda e registra em `carga_arquivo.eventos_atrasados` |
+| Mês da venda fora do recorte | Descarta e registra `periodo_fora_do_recorte` em `motivos_rejeicao` |
+
+Um atraso de dias que permanece no mesmo mês não muda a janela: a publicação não traz o dia.
+
+`make simular-atraso` carrega `scripts/fixtures/dado_atrasado/EDA_Industrializados_202002.csv` num banco descartável. A saída fica em `docs/evidencias/dado_atrasado.txt`.
+
+`make reprocessar-janela` carrega o CSV de janeiro, em seguida o de fevereiro, e recarrega fevereiro. A saída fica em `docs/evidencias/reprocessamento_janela.txt`.
 
 ## Sem Docker
 

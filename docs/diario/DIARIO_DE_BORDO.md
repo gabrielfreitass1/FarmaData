@@ -77,6 +77,15 @@ eu fechei a issue #10 resumindo a tabela de status das bases complementares no `
 escrevendo este diário de bordo. Gabriel Freitas fez a integracao com o CDC que captura as mudancas
 em tempo quase real e documenta um um arquivo texto e implementou a documentacao para um github pages.
 
-Ficaram em aberto, sem commits nesta janela, a issue #8 (tratamento de dado atrasado, atribuída ao Pedro Augusto) — candidatas
-a entrar na E3. Não houve bloqueio novo nesta semana: foi uma semana de consolidação e
+Ficou em aberto, sem commit nesta janela, a issue #8 (tratamento de dado atrasado, atribuída ao Pedro Augusto), candidata a entrar na E3. Não houve bloqueio novo nesta semana: foi uma semana de consolidação e
 fechamento, encerrada com a tag `e2` sobre a main consolidada com todas as entregas acima.
+
+## 18/10 — dado atrasado (issue #8)
+
+Eu (Pedro Augusto), fechei o tratamento de dado atrasado. A decisão está no ADR-003: a janela da dispensação é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Se esse mês está no recorte e difere do arquivo, a linha entra nesse período e a contagem fica em `carga_arquivo.eventos_atrasados`. Se está fora do recorte, a linha é descartada e o motivo `periodo_fora_do_recorte` fica em `motivos_rejeicao`.
+
+A demonstração usa os CSVs em `scripts/fixtures/dado_atrasado/`. `make simular-atraso` carrega o arquivo de fevereiro de 2020: a venda de janeiro entra em `202001`, a de fevereiro entra em `202002` e a de dezembro de 2019 é rejeitada. A saída está em `docs/evidencias/dado_atrasado.txt`.
+
+`make reprocessar-janela` carrega antes o CSV de janeiro (quantidade 10 em `202001`) e depois o de fevereiro, que traz uma venda de janeiro (quantidade 1). Recarregar fevereiro executa `DELETE` e `COPY` só das linhas daquele `arquivo_origem`. A quantidade 10 permanece e a venda atrasada não duplica. A saída está em `docs/evidencias/reprocessamento_janela.txt`.
+
+Não houve bloqueio novo.

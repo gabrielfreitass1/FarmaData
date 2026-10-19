@@ -31,6 +31,7 @@ nav:
   - ADR:
     - adr/ADR.md
     - adr/ADR-E2.md
+    - adr/ADR-003-dado-atrasado.md
   - Diario de Bordo: diario/DIARIO_DE_BORDO.md
   - Bases de Dados: BASES_PUBLICAS.md
   - Camada Analítica: CAMADA_ANALITICA.md
