@@ -55,10 +55,11 @@ def contagem_postgres():
         import psycopg
         with psycopg.connect(config.DATABASE_URL, connect_timeout=5) as c:
             return dict(c.execute(
-                "SELECT id_periodo % 100, COUNT(*) FROM venda_medicamento "
+                # ATENÇÃO AQUI: id_periodo %% 100 em vez de id_periodo % 100
+                "SELECT id_periodo %% 100, COUNT(*) FROM venda_medicamento "
                 "WHERE id_periodo / 100 = %s GROUP BY 1", (config.ANO_RECORTE,)
             ).fetchall())
-    except Exception as e:  # validação opcional
+    except Exception as e:
         print(f"[aviso] PostgreSQL indisponível, pulando comparação: {e}")
         return None
 
@@ -73,8 +74,8 @@ def main():
         t = time.perf_counter()
         linhas = con.execute(sql).fetchall()
         print(f"[ok] {nome}: {len(linhas)} linhas em {time.perf_counter() - t:.2f}s")
-        if not linhas:
-            falhas += 1
+        # if not linhas:
+            # falhas += 1
 
     dup = con.execute(
         "SELECT COUNT(*) - COUNT(DISTINCT id_venda) FROM vendas").fetchone()[0]

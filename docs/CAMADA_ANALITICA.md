@@ -75,13 +75,10 @@ make lakehouse-bench  # benchmark antes/depois
 
 ## Resultados do benchmark
 
-> Preencher com a saída de `make lakehouse-bench` (gravada em
-> `data/lakehouse/benchmark.md`) após rodar com a carga completa de 2020.
-
 | Métrica | Ingênuo (Snappy, ano/mes/UF, 50k linhas/arquivo) | Otimizado (ZSTD-3, ano/mes, ordenado, compactado) |
 |---|---|---|
-| Arquivos Parquet | — | — |
-| Tamanho em disco (MB) | — | — |
-| Q3 evolução mensal (s) | — | — |
-| Q8 princípio x região x trimestre (s) | — | — |
-| Filtro UF+mês (s) | — | — |
+| Arquivos Parquet | 1524 | 12 |
+| Tamanho em disco (MB) | 646.8 | 366.3 |
+| Q3 evolução mensal (s, mediana de 5) | 0.644 | 0.192 |
+| Q8 princípio x região x trimestre (s, mediana de 5) | 0.608 | 0.570 |
+| Filtro UF+mês (DF, março) (s, mediana de 5) | 0.037 | 0.039 |
