@@ -813,7 +813,7 @@ outras fontes, respondendo perguntas que a base isolada não permite (ex.: corre
 venda de medicamentos com indicadores externos).</p>
 </blockquote>
 <h2 id="contexto-da-base-atual">Contexto da base atual</h2>
-<p>A granularidade do <code>venda_medicamento</code> é por <strong>município × período (mês/2020) × medicamento
+<p>A granularidade do <code>venda_medicamento</code> é por <strong>município × período (mês/ano de recorte) × medicamento
 × (CID-10 quando antimicrobiano)</strong>. Qualquer base externa só agrega valor se puder ser
 cruzada numa dessas chaves.</p>
 <p><strong>Bloqueio atual:</strong> <code>municipio.codigo_ibge</code> existe na tabela mas <strong>não é populado</strong> na carga
