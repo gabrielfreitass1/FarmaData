@@ -1,0 +1,1616 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../E1/">
+      
+      
+        <link rel="next" href="../../diario/DIARIO_DE_BORDO/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Release Notes 2 — Banco de Dados 2 - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#release-notes-2-banco-de-dados-2" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Release Notes 2 — Banco de Dados 2
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-integrantes-da-squad-e-atribuicoes-na-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Integrantes da Squad e Atribuições na Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-resumo-executivo-da-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Resumo Executivo da Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-checklist-de-aceite-da-e2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Checklist de Aceite da E2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-caminho-1-ingestao-em-lote-idempotente" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Caminho 1 — Ingestão em Lote Idempotente
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Caminho 1 — Ingestão em Lote Idempotente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-mecanismo-de-idempotencia-e-transacionalidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Mecanismo de Idempotência e Transacionalidade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-demonstracao-pratica" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Demonstração Prática
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-caminho-2-captura-de-mudancas-cdc-via-debezium-e-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Caminho 2 — Captura de Mudanças (CDC via Debezium e Kafka)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Caminho 2 — Captura de Mudanças (CDC via Debezium e Kafka)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-arquitetura-de-cdc" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 Arquitetura de CDC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-demonstracao-com-script-de-alteracoes-no-oltp" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 Demonstração com Script de Alterações no OLTP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-camada-analitica-em-formato-aberto-delta-lake-parquet" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Camada Analítica em Formato Aberto (Delta Lake + Parquet)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Camada Analítica em Formato Aberto (Delta Lake + Parquet)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-por-que-formato-aberto" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Por que Formato Aberto?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-estrutura-de-diretorios-e-metadados" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Estrutura de Diretórios e Metadados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-otimizacoes-de-layout-serializacao-e-compressao" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Otimizações de Layout, Serialização e Compressão
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-resultados-de-benchmark-e-consulta-multi-engine-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.4 Resultados de Benchmark e Consulta Multi-Engine (DuckDB)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-tratamento-de-dado-atrasado-e-reprocessamento-de-janela" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Tratamento de Dado Atrasado e Reprocessamento de Janela
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Tratamento de Dado Atrasado e Reprocessamento de Janela">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-definicao-da-janela-analitica-adr-003" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Definição da Janela Analítica (ADR-003)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-demonstracao-pratica-de-dado-atrasado-e-reprocessamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Demonstração Prática de Dado Atrasado e Reprocessamento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-decisoes-arquiteturais-da-entrega-adrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Decisões Arquiteturais da Entrega (ADRs)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Decisões Arquiteturais da Entrega (ADRs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-adr-002-mecanismo-de-ingestao-e-formato-aberto" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.1 ADR-002: Mecanismo de Ingestão e Formato Aberto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-adr-003-dado-atrasado-e-janela-da-dispensacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.2 ADR-003: Dado Atrasado e Janela da Dispensação
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-diario-de-bordo-semanas-7-a-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Diário de Bordo (Semanas 7 a 10)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-guia-de-reprodutibilidade-da-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Guia de Reprodutibilidade da Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-integrantes-da-squad-e-atribuicoes-na-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Integrantes da Squad e Atribuições na Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-resumo-executivo-da-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Resumo Executivo da Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-checklist-de-aceite-da-e2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Checklist de Aceite da E2
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-caminho-1-ingestao-em-lote-idempotente" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Caminho 1 — Ingestão em Lote Idempotente
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Caminho 1 — Ingestão em Lote Idempotente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-mecanismo-de-idempotencia-e-transacionalidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Mecanismo de Idempotência e Transacionalidade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-demonstracao-pratica" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Demonstração Prática
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-caminho-2-captura-de-mudancas-cdc-via-debezium-e-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Caminho 2 — Captura de Mudanças (CDC via Debezium e Kafka)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Caminho 2 — Captura de Mudanças (CDC via Debezium e Kafka)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-arquitetura-de-cdc" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 Arquitetura de CDC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-demonstracao-com-script-de-alteracoes-no-oltp" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 Demonstração com Script de Alterações no OLTP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-camada-analitica-em-formato-aberto-delta-lake-parquet" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Camada Analítica em Formato Aberto (Delta Lake + Parquet)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Camada Analítica em Formato Aberto (Delta Lake + Parquet)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-por-que-formato-aberto" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Por que Formato Aberto?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-estrutura-de-diretorios-e-metadados" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Estrutura de Diretórios e Metadados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-otimizacoes-de-layout-serializacao-e-compressao" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Otimizações de Layout, Serialização e Compressão
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-resultados-de-benchmark-e-consulta-multi-engine-duckdb" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.4 Resultados de Benchmark e Consulta Multi-Engine (DuckDB)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-tratamento-de-dado-atrasado-e-reprocessamento-de-janela" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Tratamento de Dado Atrasado e Reprocessamento de Janela
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Tratamento de Dado Atrasado e Reprocessamento de Janela">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-definicao-da-janela-analitica-adr-003" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Definição da Janela Analítica (ADR-003)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-demonstracao-pratica-de-dado-atrasado-e-reprocessamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Demonstração Prática de Dado Atrasado e Reprocessamento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-decisoes-arquiteturais-da-entrega-adrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Decisões Arquiteturais da Entrega (ADRs)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Decisões Arquiteturais da Entrega (ADRs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-adr-002-mecanismo-de-ingestao-e-formato-aberto" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.1 ADR-002: Mecanismo de Ingestão e Formato Aberto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-adr-003-dado-atrasado-e-janela-da-dispensacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.2 ADR-003: Dado Atrasado e Janela da Dispensação
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-diario-de-bordo-semanas-7-a-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Diário de Bordo (Semanas 7 a 10)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-guia-de-reprodutibilidade-da-entrega-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Guia de Reprodutibilidade da Entrega 2
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="release-notes-2-banco-de-dados-2">Release Notes 2 — Banco de Dados 2</h1>
+<p><strong>Nome do grupo:</strong> FarmaData<br />
+<strong>Tag da entrega:</strong> <code>e2</code><br />
+<strong>Data:</strong> 13/10/2026 (Consolidação: 20/10/2026)<br />
+<strong>Semana:</strong> Semana 10 no cronograma<br />
+<strong>Domínio:</strong> Análise de Venda de Medicamentos Controlados, Antimicrobianos e Agonistas de GLP-1 no Brasil (SNGPC/Anvisa) e Camada Analítica Lakehouse  </p>
+<hr />
+<h2 id="1-integrantes-da-squad-e-atribuicoes-na-entrega-2">1. Integrantes da Squad e Atribuições na Entrega 2</h2>
+<table>
+<thead>
+<tr>
+<th>Integrante</th>
+<th>Matrícula / Identificador</th>
+<th>GitHub</th>
+<th>Atribuições Principais na E2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gabriel Freitas Balbino</strong></td>
+<td>180075462</td>
+<td><a href="https://github.com/gabrielfreitass1">@gabrielfreitass1</a></td>
+<td>Implementação da infraestrutura de CDC com Debezium + Kafka KRaft, scripts de demonstração de mudanças do OLTP e publicação da documentação com MkDocs e GitHub Pages.</td>
+</tr>
+<tr>
+<td><strong>Eduardo de Almeida Morais</strong></td>
+<td>231011275</td>
+<td><a href="https://github.com/Edumorais08">@Edumorais08</a></td>
+<td>Garantia de idempotência e reexecutabilidade na ingestão em lote do SNGPC (PR #12 / PR #21, issue #3), locks consultivos de banco e testes de reprocessamento.</td>
+</tr>
+<tr>
+<td><strong>Ruan Sobreira Carvalho</strong></td>
+<td>211043763</td>
+<td><a href="https://github.com/Ruan-Carvalho">@Ruan-Carvalho</a></td>
+<td>Arquitetura e construção da camada analítica Lakehouse (Delta Lake sobre Parquet), particionamento, compressão ZSTD, ordenação interna, compactação e benchmark com DuckDB (PR #13, issues #5 e #6).</td>
+</tr>
+<tr>
+<td><strong>João Pedro Ferreira Moraes</strong></td>
+<td>231028989</td>
+<td><a href="https://github.com/JoaoPedro2206">@JoaoPedro2206</a></td>
+<td>Formalização e testes da semântica de entrega <em>at-least-once</em> com convergência para <em>exactly-once</em> lógico via chaves de idempotência (PR #14, issue #7).</td>
+</tr>
+<tr>
+<td><strong>João Paulo Lima da Silva</strong></td>
+<td>Membro da Squad</td>
+<td><a href="https://github.com/jpaulohe4rt">@jpaulohe4rt</a></td>
+<td>Prospecção, modelagem e integração das bases públicas complementares (IBGE e INMET, PR #11) e documentação do diário de bordo das semanas 7 a 10 (PR #16, issue #10).</td>
+</tr>
+<tr>
+<td><strong>Paola Rebeca Nascimento</strong></td>
+<td>Membro da Squad</td>
+<td><a href="https://github.com/paolaalim">@paolaalim</a></td>
+<td>Elaboração do documento de decisão arquitetural ADR-002 sobre mecanismo de ingestão (Lote vs. CDC, análise da opção nula) e formato de tabela aberta (Delta Lake vs. Iceberg) (PR #15, issue #9).</td>
+</tr>
+<tr>
+<td><strong>Pedro Augusto Sousa Siqueira</strong></td>
+<td>Membro da Squad</td>
+<td><a href="https://github.com/PedroSiq">@PedroSiq</a></td>
+<td>Resolução do tratamento de dados atrasados e reprocessamento de janelas analíticas, testes automatizados e evidências de execução (PR #20, issue #8, ADR-003).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-resumo-executivo-da-entrega-2">2. Resumo Executivo da Entrega 2</h2>
+<p>A Entrega 2 (E2) concretiza a transferência do dado do ecossistema transacional (PostgreSQL/OLTP) para o armazenamento analítico em formato aberto por <strong>dois caminhos de natureza distinta</strong>:
+1. <strong>Caminho 1 (Em lote):</strong> Carga completa e incremental da fonte pública (SNGPC/Anvisa), idempotente, reexecutável e resiliente a falhas parciais.
+2. <strong>Caminho 2 (Captura de mudanças - CDC):</strong> Captura em tempo quase real das alterações transacionais no PostgreSQL via decodificação lógica do WAL com Debezium e entrega a jusante via Apache Kafka.</p>
+<p>Do outro lado, consolidou-se a <strong>camada analítica aberta</strong> utilizando <strong>Delta Lake sobre Parquet</strong>, otimizada com particionamento temporal, ordenação interna para <em>data skipping</em>, compressão ZSTD-3 e validação de consultas analíticas com motor desacoplado (<strong>DuckDB</strong>).</p>
+<hr />
+<h2 id="3-checklist-de-aceite-da-e2">3. Checklist de Aceite da E2</h2>
+<p>Abaixo encontra-se a correspondência direta com os itens verificados pela monitoria e corpo docente:</p>
+<table>
+<thead>
+<tr>
+<th>Item do Checklist de Aceite</th>
+<th>Status</th>
+<th>Onde está implementado / evidenciado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ingestão em lote da fonte pública, idempotente e reexecutável</strong></td>
+<td>Concluído</td>
+<td><code>scripts/carregar_sngpc.js</code>, <code>test_idempotencia.sh</code>, <code>Makefile</code> (<code>make test-idempotencia</code>), evidência em <code>docs/evidencias/idempotencia.txt</code>.</td>
+</tr>
+<tr>
+<td><strong>Fluxo de mudanças a partir do OLTP — CDC por decodificação lógica</strong></td>
+<td>Concluído</td>
+<td><code>docker-compose.cdc.yml</code>, <code>scripts/cdc/registrar_conector.js</code>, <code>scripts/cdc/demo_cdc.js</code>, evidência em <code>docs/evidencias/cdc_evidencia.txt</code> e documentação em <code>docs/CDC.md</code>.</td>
+</tr>
+<tr>
+<td><strong>Camada analítica em formato aberto (Parquet + Delta Lake)</strong></td>
+<td>Concluído</td>
+<td><code>scripts/lakehouse/exportar_delta.py</code>, <code>compactar_delta.py</code>, validação <code>validar_duckdb.py</code>, documentação em <code>docs/CAMADA_ANALITICA.md</code> e <code>docs/adr/ADR-002.md</code>.</td>
+</tr>
+<tr>
+<td><strong>Semântica de entrega declarada e demonstrada</strong></td>
+<td>Concluído</td>
+<td>Semântica <em>at-least-once</em> com convergência para <em>exactly-once</em> lógico via transação atômica (<code>DELETE</code> + <code>COPY</code> no Postgres; <code>mode="overwrite"</code> restrito à partição no Delta). Evidência em <code>docs/evidencias/idempotencia.txt</code>.</td>
+</tr>
+<tr>
+<td><strong>Tratamento explícito de dado atrasado e reprocessamento de janela</strong></td>
+<td>Concluído</td>
+<td>Decisão em <code>docs/adr/ADR-003.md</code>, scripts <code>test_dado_atrasado.sh</code> (<code>make simular-atraso</code>) e <code>test_reprocessar_janela.sh</code> (<code>make reprocessar-janela</code>), evidências em <code>docs/evidencias/dado_atrasado.txt</code> e <code>docs/evidencias/reprocessamento_janela.txt</code>.</td>
+</tr>
+<tr>
+<td><strong>Escolha de serialização e compressão justificada pelo padrão de acesso</strong></td>
+<td>Concluído</td>
+<td>Parquet colunar + ZSTD nível 3 com <em>row groups</em> de 500k linhas e <em>compaction</em> para 128 MB. Benchmark de ganho de desempenho registrado em <code>docs/CAMADA_ANALITICA.md</code>.</td>
+</tr>
+<tr>
+<td><strong>1 ADR sobre a escolha do mecanismo de ingestão com opção nula</strong></td>
+<td>Concluído</td>
+<td><code>docs/adr/ADR-002.md</code> (ADR-E2), confrontando CDC contínuo vs. recarga periódica agendada (opção nula) e Delta Lake vs. Apache Iceberg.</td>
+</tr>
+<tr>
+<td><strong>Diário de bordo das Semanas 7 a 10 no repositório</strong></td>
+<td>Concluído</td>
+<td><code>docs/diario/DIARIO_DE_BORDO.md</code>, cobrindo reuniões, divisão de trabalho, bloqueios e soluções ao longo de todo o ciclo.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-caminho-1-ingestao-em-lote-idempotente">4. Caminho 1 — Ingestão em Lote Idempotente</h2>
+<h3 id="41-mecanismo-de-idempotencia-e-transacionalidade">4.1 Mecanismo de Idempotência e Transacionalidade</h3>
+<ul>
+<li><strong>Chave de idempotência:</strong> O arquivo de origem (<code>EDA_Industrializados_AAAAMM.csv</code> mapeado para a coluna <code>venda_medicamento.arquivo_origem</code>).</li>
+<li><strong>Garantia transacional:</strong> A carga de cada mês executa dentro de uma transação exclusiva:
+  <div class="highlight"><pre><span></span><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">venda_medicamento</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">arquivo_origem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">;</span>
+<span class="k">COPY</span><span class="w"> </span><span class="n">venda_medicamento</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">STDIN</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">FORMAT</span><span class="w"> </span><span class="n">csv</span><span class="p">,</span><span class="w"> </span><span class="k">DELIMITER</span><span class="w"> </span><span class="s1">&#39;;&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">carga_arquivo</span><span class="w"> </span><span class="p">(</span><span class="n">nome_arquivo</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">linhas_inseridas</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(...)</span>
+<span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">nome_arquivo</span><span class="p">)</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="p">...;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></li>
+<li><strong>Resiliência a falhas:</strong> Se a conexão de rede ou a leitura do CSV quebrar, o <code>ROLLBACK</code> automático descarta as alterações, preservando o estado íntegro do banco de dados sem dados parciais.</li>
+<li><strong>Proteção contra concorrência:</strong> Lock consultivo transacional (<code>pg_try_advisory_lock(hashtext('carga_sngpc'))</code>), impedindo execuções simultâneas concorrentes.</li>
+<li><strong>Gestão inteligente de índices:</strong> Os índices secundários da tabela fato só sofrem <code>DROP</code> e <code>REINDEX</code> se houver 3 ou mais arquivos pendentes de carga inicial. Em recargas incrementais ou pontuais, o índice <code>idx_venda_arquivo_origem</code> é preservado, tornando o <code>DELETE</code> instantâneo.</li>
+</ul>
+<h3 id="42-demonstracao-pratica">4.2 Demonstração Prática</h3>
+<p>O comando <code>make test-idempotencia MES=202001</code> executa a recarga forçada (<code>FORCE=1</code>) de um mês contendo mais de 5,7 milhões de linhas e compara a contagem de registros antes e depois. O log atesta:
+<div class="highlight"><pre><span></span><code>Antes da recarga : 5714205 linhas para EDA_Industrializados_202001.csv
+Executando: make carga-sngpc MESES=202001 FORCE=1
+[↻] 5714205 linhas anteriores removidas (reprocessamento)
+[✓] Inseridas 5714205 linhas em ... ms
+Depois da recarga: 5714205 linhas para EDA_Industrializados_202001.csv
+[OK] Idempotência comprovada: contagens idênticas antes e depois.
+</code></pre></div>
+Evidência completa registrada em <a href="../../evidencias/idempotencia.txt"><code>docs/evidencias/idempotencia.txt</code></a>.</p>
+<hr />
+<h2 id="5-caminho-2-captura-de-mudancas-cdc-via-debezium-e-kafka">5. Caminho 2 — Captura de Mudanças (CDC via Debezium e Kafka)</h2>
+<h3 id="51-arquitetura-de-cdc">5.1 Arquitetura de CDC</h3>
+<p>Para atender aos requisitos pedagógicos da disciplina e contrastar os dois paradigmas, implementou-se o fluxo contínuo de decodificação lógica do WAL do PostgreSQL:</p>
+<div class="highlight"><pre><span></span><code>  PostgreSQL 16 (OLTP)              Debezium Connect 2.7              Apache Kafka 3.8 (KRaft)
+┌──────────────────────┐   slot    ┌─────────────────────┐  produce  ┌────────────────────────┐
+│  venda_medicamento   │ ────────► │  farmadata-venda-   │ ────────► │ farmadata.public.      │
+│ wal_level = logical  │ pgoutput  │      cdc conector   │           │ venda_medicamento      │
+└──────────────────────┘           └─────────────────────┘           └────────────────────────┘
+</code></pre></div>
+<ul>
+<li><strong>Configurações críticas do conector:</strong></li>
+<li><code>plugin.name=pgoutput</code>: Utiliza a biblioteca nativa do PostgreSQL.</li>
+<li><code>slot.name=farmadata_slot</code>: Mantém controle persistente do LSN.</li>
+<li><code>REPLICA IDENTITY FULL</code>: Permite capturar a imagem completa da linha anterior nos eventos de <code>UPDATE</code> e <code>DELETE</code>.</li>
+<li><code>snapshot.mode=no_data</code>: O histórico inicial de 68 milhões de linhas já foi absorvido pelo lote; o CDC atua estritamente nas mutações em tempo real.</li>
+<li><code>decimal.handling.mode=string</code>: Evita codificação binária complexa em campos numéricos de quantidade.</li>
+</ul>
+<h3 id="52-demonstracao-com-script-de-alteracoes-no-oltp">5.2 Demonstração com Script de Alterações no OLTP</h3>
+<p>O script <code>scripts/cdc/demo_cdc.js</code> simula o ciclo completo de vida de um registro transacional com a tag <code>CDC-DEMO-&lt;timestamp&gt;</code>:
+1. <code>INSERT INTO venda_medicamento ...</code> (quantidade: 1.500)
+2. <code>UPDATE venda_medicamento SET quantidade_vendida = 5.000 ...</code>
+3. <code>DELETE FROM venda_medicamento WHERE id_venda = ...</code></p>
+<p>O script consome o tópico Kafka e valida a chegada imediata dos 3 eventos:
+<div class="highlight"><pre><span></span><code>op=c (INSERT) | lsn=38030807008 | before: (sem before)            | after: quantidade_vendida=1.500
+op=u (UPDATE) | lsn=38030822224 | before: quantidade_vendida=1.500 | after: quantidade_vendida=5.000
+op=d (DELETE) | lsn=38030822504 | before: quantidade_vendida=5.000 | after: (sem after)
+SUCESSO: INSERT, UPDATE e DELETE feitos no OLTP chegaram ao Kafka como eventos op=c, op=u e op=d.
+</code></pre></div>
+Evidência completa registrada em <a href="../../evidencias/cdc_evidencia.txt"><code>docs/evidencias/cdc_evidencia.txt</code></a> e documentação em <a href="../../CDC/"><code>docs/CDC.md</code></a>.</p>
+<hr />
+<h2 id="6-camada-analitica-em-formato-aberto-delta-lake-parquet">6. Camada Analítica em Formato Aberto (Delta Lake + Parquet)</h2>
+<h3 id="61-por-que-formato-aberto">6.1 Por que Formato Aberto?</h3>
+<p>O dado analítico não pode ficar refém da tecnologia de armazenamento ou motor de execução. Utilizando arquivos Parquet envelopados pelo protocolo aberto <strong>Delta Lake</strong>, os mesmos dados podem ser consultados por múltiplos motores analíticos concorrentes (DuckDB, Apache Spark, Trino, Polars) sem conversão.</p>
+<h3 id="62-estrutura-de-diretorios-e-metadados">6.2 Estrutura de Diretórios e Metadados</h3>
+<div class="highlight"><pre><span></span><code>data/lakehouse/delta/venda_medicamento/
+├── _delta_log/
+│   ├── 00000000000000000000.json       # Commit inicial (schema, partições)
+│   └── 0000000000000000000N.json       # Commits atômicos por partição / compactação
+├── ano=2020/mes=1/part-*.zstd.parquet
+├── ano=2020/mes=2/...
+└── ano=2020/mes=12/...
+</code></pre></div>
+<h3 id="63-otimizacoes-de-layout-serializacao-e-compressao">6.3 Otimizações de Layout, Serialização e Compressão</h3>
+<ol>
+<li><strong>Particionamento por <code>(ano, mes)</code>:</strong> 12 partições por ano (~5,7M linhas/partição). Evita a proliferação excessiva de pequenos arquivos (<em>small files problem</em>) que ocorreria ao particionar por UF (geraria 324 diretórios) ou município (geraria &gt;60.000 diretórios).</li>
+<li><strong>Ordenação interna por <code>sigla_uf, id_medicamento</code>:</strong> Estreita os limites <code>min</code> e <code>max</code> em cada <em>row group</em> do Parquet, permitindo que consultas filtrando por UF ou princípio ativo realizem <em>data skipping</em> (pulem row groups inteiros) sem necessidade de diretórios adicionais.</li>
+<li><strong>Compressão ZSTD (Nível 3):</strong> Ideal para o perfil de leitura analítica repetida (<em>write-once, read-many</em>), superando o Snappy em taxa de compactação sem o custo de CPU de descompressão do GZIP.</li>
+<li><strong>Compactação (<em>Compaction</em>):</strong> Consolidação dos arquivos em blocos de ~128 MB com <em>row groups</em> de 500.000 linhas.</li>
+</ol>
+<h3 id="64-resultados-de-benchmark-e-consulta-multi-engine-duckdb">6.4 Resultados de Benchmark e Consulta Multi-Engine (DuckDB)</h3>
+<p>O script <code>validar_duckdb.py</code> e o benchmark comparativo demonstram as vantagens do layout otimizado:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Layout Ingênuo (Snappy, particionado ano/mes/uf)</th>
+<th>Layout Otimizado (ZSTD-3, ano/mes, ordenado e compactado)</th>
+<th>Ganho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Número de arquivos Parquet</strong></td>
+<td>1524</td>
+<td><strong>12</strong></td>
+<td>Redução de 99,2%</td>
+</tr>
+<tr>
+<td><strong>Espaço ocupado em disco</strong></td>
+<td>646.8 MB</td>
+<td><strong>366.3 MB</strong></td>
+<td>Redução de 43,4%</td>
+</tr>
+<tr>
+<td><strong>Q3 — Evolução mensal (mediana de 5 execuções)</strong></td>
+<td>0.644 s</td>
+<td><strong>0.192 s</strong></td>
+<td><strong>3,3x mais rápido</strong></td>
+</tr>
+<tr>
+<td><strong>Q8 — Princípio x Região x Trimestre</strong></td>
+<td>0.608 s</td>
+<td><strong>0.570 s</strong></td>
+<td><strong>6,3% mais rápido</strong></td>
+</tr>
+<tr>
+<td><strong>Filtro UF + Mês (DF, março)</strong></td>
+<td>0.037 s</td>
+<td><strong>0.039 s</strong></td>
+<td>Praticamente instantâneo</td>
+</tr>
+</tbody>
+</table>
+<p>Detalhes completos em <a href="../../CAMADA_ANALITICA/"><code>docs/CAMADA_ANALITICA.md</code></a>.</p>
+<hr />
+<h2 id="7-tratamento-de-dado-atrasado-e-reprocessamento-de-janela">7. Tratamento de Dado Atrasado e Reprocessamento de Janela</h2>
+<h3 id="71-definicao-da-janela-analitica-adr-003">7.1 Definição da Janela Analítica (ADR-003)</h3>
+<p>Diferente de sistemas de streaming sintéticos, os dados do SNGPC são publicados pela Anvisa em arquivos mensais agregados. A decisão arquitetural registrada no <strong>ADR-003</strong> define:
+- <strong>A janela da dispensação é o mês real da venda</strong> (<code>nu_ano_venda</code>, <code>nu_mes_venda</code>), e <strong>não</strong> o mês do arquivo CSV que a transportou, tampouco a data da execução da carga.
+- <strong>Venda com mês dentro do ano de recorte:</strong> É inserida no período real da dispensação (<code>id_periodo</code>), com o desvio contabilizado na coluna de auditoria <code>carga_arquivo.eventos_atrasados</code>.
+- <strong>Venda fora do ano de recorte:</strong> É descartada da tabela fato, com o motivo registrado em <code>carga_arquivo.motivos_rejeicao</code> (<code>periodo_fora_do_recorte</code>).</p>
+<h3 id="72-demonstracao-pratica-de-dado-atrasado-e-reprocessamento">7.2 Demonstração Prática de Dado Atrasado e Reprocessamento</h3>
+<p>Dois testes automatizados comprovam a robustez do tratamento:
+1. <code>make simular-atraso</code>: Carrega um arquivo com vendas de janeiro, fevereiro e dezembro anterior. Comprova que o evento atrasado é acomodado na janela correta (janeiro) e o fora do recorte é rejeitado.
+   - Evidência em <a href="../../evidencias/dado_atrasado.txt"><code>docs/evidencias/dado_atrasado.txt</code></a>.
+2. <code>make reprocessar-janela</code>: Carrega o CSV de janeiro (10 itens). Em seguida, carrega fevereiro com uma venda retroativa de janeiro (1 item). Por fim, reexecuta a carga de fevereiro.
+   - Comprova que o <code>DELETE</code> restringe-se ao <code>arquivo_origem = 'fevereiro'</code>, mantendo intactas as 10 vendas originárias de janeiro e sem duplicar o dado atrasado.
+   - Evidência em <a href="../../evidencias/reprocessamento_janela.txt"><code>docs/evidencias/reprocessamento_janela.txt</code></a>.</p>
+<hr />
+<h2 id="8-decisoes-arquiteturais-da-entrega-adrs">8. Decisões Arquiteturais da Entrega (ADRs)</h2>
+<h3 id="81-adr-002-mecanismo-de-ingestao-e-formato-aberto">8.1 ADR-002: Mecanismo de Ingestão e Formato Aberto</h3>
+<ul>
+<li><strong>Avaliação da Opção Nula (Scripts crus no cron):</strong> A simples reexecução de <code>docker compose run carga</code> com encadeamento <code>&amp;&amp;</code> falhava catastroficamente ao encontrar erros 404 de meses futuros na Anvisa ou derrubar índices em cargas parciais. Foi descartada a opção nula crua em favor da <strong>Opção Nula Otimizada</strong> (lote transacional idempotente, resiliente a 404 e com índices condicionais).</li>
+<li><strong>CDC vs. Lote:</strong> Como os dados governamentais são publicados retroativamente em lotes mensais estáticos, o CDC contínuo acarreta um custo de infraestrutura injustificável para o negócio (2–4 GB de RAM permanente). Contudo, foi adotada a <strong>Arquitetura Dual</strong> para cumprir o objetivo acadêmico de observar e tratar as falhas inerentes a ambos os caminhos.</li>
+<li><strong>Delta Lake vs. Apache Iceberg:</strong> Embora o Apache Iceberg ofereça evolução rica de esquema via <code>field-id</code>, sua operação plena requer um servidor de catálogo externo (REST Catalog, Nessie ou Hive). O <strong>Delta Lake</strong> foi escolhido por armazenar seu log de transações atômico (<code>_delta_log/</code>) diretamente na pasta dos dados, possibilitando pipelines leves sem JVM (via Rust/Python <code>deltalake</code>) e leitura nativa ultraveloz pelo DuckDB.</li>
+<li>Documento completo: <a href="../../adr/ADR-002/"><code>docs/adr/ADR-002.md</code></a>.</li>
+</ul>
+<h3 id="82-adr-003-dado-atrasado-e-janela-da-dispensacao">8.2 ADR-003: Dado Atrasado e Janela da Dispensação</h3>
+<ul>
+<li>Documento completo: <a href="../../adr/ADR-003/"><code>docs/adr/ADR-003.md</code></a>.</li>
+</ul>
+<hr />
+<h2 id="9-diario-de-bordo-semanas-7-a-10">9. Diário de Bordo (Semanas 7 a 10)</h2>
+<p>O registro cronológico das reuniões semanais pós-aula, divisão de responsabilidades, deliberações e superação de bloqueios está versionado no repositório em:
+👉 <a href="../../diario/DIARIO_DE_BORDO/"><code>docs/diario/DIARIO_DE_BORDO.md</code></a></p>
+<hr />
+<h2 id="10-guia-de-reprodutibilidade-da-entrega-2">10. Guia de Reprodutibilidade da Entrega 2</h2>
+<p>Para reproduzir integralmente os passos avaliados pela monitoria:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Subir o ambiente transacional e executar as migrações</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>db
+
+<span class="c1"># 2. Executar a ingestão em lote (ou lote pontual para validação rápida)</span>
+make<span class="w"> </span>carga-sngpc<span class="w"> </span><span class="nv">MESES</span><span class="o">=</span><span class="m">202001</span>
+
+<span class="c1"># 3. Provar a idempotência do reprocessamento em lote</span>
+make<span class="w"> </span>test-idempotencia<span class="w"> </span><span class="nv">MES</span><span class="o">=</span><span class="m">202001</span>
+
+<span class="c1"># 4. Provar o tratamento de dado atrasado e reprocessamento de janela</span>
+make<span class="w"> </span>simular-atraso
+make<span class="w"> </span>reprocessar-janela
+
+<span class="c1"># 5. Exportar, compactar e validar a camada analítica Delta Lake com DuckDB</span>
+make<span class="w"> </span>lakehouse
+make<span class="w"> </span>lakehouse-bench
+
+<span class="c1"># 6. Subir a stack de CDC (Postgres lógico + Kafka + Debezium) e registrar conector</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.cdc.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>db<span class="w"> </span>kafka<span class="w"> </span>connect
+node<span class="w"> </span>scripts/cdc/registrar_conector.js
+
+<span class="c1"># 7. Executar a demonstração de captura de mudanças em tempo real</span>
+node<span class="w"> </span>scripts/cdc/demo_cdc.js
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>
