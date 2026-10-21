@@ -29,11 +29,14 @@ markdown_extensions:
 nav:
   - Início: index.md
   - ADR:
-    - adr/ADR.md
-    - adr/ADR-E2.md
-    - adr/ADR-003-dado-atrasado.md
+    - adr/ADR-001.md
+    - adr/ADR-002.md
+    - adr/ADR-003.md
+  - Entregas:
+    - entregas/E1.md
   - Diario de Bordo: diario/DIARIO_DE_BORDO.md
   - Bases de Dados: BASES_PUBLICAS.md
   - Camada Analítica: CAMADA_ANALITICA.md
   - Consultas: QUERIES.md
+  - Arquitetura: ARQUITETURA.md
   
