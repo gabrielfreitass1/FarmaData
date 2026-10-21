@@ -7,13 +7,39 @@
 
 ---
 
-##  Navegação da Documentação (Entrega E2)
+## 👥 Integrantes da Squad FarmaData
 
+| Integrante | Matrícula / Identificador | GitHub |
+|---|---|---|
+| **Gabriel Freitas Balbino** | 180075462 | [@gabrielfreitass1](https://github.com/gabrielfreitass1) |
+| **Eduardo de Almeida Morais** | 231011275 | [@Edumorais08](https://github.com/Edumorais08) |
+| **Ruan Sobreira Carvalho** | 211043763 | [@Ruan-Carvalho](https://github.com/Ruan-Carvalho) |
+| **João Pedro Ferreira Moraes** | 231028989 | [@JoaoPedro2206](https://github.com/JoaoPedro2206) |
+| **João Paulo Lima da Silva** | Membro da Squad | [@jpaulohe4rt](https://github.com/jpaulohe4rt) |
+| **Paola Rebeca Nascimento** | Membro da Squad | [@paolaalim](https://github.com/paolaalim) |
+| **Pedro Augusto Sousa Siqueira** | Membro da Squad | [@PedroSiq](https://github.com/PedroSiq) |
+
+---
+
+## 🧭 Navegação da Documentação
+
+### Releases
+* [Release Notes E2 — Ingestão em Lote e Captura de Mudanças (Tag e2)](docs/entregas/E2.md)
+* [Release Notes E1 — Sistema de Origem OLTP (Tag e1)](docs/entregas/E1.md)
+
+### Decisões Arquiteturais (ADRs)
+* [ADR-001: Modelagem do Sistema de Origem FarmaData](docs/adr/ADR-001.md)
+* [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-002.md)
+* [ADR-003: Dado atrasado e janela da dispensação](docs/adr/ADR-003.md)
+
+### Execução e Arquitetura
 * [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
-* [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-E2.md)
-* [Camada Analítica e Benchmark](docs/CAMADA_ANALITICA.md)
+* [Arquitetura da Plataforma](docs/ARQUITETURA.md)
+* [Captura de Mudanças no OLTP — CDC](docs/CDC.md)
+* [Camada Analítica Lakehouse e Benchmark](docs/CAMADA_ANALITICA.md)
 * [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
-* [Uso de IA no Projeto](AI-USAGE.md)
+* [Consultas Analíticas](docs/QUERIES.md)
+* [Declaração de Uso de IA](AI-USAGE.md)
 
 ---
 

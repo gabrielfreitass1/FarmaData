@@ -34,6 +34,7 @@ nav:
     - adr/ADR-003.md
   - Entregas:
     - entregas/E1.md
+    - entregas/E2.md
   - Diario de Bordo: diario/DIARIO_DE_BORDO.md
   - Bases de Dados: BASES_PUBLICAS.md
   - Camada Analítica: CAMADA_ANALITICA.md

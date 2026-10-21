@@ -8,71 +8,93 @@
 <center>
 <table style="width: 100%;">
     <tr>
-        <td align="center">
-            <a href="https://github.com/jpaulohe4rt">
-                <img style="border-radius: 50%;" src="https://github.com/jpaulohe4rt.png" width="100px;" alt="Imagem de Gabriel Freitas Balbino"/>
+        <td align="center" style="width: 25%;">
+            <a href="https://github.com/gabrielfreitass1">
+                <img style="border-radius: 50%;" src="https://github.com/gabrielfreitass1.png" width="100px;" alt="Gabriel Freitas Balbino"/>
                 <br />
                 <sub><b>Gabriel Freitas Balbino</b></sub>
-                <br />
             </a>
+            <br />
             <sub><b>180075462</b></sub>
         </td>
-        <td align="center">
+        <td align="center" style="width: 25%;">
             <a href="https://github.com/Edumorais08">
-                <img style="border-radius: 50%;" src="https://github.com/Edumorais08.png" width="100px;" alt="Imagem de Eduardo de Almeida Morais"/>
+                <img style="border-radius: 50%;" src="https://github.com/Edumorais08.png" width="100px;" alt="Eduardo de Almeida Morais"/>
                 <br />
                 <sub><b>Eduardo de Almeida Morais</b></sub>
-                <br />
             </a>
+            <br />
             <sub><b>231011275</b></sub>
         </td>
-        <td align="center">
-            <a href="https://github.com/paolaalim">
-                <img style="border-radius: 50%;" src="https://github.com/paolaalim.png" width="100px;" alt="Perfil GitHub paolaalim"/>
+        <td align="center" style="width: 25%;">
+            <a href="https://github.com/Ruan-Carvalho">
+                <img style="border-radius: 50%;" src="https://github.com/Ruan-Carvalho.png" width="100px;" alt="Ruan Sobreira Carvalho"/>
                 <br />
                 <sub><b>Ruan Sobreira Carvalho</b></sub>
-                <br />
             </a>
+            <br />
             <sub><b>211043763</b></sub>
         </td>
-        <td align="center">
+        <td align="center" style="width: 25%;">
             <a href="https://github.com/JoaoPedro2206">
-                <img style="border-radius: 50%;" src="https://github.com/JoaoPedro2206.png" width="100px;" alt="Imagem de Joao Pedro Ferreira Moraes"/>
+                <img style="border-radius: 50%;" src="https://github.com/JoaoPedro2206.png" width="100px;" alt="João Pedro Ferreira Moraes"/>
                 <br />
-                <sub><b>Joao Pedro Ferreira Moraes</b></sub>
-                <br />
+                <sub><b>João Pedro Ferreira Moraes</b></sub>
             </a>
+            <br />
             <sub><b>231028989</b></sub>
         </td>
-        <td align="center">
-            <a href="https://github.com/gabrielfreitass1">
-                <img style="border-radius: 50%;" src="https://github.com/gabrielfreitass1.png" width="100px;" alt="Perfil GitHub gabrielfreitass1"/>
+    </tr>
+    <tr>
+        <td align="center" style="width: 25%;">
+            <a href="https://github.com/jpaulohe4rt">
+                <img style="border-radius: 50%;" src="https://github.com/jpaulohe4rt.png" width="100px;" alt="João Paulo Lima da Silva"/>
                 <br />
-                <sub><b>Gabriel Freitas Balbino</b></sub>
-                <br />
+                <sub><b>João Paulo Lima da Silva</b></sub>
             </a>
-            <sub><b>180075462</b></sub>
+            <br />
+            <sub><b>Membro da Squad</b></sub>
         </td>
+        <td align="center" style="width: 25%;">
+            <a href="https://github.com/paolaalim">
+                <img style="border-radius: 50%;" src="https://github.com/paolaalim.png" width="100px;" alt="Paola Rebeca Nascimento"/>
+                <br />
+                <sub><b>Paola Rebeca Nascimento</b></sub>
+            </a>
+            <br />
+            <sub><b>Membro da Squad</b></sub>
+        </td>
+        <td align="center" style="width: 25%;">
+            <a href="https://github.com/PedroSiq">
+                <img style="border-radius: 50%;" src="https://github.com/PedroSiq.png" width="100px;" alt="Pedro Augusto Sousa Siqueira"/>
+                <br />
+                <sub><b>Pedro Augusto Sousa Siqueira</b></sub>
+            </a>
+            <br />
+            <sub><b>Membro da Squad</b></sub>
+        </td>
+        <td align="center" style="width: 25%;"></td>
     </tr>
 </table>
 </center>
 ---
 
-##  Navegação da Documentação (Entrega E2)
+## 🧭 Navegação da Documentação
 
+### Releases do Projeto
+* [Release E2 — Ingestão em Lote e Captura de Mudanças (Tag e2)](entregas/E2.md)
+* [Release E1 — Modelagem e Fonte Transacional (Tag e1)](entregas/E1.md)
+
+### Arquitetura, Decisões e Execução
 * [Diário de Bordo (Semanas 7 a 10)](diario/DIARIO_DE_BORDO.md)
-
 * [ADR-001: Modelagem do Sistema de Origem FarmaData](adr/ADR-001.md)
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](adr/ADR-002.md)
 * [ADR-003: Dado atrasado e janela da dispensação](adr/ADR-003.md)
-
 * [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)
 * [Bases Públicas Complementares](BASES_PUBLICAS.md)
 * [Arquitetura](ARQUITETURA.md)
+* [Captura de Mudanças (CDC)](CDC.md)
 * [Consultas](QUERIES.md)
-* [CDC](CDC.md)
-
-* [E1](entregas/E1.md)
 
 
 
