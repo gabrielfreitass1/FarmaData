@@ -1,0 +1,1463 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Arquitetura e modelo de dados - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arquitetura-e-modelo-de-dados" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Arquitetura e modelo de dados
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../adr/ADR/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-003-dado-atrasado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Visão geral
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-servicos-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Serviços (Docker Compose)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-caminho-1-ingestao-em-lote" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Caminho 1 — ingestão em lote
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-caminho-2-captura-de-mudancas-cdc" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Caminho 2 — captura de mudanças (CDC)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-camada-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Camada analítica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-modelo-de-dados-postgresql" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Modelo de dados (PostgreSQL)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Modelo de dados (PostgreSQL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-relacionamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Relacionamentos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-dicionario-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Dicionário de dados
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 Dicionário de dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dimensoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensões
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fato" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fato
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bases-complementares-e-controle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bases complementares e controle
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-indices-da-tabela-de-fatos" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Índices da tabela de fatos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-preenchimento-real-6mi-linhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.4 Preenchimento real ( ~6mi linhas)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.5 Volume
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-limitacoes-conhecidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Limitações conhecidas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="arquitetura-e-modelo-de-dados">Arquitetura e modelo de dados</h1>
+<p>Visão técnica da plataforma FarmaData: como o dado sai das fontes públicas,
+passa pelo PostgreSQL (OLTP) e chega à camada analítica em formato aberto.
+Decisões e alternativas estão nos ADRs (<code>docs/adr/</code>); aqui está o <strong>como é</strong>.</p>
+<h2 id="1-visao-geral">1. Visão geral</h2>
+<p><img alt="arquitetura" src="../img/arquitetura.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Tecnologia</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fontes</td>
+<td>SNGPC/Anvisa, DATASUS (CID-10), IBGE/SIDRA, INMET</td>
+<td>Dados abertos, publicados em arquivos ou APIs</td>
+</tr>
+<tr>
+<td>OLTP</td>
+<td>PostgreSQL 16</td>
+<td>Fonte transacional normalizada, insert-only (ADR-001)</td>
+</tr>
+<tr>
+<td>Ingestão em lote</td>
+<td>Node.js 20 (<code>scripts/carregar_*.js</code>)</td>
+<td>Download, validação e carga idempotente</td>
+</tr>
+<tr>
+<td>Captura de mudanças</td>
+<td>Debezium 2.7 + Kafka 3.8 (KRaft)</td>
+<td>Eventos <code>c/u/d</code> do WAL da tabela de fatos</td>
+</tr>
+<tr>
+<td>Analítico</td>
+<td>Delta Lake sobre Parquet (<code>deltalake</code>, <code>pyarrow</code>)</td>
+<td>Tabela achatada, particionada, em formato aberto</td>
+</tr>
+<tr>
+<td>Consulta analítica</td>
+<td>DuckDB (<code>delta_scan</code>)</td>
+<td>Leitura por motor diferente do escritor</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-servicos-docker-compose">2. Serviços (Docker Compose)</h2>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Imagem</th>
+<th>Arquivo</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>db</code></td>
+<td><code>postgres:16-alpine</code></td>
+<td><code>docker-compose.yml</code></td>
+<td>OLTP; porta do host 5433</td>
+</tr>
+<tr>
+<td><code>carga</code></td>
+<td><code>node:20-slim</code></td>
+<td><code>docker-compose.yml</code></td>
+<td>Roda os scripts de carga em lote</td>
+</tr>
+<tr>
+<td><code>kafka</code></td>
+<td><code>apache/kafka:3.8.0</code></td>
+<td><code>docker-compose.cdc.yml</code></td>
+<td>Broker single-node, modo KRaft</td>
+</tr>
+<tr>
+<td><code>connect</code></td>
+<td><code>quay.io/debezium/connect:2.7</code></td>
+<td><code>docker-compose.cdc.yml</code></td>
+<td>Kafka Connect com o conector Postgres</td>
+</tr>
+<tr>
+<td><code>lakehouse</code></td>
+<td>Python</td>
+<td><code>docker-compose.yml</code></td>
+<td>Exporta, compacta e valida o Delta</td>
+</tr>
+</tbody>
+</table>
+<p>O CDC é um <em>override</em>: o ambiente normal fica leve e a stack pesada só sobe quando necessário
+(<code>docker compose -f docker-compose.yml -f docker-compose.cdc.yml up -d db kafka connect</code>).</p>
+<h2 id="3-caminho-1-ingestao-em-lote">3. Caminho 1 — ingestão em lote</h2>
+<ol>
+<li><strong>Download com cache</strong> em <code>tmp/</code> e leitura em stream do CSV.</li>
+<li><strong>Resolução de dimensões</strong> (<code>municipio</code>, <code>medicamento</code>) com inserção sem duplicar.</li>
+<li><strong>Carga de um arquivo mensal numa única transação:</strong> <code>DELETE</code> das linhas do <code>arquivo_origem</code> → <code>COPY</code> → upsert em <code>carga_arquivo</code>. Falha = <code>ROLLBACK</code>.</li>
+<li><strong>Controle:</strong> <code>carga_arquivo</code> registra o que foi carregado; arquivo já presente dá <code>[SKIP]</code>. Um advisory lock impede duas cargas simultâneas.</li>
+<li><strong>Índices:</strong> removidos e recriados apenas quando há 3 ou mais arquivos pendentes; o índice <code>idx_venda_arquivo_origem</code> torna o <code>DELETE</code> barato.</li>
+<li><strong>Linhas rejeitadas</strong> são contadas por motivo (ex.: <code>sem_principio_ativo</code>, <code>quantidade_invalida</code>).</li>
+</ol>
+<p>Reexecução, flags e evidência: seção de ingestão do <code>README.md</code> e <code>docs/evidencias/idempotencia.txt</code>.</p>
+<h2 id="4-caminho-2-captura-de-mudancas-cdc">4. Caminho 2 — captura de mudanças (CDC)</h2>
+<table>
+<thead>
+<tr>
+<th>Parâmetro</th>
+<th>Valor</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tabela capturada</td>
+<td><code>public.venda_medicamento</code></td>
+<td>Tabela de fatos</td>
+</tr>
+<tr>
+<td>Plugin / slot / publicação</td>
+<td><code>pgoutput</code> / <code>farmadata_slot</code> / <code>farmadata_pub</code></td>
+<td>Decodificação lógica nativa</td>
+</tr>
+<tr>
+<td><code>REPLICA IDENTITY</code></td>
+<td><code>FULL</code></td>
+<td><code>before</code> traz a linha inteira em UPDATE/DELETE</td>
+</tr>
+<tr>
+<td><code>snapshot.mode</code></td>
+<td><code>no_data</code></td>
+<td>O estado inicial já veio pelo lote</td>
+</tr>
+<tr>
+<td><code>decimal.handling.mode</code></td>
+<td><code>string</code></td>
+<td><code>NUMERIC</code> seria base64 por padrão</td>
+</tr>
+<tr>
+<td>Tópico</td>
+<td><code>farmadata.public.venda_medicamento</code></td>
+<td>Prefixo <code>farmadata</code> + schema + tabela</td>
+</tr>
+</tbody>
+</table>
+<p>Evento: <code>op</code> (<code>c</code>, <code>u</code>, <code>d</code>), <code>before</code>, <code>after</code>, <code>source.lsn</code>, <code>ts_ms</code>.
+<strong>Destino atual:</strong> o tópico Kafka. O consumidor que aplica os eventos no Delta está planejado para a E3.
+<strong>Atenção:</strong> o slot retém WAL enquanto o conector está parado; recargas mensais com o conector ativo geram milhões de eventos.</p>
+<h2 id="5-camada-analitica">5. Camada analítica</h2>
+<p>Caminho: <code>data/lakehouse/delta/venda_medicamento/</code> (<code>_delta_log/</code> + Parquet).</p>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Escolha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo</td>
+<td>Achatado: fato + atributos de dimensão (sem joins na leitura)</td>
+</tr>
+<tr>
+<td>Partição</td>
+<td><code>ano</code>, <code>mes</code></td>
+</tr>
+<tr>
+<td>Ordenação interna</td>
+<td><code>sigla_uf</code>, <code>id_medicamento</code></td>
+</tr>
+<tr>
+<td>Codec / row group</td>
+<td>ZSTD nível 3 / 500 mil linhas</td>
+</tr>
+<tr>
+<td>Tamanho-alvo de arquivo</td>
+<td>128 MB (<code>compactar_delta.py</code>)</td>
+</tr>
+<tr>
+<td>Idempotência</td>
+<td><code>overwrite</code> restrito à partição (<code>predicate = ano/mes</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Colunas do Delta: <code>id_venda</code>, <code>data_venda</code>, <code>ano</code>, <code>mes</code>, <code>trimestre</code>, <code>id_municipio</code>, <code>nome_municipio</code>,
+<code>sigla_uf</code>, <code>regiao</code>, <code>id_medicamento</code>, <code>principio_ativo</code>, <code>tipo_receituario</code>, <code>quantidade_vendida</code>,
+<code>unidade_medida</code>, <code>codigo_cid10</code>, <code>sexo_paciente</code>, <code>idade_paciente</code>, <code>unidade_idade</code>,
+<code>eh_antimicrobiano</code>, <code>arquivo_origem</code>.</p>
+<p>Detalhes e justificativas: <code>docs/CAMADA_ANALITICA.md</code>.</p>
+<h2 id="6-modelo-de-dados-postgresql">6. Modelo de dados (PostgreSQL)</h2>
+<h3 id="61-relacionamentos">6.1 Relacionamentos</h3>
+<div class="highlight"><pre><span></span><code>unidade_federativa ──► municipio ───────────────┐
+periodo ────────────────────────────────────────┤
+medicamento ────────────────────────────────────┤
+conselho_profissional ──────────────────────────┤──► venda_medicamento
+tipo_receituario / unidade_medida / unidade_idade ┤
+cid10 ──────────────────────────────────────────┘
+
+municipio ──► ibge_populacao_municipio (id_municipio, ano)
+municipio ──► ibge_populacao_faixa_etaria_municipio (id_municipio, ano, faixa_etaria)
+unidade_federativa + periodo ──► clima_mensal_uf (sigla_uf, id_periodo)
+carga_arquivo (controle de carga, sem FK)
+</code></pre></div>
+<h3 id="62-dicionario-de-dados">6.2 Dicionário de dados</h3>
+<p>Gerado de <code>information_schema</code> e <code>pg_constraint</code> em 20/10/2026.</p>
+<h4 id="dimensoes">Dimensões</h4>
+<p><strong><code>unidade_federativa</code></strong> — 27 UFs (valores fixos, <code>01_geografia_uf.sql</code>). PK <code>sigla</code>; UNIQUE <code>codigo_ibge</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sigla</code></td>
+<td>char</td>
+<td>não</td>
+<td>Sigla da UF</td>
+</tr>
+<tr>
+<td><code>codigo_ibge</code></td>
+<td>integer</td>
+<td>não</td>
+<td>Código IBGE da UF</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>varchar</td>
+<td>não</td>
+<td>Nome da UF</td>
+</tr>
+<tr>
+<td><code>regiao</code></td>
+<td>varchar</td>
+<td>não</td>
+<td>Região do país</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>municipio</code></strong> — extraído dos CSVs do SNGPC. PK <code>id_municipio</code>; UNIQUE <code>(nome_municipio, sigla_uf)</code>; FK <code>sigla_uf</code> → <code>unidade_federativa</code> (ON UPDATE CASCADE).</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_municipio</code></td>
+<td>integer</td>
+<td>não</td>
+<td>Chave</td>
+</tr>
+<tr>
+<td><code>nome_municipio</code></td>
+<td>varchar</td>
+<td>não</td>
+<td>Nome como vem da Anvisa</td>
+</tr>
+<tr>
+<td><code>sigla_uf</code></td>
+<td>char</td>
+<td>não</td>
+<td>UF</td>
+</tr>
+<tr>
+<td><code>codigo_ibge</code></td>
+<td>integer</td>
+<td>sim</td>
+<td>Preenchido pelo carregador do IBGE; nulo quando a grafia diverge</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>periodo</code></strong> — 12 meses do recorte (<code>03_tempo_periodo.sql</code>). PK <code>id_periodo</code> (<code>AAAAMM</code>); UNIQUE <code>(ano, mes)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_periodo</code></td>
+<td>integer</td>
+<td>não</td>
+<td>Chave no formato <code>AAAAMM</code></td>
+</tr>
+<tr>
+<td><code>ano</code>, <code>mes</code></td>
+<td>integer</td>
+<td>não</td>
+<td>Ano e mês</td>
+</tr>
+<tr>
+<td><code>nome_mes</code></td>
+<td>varchar</td>
+<td>não</td>
+<td>Nome do mês</td>
+</tr>
+<tr>
+<td><code>trimestre</code>, <code>semestre</code></td>
+<td>integer</td>
+<td>não</td>
+<td>Agrupamentos de tempo</td>
+</tr>
+<tr>
+<td><code>data_inicio</code>, <code>data_fim</code></td>
+<td>date</td>
+<td>não</td>
+<td>Limites do mês</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>medicamento</code></strong> — extraído do SNGPC. PK <code>id_medicamento</code>; UNIQUE <code>(principio_ativo, descricao_apresentacao)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_medicamento</code></td>
+<td>bigint</td>
+<td>não</td>
+<td>Chave</td>
+</tr>
+<tr>
+<td><code>principio_ativo</code></td>
+<td>text</td>
+<td>não</td>
+<td>Princípio ativo</td>
+</tr>
+<tr>
+<td><code>descricao_apresentacao</code></td>
+<td>text</td>
+<td>não</td>
+<td>Apresentação</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>cid10</code></strong> — catálogo DATASUS. PK <code>codigo</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codigo</code></td>
+<td>varchar</td>
+<td>não</td>
+<td>Código CID-10</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>text</td>
+<td>não</td>
+<td>Descrição completa</td>
+</tr>
+<tr>
+<td><code>descricao_abreviada</code></td>
+<td>varchar</td>
+<td>sim</td>
+<td>Descrição curta</td>
+</tr>
+<tr>
+<td><code>categoria</code></td>
+<td>varchar</td>
+<td>sim</td>
+<td>Categoria (indexada)</td>
+</tr>
+<tr>
+<td><code>restricao_sexo</code>, <code>causa_obito</code></td>
+<td>char</td>
+<td>sim</td>
+<td>Campos do catálogo DATASUS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Listas fixas da Anvisa</strong> (<code>06_prescritor_listas.sql</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Tabela</th>
+<th>Colunas</th>
+<th>Chave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conselho_profissional</code></td>
+<td><code>id_conselho</code> smallint, <code>sigla</code>, <code>descricao</code></td>
+<td>PK <code>id_conselho</code>; UNIQUE <code>sigla</code></td>
+</tr>
+<tr>
+<td><code>tipo_receituario</code></td>
+<td><code>id_tipo_receituario</code> smallint, <code>codigo</code>, <code>descricao</code></td>
+<td>PK <code>id_tipo_receituario</code>; UNIQUE <code>codigo</code></td>
+</tr>
+<tr>
+<td><code>unidade_medida</code></td>
+<td><code>id_unidade_medida</code> smallint, <code>descricao</code></td>
+<td>PK <code>id_unidade_medida</code>; UNIQUE <code>descricao</code></td>
+</tr>
+<tr>
+<td><code>unidade_idade</code></td>
+<td><code>id_unidade_idade</code> smallint, <code>descricao</code></td>
+<td>PK <code>id_unidade_idade</code>; UNIQUE <code>descricao</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="fato">Fato</h4>
+<p><strong><code>venda_medicamento</code></strong> — uma linha por registro do CSV agregado do SNGPC. PK <code>id_venda</code>; FKs para período, município, medicamento, conselho, tipo de receituário, unidades e CID-10.</p>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Nulo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_venda</code></td>
+<td>bigint</td>
+<td>não</td>
+<td>Chave sequencial. <strong>Não é estável entre recargas</strong>: <code>DELETE</code> + <code>COPY</code> gera ids novos</td>
+</tr>
+<tr>
+<td><code>id_periodo</code></td>
+<td>integer</td>
+<td>não</td>
+<td>FK <code>periodo</code></td>
+</tr>
+<tr>
+<td><code>data_venda</code></td>
+<td>date</td>
+<td>não</td>
+<td>Data (o carregador grava o dia 1 do mês)</td>
+</tr>
+<tr>
+<td><code>id_municipio</code></td>
+<td>integer</td>
+<td>não</td>
+<td>FK <code>municipio</code></td>
+</tr>
+<tr>
+<td><code>id_medicamento</code></td>
+<td>bigint</td>
+<td>não</td>
+<td>FK <code>medicamento</code></td>
+</tr>
+<tr>
+<td><code>id_conselho</code></td>
+<td>smallint</td>
+<td>sim</td>
+<td>FK <code>conselho_profissional</code></td>
+</tr>
+<tr>
+<td><code>id_tipo_receituario</code></td>
+<td>smallint</td>
+<td>sim</td>
+<td>FK <code>tipo_receituario</code></td>
+</tr>
+<tr>
+<td><code>quantidade_vendida</code></td>
+<td>numeric</td>
+<td>não</td>
+<td>Quantidade; unidades heterogêneas</td>
+</tr>
+<tr>
+<td><code>id_unidade_medida</code></td>
+<td>smallint</td>
+<td>sim</td>
+<td>FK <code>unidade_medida</code></td>
+</tr>
+<tr>
+<td><code>codigo_cid10</code></td>
+<td>varchar</td>
+<td>sim</td>
+<td>FK <code>cid10</code></td>
+</tr>
+<tr>
+<td><code>sexo_paciente</code></td>
+<td>char</td>
+<td>sim</td>
+<td>Sexo do paciente</td>
+</tr>
+<tr>
+<td><code>idade_paciente</code></td>
+<td>smallint</td>
+<td>sim</td>
+<td>Idade normalizada em anos</td>
+</tr>
+<tr>
+<td><code>id_unidade_idade</code></td>
+<td>smallint</td>
+<td>sim</td>
+<td>FK <code>unidade_idade</code></td>
+</tr>
+<tr>
+<td><code>eh_antimicrobiano</code></td>
+<td>boolean</td>
+<td>não</td>
+<td>Heurística do carregador</td>
+</tr>
+<tr>
+<td><code>numero_notificacao</code></td>
+<td>varchar</td>
+<td>sim</td>
+<td>Não vem do CSV agregado; só a demo do CDC o preenche</td>
+</tr>
+<tr>
+<td><code>arquivo_origem</code></td>
+<td>varchar</td>
+<td>sim</td>
+<td>Arquivo mensal de origem; <strong>chave de idempotência do lote</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="bases-complementares-e-controle">Bases complementares e controle</h4>
+<table>
+<thead>
+<tr>
+<th>Tabela</th>
+<th>Colunas</th>
+<th>Chave / FK</th>
+<th>Origem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ibge_populacao_municipio</code></td>
+<td><code>id_municipio</code>, <code>ano</code>, <code>populacao</code></td>
+<td>PK <code>(id_municipio, ano)</code>; FK <code>municipio</code></td>
+<td>IBGE/SIDRA, agregado 6579</td>
+</tr>
+<tr>
+<td><code>ibge_populacao_faixa_etaria_municipio</code></td>
+<td><code>id_municipio</code>, <code>ano</code>, <code>faixa_etaria</code> text, <code>populacao</code></td>
+<td>PK <code>(id_municipio, ano, faixa_etaria)</code>; FK <code>municipio</code></td>
+<td>IBGE/SIDRA, agregado 9514 (Censo 2022)</td>
+</tr>
+<tr>
+<td><code>clima_mensal_uf</code></td>
+<td><code>sigla_uf</code>, <code>id_periodo</code>, <code>temp_media_c</code>, <code>precipitacao_media_mm</code> (ambas anuláveis), <code>qtd_estacoes</code> smallint</td>
+<td>PK <code>(sigla_uf, id_periodo)</code>; FKs <code>unidade_federativa</code>, <code>periodo</code></td>
+<td>INMET, dados históricos por estação</td>
+</tr>
+<tr>
+<td><code>carga_arquivo</code></td>
+<td><code>arquivo</code> text, <code>linhas_lidas</code>, <code>linhas_inseridas</code>, <code>linhas_rejeitadas</code> bigint, <code>motivos_rejeicao</code> jsonb, <code>carregado_em</code> timestamptz</td>
+<td>PK <code>arquivo</code></td>
+<td>Criada pelo <code>carregar_sngpc.js</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-indices-da-tabela-de-fatos">6.3 Índices da tabela de fatos</h3>
+<table>
+<thead>
+<tr>
+<th>Índice</th>
+<th>Colunas</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>venda_medicamento_pkey</code></td>
+<td><code>id_venda</code></td>
+<td>PK</td>
+</tr>
+<tr>
+<td><code>idx_venda_arquivo_origem</code></td>
+<td><code>arquivo_origem</code></td>
+<td>Torna o <code>DELETE</code> da recarga barato; nunca é removido</td>
+</tr>
+<tr>
+<td><code>idx_venda_periodo_municipio</code></td>
+<td><code>id_periodo, id_municipio</code></td>
+<td>Consultas por tempo e local</td>
+</tr>
+<tr>
+<td><code>idx_venda_municipio_periodo</code></td>
+<td><code>id_municipio, id_periodo</code></td>
+<td>Consultas por local e tempo</td>
+</tr>
+<tr>
+<td><code>idx_venda_medicamento_periodo</code></td>
+<td><code>id_medicamento, id_periodo</code></td>
+<td>Consultas por medicamento</td>
+</tr>
+<tr>
+<td><code>idx_venda_antimicrobiano</code></td>
+<td><code>id_periodo, id_municipio</code> onde <code>eh_antimicrobiano</code></td>
+<td>Índice parcial</td>
+</tr>
+</tbody>
+</table>
+<p>Os quatro índices de consulta são os que o carregador remove e recria numa carga com 3 ou mais arquivos pendentes.
+Não há <code>UNIQUE</code> na tabela de fatos: a idempotência é por arquivo, não por linha.</p>
+<h3 id="64-preenchimento-real-6mi-linhas">6.4 Preenchimento real ( ~6mi linhas)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Preenchidas</th>
+<th>Leitura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>idade_paciente</code></td>
+<td>4.593.047 (74,8%)</td>
+<td>Usável para faixas etárias</td>
+</tr>
+<tr>
+<td><code>codigo_cid10</code></td>
+<td>28.857 (0,5%)</td>
+<td>Muito esparsa: análises por CID-10 cobrem uma fração pequena</td>
+</tr>
+<tr>
+<td><code>id_tipo_receituario</code></td>
+<td>0</td>
+<td>Não preenchida pelo carregador</td>
+</tr>
+<tr>
+<td><code>id_unidade_medida</code></td>
+<td>0</td>
+<td>Não preenchida; somas misturam unidades</td>
+</tr>
+<tr>
+<td><code>id_unidade_idade</code></td>
+<td>0</td>
+<td>Não preenchida; a idade já está em anos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="65-volume">6.5 Volume</h3>
+<p>68.264.756 linhas em 12 arquivos mensais; 5.088 municípios e 1.231 princípios ativos distintos.</p>
+<h2 id="7-limitacoes-conhecidas">7. Limitações conhecidas</h2>
+<ul>
+<li>A idempotência do lote tem granularidade de arquivo mensal, não de linha. O <code>DELETE</code> de ~6 milhões de linhas gera <em>bloat</em>.</li>
+<li>A carga incremental detecta meses novos; um arquivo republicado com o mesmo nome só é recarregado com <code>FORCE=1</code>.</li>
+<li>Municípios com grafia divergente entre Anvisa e IBGE ficam sem <code>codigo_ibge</code>.</li>
+<li><code>id_tipo_receituario</code>, <code>id_unidade_medida</code> e <code>id_unidade_idade</code> ficam nulos; consultas que dependem deles (por receituário, por unidade) não são possíveis com esta carga, e as somas de <code>quantidade_vendida</code> misturam unidades.</li>
+<li>As tabelas do IBGE têm série por <code>ano</code>: consultas que as juntam à tabela de fatos devem filtrar o ano, ou a soma se multiplica.</li>
+<li>Os eventos do CDC terminam no Kafka; a aplicação no Delta fica para a E3.</li>
+<li>Domínio insert-only: o CDC é demonstrado com <code>UPDATE</code>/<code>DELETE</code> sintéticos (<code>scripts/cdc/demo_cdc.js</code>).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

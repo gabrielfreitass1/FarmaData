@@ -1,0 +1,834 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>CDC — captura de mudanças do OLTP (E2, caminho 2) - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cdc-captura-de-mudancas-do-oltp-e2-caminho-2" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CDC — captura de mudanças do OLTP (E2, caminho 2)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../adr/ADR/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-003-dado-atrasado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arquivos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pré-requisitos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passo-a-passo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passo a passo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidencia-esperada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidência esperada
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisoes-de-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisões de projeto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucao-de-problemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solução de problemas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limpeza" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limpeza
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cdc-captura-de-mudancas-do-oltp-e2-caminho-2">CDC — captura de mudanças do OLTP (E2, caminho 2)</h1>
+<p>Captura em tempo (quase) real o que muda na tabela <code>venda_medicamento</code> do Postgres, por <strong>decodificação lógica do WAL</strong> com <strong>Debezium</strong>, e entrega os eventos em um <strong>tópico Kafka</strong>.</p>
+<div class="highlight"><pre><span></span><code> INSERT/UPDATE/DELETE        WAL lógico (pgoutput)         Kafka Connect            Kafka
+┌──────────────────┐  slot  ┌─────────────────────┐      ┌───────────────┐      ┌────────────────────────────────┐
+│ Postgres (db)    │ ─────► │ farmadata_slot      │ ───► │ Debezium      │ ───► │ farmadata.public.venda_        │
+│ venda_medicamento│        │ publication         │      │ connector     │      │ medicamento                    │
+└──────────────────┘        └─────────────────────┘      └───────────────┘      └────────────────────────────────┘
+</code></pre></div>
+<p>Cada evento tem <code>op</code> (<code>c</code> = insert, <code>u</code> = update, <code>d</code> = delete), <code>before</code> (linha antes), <code>after</code> (linha depois) e <code>source.lsn</code> (posição no WAL).</p>
+<h2 id="arquivos">Arquivos</h2>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker-compose.cdc.yml</code></td>
+<td>Override do compose: <code>db</code> com <code>wal_level=logical</code>, Kafka (KRaft) e Debezium Connect</td>
+</tr>
+<tr>
+<td><code>scripts/cdc/registrar_conector.js</code></td>
+<td>Valida pré-requisitos, aplica <code>REPLICA IDENTITY FULL</code> e registra o conector</td>
+</tr>
+<tr>
+<td><code>scripts/cdc/demo_cdc.js</code></td>
+<td>Altera linhas no OLTP e prova a propagação lendo o tópico</td>
+</tr>
+<tr>
+<td><code>docs/cdc_evidencia.txt</code></td>
+<td>Evidência gerada pela demonstração</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pre-requisitos">Pré-requisitos</h2>
+<ul>
+<li>Docker e Docker Compose</li>
+<li>Node.js 18+ no host (os scripts chamam <code>docker exec</code>)</li>
+<li>Banco já carregado (as tabelas <code>periodo</code>, <code>municipio</code> e <code>medicamento</code> precisam ter linhas, pois a demo usa chaves estrangeiras existentes)</li>
+</ul>
+<h2 id="passo-a-passo">Passo a passo</h2>
+<p>Na raiz do projeto:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1) SUBA O DOCKER NORMALMENTE!!!</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up
+<span class="c1"># Certifique-se que o docker subiu, rodou os scripts e caregou o banco completo</span>
+<span class="c1"># 2) Subir Postgres com replicação lógica + Kafka + Debezium</span>
+<span class="c1">#    (listar os serviços evita rodar a carga em lote de novo)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.cdc.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>db<span class="w"> </span>kafka<span class="w"> </span>connect
+
+<span class="c1"># 3) Aguardar ficar saudável (db, kafka e connect = healthy)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.cdc.yml<span class="w"> </span>ps
+
+<span class="c1"># 4) Registrar o conector (também aplica REPLICA IDENTITY FULL)</span>
+node<span class="w"> </span>scripts/cdc/registrar_conector.js
+
+<span class="c1"># 5) Rodar a demonstração: INSERT -&gt; UPDATE -&gt; DELETE e leitura dos eventos</span>
+node<span class="w"> </span>scripts/cdc/demo_cdc.js
+</code></pre></div>
+<p>O volume <code>pgdata</code> é preservado: ao subir o <code>db</code> com o override, o Postgres só reinicia com <code>wal_level=logical</code>.</p>
+<h2 id="evidencia-esperada">Evidência esperada</h2>
+<p>A demo imprime (e salva em <code>docs/cdc_evidencia.txt</code>):</p>
+<ol>
+<li><strong>Pipeline saudável:</strong> <code>wal_level: logical</code>, conector e tarefa <code>RUNNING</code>, slot <code>farmadata_slot</code> com <code>active=true</code>.</li>
+<li><strong>As alterações feitas no OLTP:</strong> os três comandos SQL, com a marca <code>CDC-DEMO-&lt;timestamp&gt;</code> em <code>numero_notificacao</code>.</li>
+<li><strong>Os eventos no destino</strong>, algo como:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>op=c (INSERT) | before: (sem before)            | after: quantidade_vendida=1.500
+op=u (UPDATE) | before: quantidade_vendida=1.500 | after: quantidade_vendida=5.000
+op=d (DELETE) | before: quantidade_vendida=5.000 | after: (sem after)
+</code></pre></div>
+<ol>
+<li><code>SUCESSO</code> e código de saída 0. Se algum evento faltar, o script termina com código 1.</li>
+</ol>
+<p>Para inspecionar o tópico manualmente:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>farmadata_kafka<span class="w"> </span>/opt/kafka/bin/kafka-console-consumer.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--topic<span class="w"> </span>farmadata.public.venda_medicamento<span class="w"> </span>--from-beginning
+</code></pre></div>
+<h2 id="decisoes-de-projeto">Decisões de projeto</h2>
+<ul>
+<li><strong><code>snapshot.mode=no_data</code>:</strong> a tabela tem milhões de linhas vindas da carga em lote. O CDC captura apenas mudanças a partir do registro do conector; o estado inicial já foi coberto pelo caminho em lote.</li>
+<li><strong><code>REPLICA IDENTITY FULL</code>:</strong> sem isso, UPDATE e DELETE trariam em <code>before</code> só a chave primária. Com FULL, <code>before</code> traz a linha inteira.</li>
+<li><strong><code>decimal.handling.mode=string</code>:</strong> <code>NUMERIC(10,3)</code> chegaria como bytes em base64 por padrão.</li>
+<li><strong><code>tombstones.on.delete=false</code>:</strong> cada mudança vira exatamente um evento.</li>
+<li><strong>Sem schema no JSON:</strong> leitura mais simples dos eventos.</li>
+</ul>
+<h2 id="solucao-de-problemas">Solução de problemas</h2>
+<table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Causa provável / ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wal_level=replica</code> no registro</td>
+<td>O <code>db</code> subiu sem o override. Rode o passo 1 com os dois <code>-f</code></td>
+</tr>
+<tr>
+<td>Conector <code>FAILED</code></td>
+<td><code>docker logs farmadata_connect</code>; confira usuário/senha e se <code>db</code> está healthy</td>
+</tr>
+<tr>
+<td>Demo não recebe eventos</td>
+<td>Conector não <code>RUNNING</code>, ou slot inativo: <code>docker exec farmadata_db psql -U postgres -d farmadata -c "select * from pg_replication_slots"</code></td>
+</tr>
+<tr>
+<td>INSERT da demo falha por FK/NOT NULL</td>
+<td>Tabelas de dimensão vazias: rode a carga em lote antes</td>
+</tr>
+<tr>
+<td>Disco do Postgres crescendo</td>
+<td>Slot parado retém WAL. Remova com <code>select pg_drop_replication_slot('farmadata_slot')</code> se desativar o CDC</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limpeza">Limpeza</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># remover o conector e o slot</span>
+curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8083/connectors/farmadata-venda-cdc
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.cdc.yml<span class="w"> </span>stop<span class="w"> </span>kafka<span class="w"> </span>connect
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>
