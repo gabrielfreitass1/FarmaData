@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../ADR-001/">
       
       
-        <link rel="next" href="../ADR-E2/">
+        <link rel="next" href="../ADR-003/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>ADR-001 — Modelagem do Sistema de Origem FarmaData - Documentação do Projeto</title>
+        <title>ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9) - Documentação do Projeto</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#adr-001-modelagem-do-sistema-de-origem-farmadata" class="md-skip">
+        <a href="#adr-002-mecanismo-de-ingestao-e-formato-de-armazenamento-aberto-issue-9" class="md-skip">
           Pular para conteúdo
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ADR-001 — Modelagem do Sistema de Origem FarmaData
+              ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
             
           </span>
         </div>
@@ -198,11 +198,31 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../ADR-001/" class="md-tabs__link">
           
   
   
   ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
 
         </a>
       </li>
@@ -280,6 +300,25 @@
     
   
   Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
 
       </a>
     </li>
@@ -393,6 +432,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -410,7 +472,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
     
   </span>
   
@@ -423,7 +485,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
     
   </span>
   
@@ -479,6 +541,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4. Avaliação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-ingestao-cdc-vs-recarga-periodica-opcao-nula-vs-arquitetura-dual" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Ingestão: CDC vs. Recarga Periódica (Opção Nula) vs. Arquitetura Dual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-armazenamento-apache-iceberg-vs-delta-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Armazenamento: Apache Iceberg vs. Delta Lake
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -491,11 +577,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-consequencias" class="md-nav__link">
+  <a href="#6-semantica-de-entrega-e-idempotencia" class="md-nav__link">
     <span class="md-ellipsis">
-      6. Consequências
+      6. Semântica de entrega e idempotência
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-consequencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Consequências
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Consequências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permite:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dividas-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dívidas técnicas:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -515,12 +634,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../ADR-E2/" class="md-nav__link">
+      <a href="../ADR-003/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
     
   </span>
   
@@ -531,6 +650,56 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -538,12 +707,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../ADR-003-dado-atrasado/" class="md-nav__link">
+      <a href="../../entregas/E1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    Release Notes 1 — Banco de Dados 2
     
   </span>
   
@@ -649,6 +818,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -709,6 +900,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4. Avaliação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-ingestao-cdc-vs-recarga-periodica-opcao-nula-vs-arquitetura-dual" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Ingestão: CDC vs. Recarga Periódica (Opção Nula) vs. Arquitetura Dual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-armazenamento-apache-iceberg-vs-delta-lake" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Armazenamento: Apache Iceberg vs. Delta Lake
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -721,11 +936,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-consequencias" class="md-nav__link">
+  <a href="#6-semantica-de-entrega-e-idempotencia" class="md-nav__link">
     <span class="md-ellipsis">
-      6. Consequências
+      6. Semântica de entrega e idempotência
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-consequencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Consequências
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Consequências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permite:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dividas-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dívidas técnicas:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -745,9 +993,9 @@
 
 
 
-<h1 id="adr-001-modelagem-do-sistema-de-origem-farmadata">ADR-001 — Modelagem do Sistema de Origem FarmaData</h1>
-<p><strong>Status:</strong> Aceito<br />
-<strong>Data:</strong> 2026-09-28<br />
+<h1 id="adr-002-mecanismo-de-ingestao-e-formato-de-armazenamento-aberto-issue-9">ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)</h1>
+<p><strong>Status:</strong> Aceito
+<strong>Data:</strong> 2026-10-12<br />
 <strong>Squad:</strong> FarmaData (UnB — Sistemas de Bancos de Dados 2)</p>
 <hr />
 <h2 id="1-caracterizar-a-carga">1. Caracterizar a carga</h2>
@@ -761,103 +1009,126 @@
 <tbody>
 <tr>
 <td><strong>Domínio</strong></td>
-<td>Venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, 2020)</td>
+<td>Ingestão e consolidação analítica de dados de saúde pública: SNGPC/Anvisa, DATASUS (CID-10), IBGE (população) e INMET (clima).</td>
 </tr>
 <tr>
-<td><strong>Pergunta de gestão</strong></td>
-<td>Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações, e como esses padrões se distribuem por região e faixa etária?</td>
+<td><strong>Padrão de atualização da origem</strong></td>
+<td>Publicação em bateladas periódicas oficiais pelas agências de governo. Inexistência de transações OLTP contínuas.</td>
 </tr>
 <tr>
 <td><strong>Volume estimado</strong></td>
-<td>~18 milhões de registros anuais (12 arquivos CSV mensais × ~1,5 milhão de linhas)</td>
+<td>~68,3 milhões de registros anuais na tabela fato de dispensações (~7 GB brutos de dados relacionais + ~3 GB de índices para por ano de análise), além de catálogos dimensionais.</td>
 </tr>
 <tr>
 <td><strong>Taxa de escrita</strong></td>
-<td>Carga em lote mensal — sem escrita contínua em produção</td>
+<td>Bateladas volumosas esporádicas (mensais/anuais). Nenhuma concorrência de escrita durante a consulta analítica.</td>
 </tr>
 <tr>
-<td><strong>Taxa de leitura</strong></td>
-<td>Consultas analíticas pontuais, baixa concorrência, latência tolerada de até 3 s</td>
+<td><strong>Latência tolerada pelo negócio</strong></td>
+<td>D-1 a D-30 perfeitamente aceitável. O dado oficial é retroativo e consolidado mensalmente; não há requisitos de monitoramento operacional em tempo real.</td>
 </tr>
 <tr>
-<td><strong>Padrão de acesso</strong></td>
-<td>Scan parcial com filtros por período, UF/município e princípio ativo; GROUP BY frequente; sem UPDATE nem DELETE</td>
-</tr>
-<tr>
-<td><strong>Latência tolerada</strong></td>
-<td>&lt; 2 s para agregações mensais por UF; &lt; 10 s para joins completos com CID-10</td>
-</tr>
-<tr>
-<td><strong>Crescimento</strong></td>
-<td>Recorte de 1 ano configurável via <code>ANO_RECORTE</code> (padrão: 2020); extensão para outros anos não exige alteração de esquema</td>
+<td><strong>Padrão de acesso analítico</strong></td>
+<td>Leituras analíticas intensivas (<em>OLAP</em>), scans seletivos com filtros por período temporal, UF e princípio ativo, além de agregações multidimensionais (<em>GROUP BY</em>).</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="2-definir-o-problema">2. Definir o problema</h2>
-<p>O sistema de origem precisa:</p>
-<ul>
-<li>Representar a granularidade do SNGPC: uma linha = uma dispensação.</li>
-<li>Preservar os campos exclusivos de antimicrobianos (CID-10, sexo, idade do paciente).</li>
-<li>Ser reprodutível: um único comando popula o banco do zero.</li>
-<li>Servir de base para as transformações das entregas E2 e E3 sem retrabalho.</li>
-</ul>
+<p>O projeto necessita evoluir o seu mecanismo de ingestão de dados e definir o padrão de armazenamento aberto na camada analítica (Lakehouse/OLAP), endereçando:</p>
+<ol>
+<li><strong>Definição da estratégia de ingestão:</strong> Avaliar a viabilidade de captura contínua de mudanças (<em>Change Data Capture — CDC</em>) versus recargas periódicas em lote, ponderando a latência contra o custo de infraestrutura.</li>
+<li><strong>Superação da fragilidade da opção nula:</strong> Os scripts atuais foram desenhados para uma inicialização única. Caso sejam agendados como estão para execuções periódicas, apresentam fragilidades no tratamento de erros 404.</li>
+<li><strong>Seleção de formato de tabela aberta (Open Table Format):</strong> Escolher entre <strong>Apache Iceberg</strong> e <strong>Delta Lake</strong> para viabilizar suporte transacional ACID, viagens no tempo (<em>time travel</em>) e facilidade de leitura por motores como DuckDB.</li>
+<li><strong>Garantia de consistência e idempotência:</strong> Assegurar que reexecuções de jobs não gerem duplicidade de registros.</li>
+</ol>
 <hr />
 <h2 id="3-alternativas-consideradas">3. Alternativas consideradas</h2>
 <table>
 <thead>
 <tr>
 <th>Alternativa</th>
+<th>Mecanismo de Ingestão</th>
+<th>Formato de Armazenamento</th>
 <th>Descrição</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>A — Tabela única desnormalizada</strong></td>
-<td>CSV → única tabela wide com todos os campos como TEXT</td>
+<td><strong>A — Opção Nula (Scripts crus agendados)</strong></td>
+<td>Recarga periódica via cron chamando o container de carga</td>
+<td>Armazenamento relacional PostgreSQL nativo</td>
+<td>Agendar a reexecução do comando <code>docker compose run carga</code>.</td>
 </tr>
 <tr>
-<td><strong>B — Esquema normalizado insert-only</strong> <em>(escolhida)</em></td>
-<td>Estrela com dimensões separadas e tabela fato imutável</td>
+<td><strong>B — CDC Always-on + Delta Lake</strong></td>
+<td>Captura contínua de mudanças (Debezium + Apache Kafka)</td>
+<td>Delta Lake</td>
+<td>Monitorar logs de transação da origem via conectores CDC em tempo real e descarregar no Delta Lake.</td>
 </tr>
 <tr>
-<td><strong>C — Esquema CRUD normalizado</strong></td>
-<td>Mesma estrela, com UPDATE/DELETE permitidos nas dimensões</td>
-</tr>
-<tr>
-<td><strong>D — Particionamento por mês</strong></td>
-<td>Tabela fato particionada por <code>id_periodo</code> desde o início</td>
+<td><strong>C — Arquitetura Dual (Lote Idempotente + CDC Pedagógico) + Delta Lake</strong> <em>(Escolhida)</em></td>
+<td>Recarga em lote agendada (Opção Nula Otimizada) + Debezium</td>
+<td>Delta Lake sobre Parquet</td>
+<td>Pipeline em lote mensal (idempotente via <code>DELETE</code> + <code>COPY</code>) para o volume massivo, em conjunto com o CDC ativado no Postgres para cumprir requisitos acadêmicos.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="4-avaliacao">4. Avaliação</h2>
-<p><strong>A — Desnormalizada:</strong> simples de carregar, mas cria redundância massiva, elimina integridade referencial e inviabiliza o modelo dimensional da E3.</p>
-<p><strong>B — Normalizada insert-only <em>(escolhida)</em>:</strong> integridade referencial via FKs, dimensões pequenas e estáveis, tabela fato imutável que preserva histórico sem custo extra. O único overhead é o upsert nas dimensões durante a carga, gerenciável com cache em memória.</p>
-<p><strong>C — CRUD normalizado:</strong> UPDATEs em dimensões quebram rastreabilidade histórica. Os dados do SNGPC são publicações oficiais imutáveis — UPDATE não agrega valor.</p>
-<p><strong>D — Particionamento:</strong> o volume de 2020 (~8 GB) não justifica a complexidade adicional nesta entrega.</p>
+<h3 id="41-ingestao-cdc-vs-recarga-periodica-opcao-nula-vs-arquitetura-dual">4.1 Ingestão: CDC vs. Recarga Periódica (Opção Nula) vs. Arquitetura Dual</h3>
+<ul>
+<li><strong>Opção Nula (Recarga Periódica em Lote):</strong></li>
+<li><em>Vantagem computacional:</em> Extremamente barata. Mantém-se ativa apenas durante o processamento mensal, liberando 100% de CPU e RAM no restante do tempo. Com as nossas otimizações, o <code>DROP INDEX</code> foi condicionado: os índices pesados só são removidos se houver $\ge 3$ arquivos mensais pendentes, preservando o desempenho em cargas incrementais simples.</li>
+<li>
+<p><em>Desvantagem Arquitetural Original:</em> Inicialmente, o código em cadeia via <code>&amp;&amp;</code> (<code>npm install &amp;&amp; node scripts/carregar_sngpc.js</code>) fazia com que um erro 404 (mês futuro) na Anvisa abortasse a carga com <code>process.exit(1)</code>, impedindo a atualização de bases subsequentes.</p>
+</li>
+<li>
+<p><strong>CDC (Change Data Capture — Debezium + Kafka):</strong></p>
+</li>
+<li><em>Vantagem:</em> Reduz a latência de transferência a patamares de <em>near-real-time</em> e permite capturar exclusões (<em>hard deletes</em>) ocorridas no banco relacional.</li>
+<li><em>Desvantagem:</em> Incompatibilidade com o modelo de negócio (os dados públicos vêm em CSV, não de bancos com WAL) e custo operacional. Sustentar o ecossistema (Kafka, Zookeeper/KRaft, Debezium) exige alocação permanente de 2 a 4 GB de memória RAM e consumo ininterrupto de CPU. Contudo, a captura de mudanças é uma exigência pedagógica da disciplina.</li>
+</ul>
+<h3 id="42-armazenamento-apache-iceberg-vs-delta-lake">4.2 Armazenamento: Apache Iceberg vs. Delta Lake</h3>
+<ul>
+<li><strong>Apache Iceberg:</strong></li>
+<li>
+<p>Oferece arquitetura avançada para evolução de esquema (<em>Full Metadata-only Schema Evolution</em> via <code>field-id</code>) e <em>partition pruning</em> inteligente. No entanto, para funcionar plenamente com múltiplos motores, exige frequentemente a manutenção de um catálogo externo (REST Catalog, Nessie, Hive Metastore), adicionando complexidade operacional desnecessária para a escala deste projeto.</p>
+</li>
+<li>
+<p><strong>Delta Lake (Vencedor):</strong></p>
+</li>
+<li>A estrutura de metadados do Delta Lake baseia-se num log de transações em JSON (<code>_delta_log/</code>) armazenado diretamente no diretório dos dados, o que <strong>elimina a necessidade de configurar catálogos externos</strong>.</li>
+<li>Ecossistema leve: Permite escritas em Python nativo usando a biblioteca <code>deltalake</code> (escrita em Rust), dispensando o uso de JVM/Spark. Além disso, o DuckDB (motor analítico escolhido) possui uma extensão oficial e altamente otimizada (<code>delta_scan</code>) para ler este formato nativamente.</li>
+</ul>
 <hr />
 <h2 id="5-decisao">5. Decisão</h2>
-<p><strong>Alternativa B — Esquema normalizado insert-only.</strong></p>
 <ol>
-<li><strong>O dado do SNGPC é imutável.</strong> Cada CSV mensal é uma publicação oficial; insert-only é a representação fiel do domínio.</li>
-<li><strong>Recorte de 1 ano configurável.</strong> O ano é definido pela variável <code>ANO_RECORTE</code> (padrão: 2020). Os CSVs de um único ano somam ~6–8 GB; um recorte maior ultrapassaria os limites práticos do projeto semestral. O ano de 2020 é analiticamente relevante (pandemia + pico de antimicrobianos). Os períodos são gerados dinamicamente pelo script de carga, sem alteração de esquema para mudar o ano.</li>
-<li><strong>Normalização viabiliza a E3.</strong> Dimensões limpas são a base do modelo dimensional. Desnormalizar agora custaria refatoração completa na entrega seguinte.</li>
-<li><strong>FKs como documentação viva.</strong> O banco rejeita dados inválidos na inserção, eliminando erros de qualidade que apareceriam só na E3.</li>
+<li><strong>Adotar a Arquitetura Dual de Ingestão (Lote + CDC):</strong> 
+   Embora o uso de CDC não se justifique do ponto de vista do negócio (dados públicos estáticos e retroativos), o projeto implementará o fluxo contínuo (Debezium + Kafka) a escutar o <code>farmadata_db</code> para atender estritamente aos requisitos curriculares da disciplina, mantendo em paralelo o processamento em lote como a fundação principal da carga volumosa.</li>
+<li><strong>Refinar a Opção Nula em Lote:</strong> O fluxo mensal de carga de CSVs torna-se a espinha dorsal de ingestão. A carga tornou-se condicional, idempotente e gerencia falhas sem abortar o processamento das outras bases do pipeline.</li>
+<li><strong>Adotar o Delta Lake como Formato de Tabela Aberta:</strong> Padronizar o armazenamento da camada analítica em Delta Lake sobre ficheiros Parquet, devido à sua simplicidade arquitetural (sem <em>catalog server</em>), alta compressão (ZSTD nível 3) e integração nativa via extensões do DuckDB.</li>
 </ol>
 <hr />
-<h2 id="6-consequencias">6. Consequências</h2>
-<p><strong>Permite:</strong>
-- Agregações mensais por UF, município e princípio ativo com índices já criados
-- Série temporal sem pré-agregação
-- Extensão para novos anos sem alterar o esquema</p>
-<p><strong>Impede/dificulta:</strong>
-- Correção retroativa de registros (intencional — dado público e imutável)
-- Consultas de "estado atual" de entidades (inaplicável neste domínio)</p>
-<p><strong>Dívidas técnicas:</strong>
-- <code>codigo_ibge</code> em <code>municipio</code> não é populado na carga inicial; pode ser enriquecido com dados do IBGE futuramente.
-- Se a Anvisa alterar o cabeçalho do CSV, <code>carregar_sngpc.js</code> precisará de ajuste.
-- Métricas de volume são estimativas; atualizar com <code>\dt+</code> após a carga completa.</p>
+<h2 id="6-semantica-de-entrega-e-idempotencia">6. Semântica de entrega e idempotência</h2>
+<p>A arquitetura adotará a semântica de entrega <strong>At-least-once com convergência para Exactly-once lógico</strong> por meio de operações idempotentes.</p>
+<ol>
+<li><strong>Idempotência no PostgreSQL (Lote):</strong> O limite transacional não é a linha, mas o <code>arquivo_origem</code>. Ao forçar uma recarga, a tabela fato sofre um <code>DELETE</code> transacional prévio das linhas exclusivas desse arquivo, seguido de um novo <code>COPY</code>. Isto garante que reprocessar um mês nunca gera duplicados.</li>
+<li><strong>Idempotência no Delta Lake:</strong> O script <code>exportar_delta.py</code> grava cada mês com <code>mode="overwrite"</code> restrito pela partição (<code>predicate="ano = A AND mes = M"</code>). A reexecução de um mês substitui integralmente a sua partição no Delta através de um commit atómico.</li>
+<li><strong>Desacoplamento de Chaves de Origem e Destino:</strong> No fluxo CDC, constatou-se que a recarga do lote reconstrói o <code>id_venda</code> sequencial. Consequentemente, operações analíticas e de reconciliação no Delta Lake baseadas nestes eventos devem recorrer a chaves de negócio (<code>arquivo_origem</code>, <code>numero_notificacao</code>), assumindo que a PK transacional é instável entre recargas pesadas.</li>
+</ol>
+<hr />
+<h2 id="7-consequencias">7. Consequências</h2>
+<h3 id="permite">Permite:</h3>
+<ul>
+<li><strong>Redução de custos com Staging:</strong> O Delta Lake permite leituras analíticas diretamente dos ficheiros Parquet compactados (12 ficheiros vs os 1500+ originais).</li>
+<li><strong>Semântica de Reescrita de Janela:</strong> A adoção do modelo <code>overwrite</code> facilita o tratamento de atrasos pontuais e de republicações completas do SNGPC.</li>
+<li><strong>Interoperabilidade analítica:</strong> O lakehouse pode ser consultado eficientemente pelo DuckDB em menos de 1 segundo para partições agregadas (como evidenciado no benchmark).</li>
+</ul>
+<h3 id="dividas-tecnicas">Dívidas técnicas:</h3>
+<ul>
+<li>O consumidor final do fluxo CDC. Atualmente, os eventos capturados via descodificação lógica chegam aos tópicos Kafka, mas a ferramenta de orquestração a jusante responsável por aplicá-los (<code>UPSERT</code>) de forma transacional na tabela Delta Lake transitará como dívida técnica para a Entrega E3.</li>
+</ul>
 
 
 

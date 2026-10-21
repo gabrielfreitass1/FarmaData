@@ -1,0 +1,1053 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../../adr/ADR-003/">
+      
+      
+        <link rel="next" href="../../diario/DIARIO_DE_BORDO/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Release Notes 1 — Banco de Dados 2 - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#release-notes-1-banco-de-dados-2" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Release Notes 1 — Banco de Dados 2
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-dominio-perguntas-e-valor-de-negocio" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Domínio, perguntas e valor de negócio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-fontes-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Fontes de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-escolha-do-banco-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Escolha do banco de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-pipeline-de-dados-versao-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Pipeline de dados (versão inicial)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-dominio-perguntas-e-valor-de-negocio" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Domínio, perguntas e valor de negócio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-fontes-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Fontes de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-escolha-do-banco-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Escolha do banco de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-pipeline-de-dados-versao-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Pipeline de dados (versão inicial)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="release-notes-1-banco-de-dados-2">Release Notes 1 — Banco de Dados 2</h1>
+<p>Nome do grupo: FarmaData</p>
+<p>Integrantes:</p>
+<ul>
+<li>Gabriel Freitas Balbino - 180075462</li>
+<li>Eduardo de Almeida Morais - 231011275</li>
+<li>Ruan Sobreira Carvalho  -211043763</li>
+<li>Joao Pedro Ferreira Moraes -231028989</li>
+</ul>
+<p>Data: 05/10/2026</p>
+<p>Domínio: Venda de Medicamentos Controlados, Antimicrobianos e Agonistas de GLP-1 no Brasil</p>
+<hr />
+<h2 id="1-dominio-perguntas-e-valor-de-negocio">1. Domínio, perguntas e valor de negócio</h2>
+<p>Domínio de aplicação:
+Nosso projeto tem como objetivo auxiliar a indústria farmacêutica, fornecedores e farmácias com o gerenciamento/fabricação de medicamentos. Com os nossos dados, podemos analisar como o consumo de medicamentos se distribui ao longo do tempo, território, perfil dos pacientes e condições clínicas.</p>
+<p>Perguntas que o projeto pretende responder:</p>
+<ol>
+<li>
+<p>Como prever a demanda para reduzir falta ou excesso de estoque?</p>
+</li>
+<li>
+<p>Como melhorar o planejamento e a distribuição de medicamentos de acordo com a demanda real da população?</p>
+</li>
+<li>
+<p>Onde existe crescimento de demanda e quais medicamentos estão ganhando ou perdendo relevância?</p>
+</li>
+<li>
+<p>Quais regiões apresentam maior consumo de cada tipo de medicamento?</p>
+</li>
+<li>
+<p>Como surtos sazonais (viroses de inverno, epidemias de dengue) impactam imediatamente a curva de consumo de categorias específicas de medicamentos em cada estado?</p>
+</li>
+<li>
+<p>Quais condições clínicas estão mais associadas ao consumo de determinados medicamentos e como esse padrão varia ao longo do tempo e entre diferentes regiões?</p>
+</li>
+</ol>
+<p>Valor de negócio dos dados gerados:
+Os dados analisados podem apoiar diferentes atores do setor farmacêutico e da saúde pública na tomada de decisões relacionadas à previsão de demanda, gestão de estoques, distribuição de medicamentos e identificação de padrões sazonais de consumo.</p>
+<table>
+<thead>
+<tr>
+<th>Quem usa</th>
+<th>Decisão apoiada</th>
+<th>Ganho esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Indústria farmacêutica, distribuidores e fornecedores</strong></td>
+<td>Prever a demanda e identificar tendências regionais para ajustar produção, aquisição e distribuição de medicamentos.</td>
+<td>Redução de <strong>excesso de estoque e risco de desabastecimento</strong>, além de melhor planejamento da produção e distribuição.</td>
+</tr>
+<tr>
+<td><strong>Farmácias, hospitais e demais estabelecimentos de saúde</strong></td>
+<td>Planejar estoques com base em padrões históricos, sazonais e regionais de consumo.</td>
+<td>Redução de perdas por <strong>excesso de estoque ou vencimento</strong> e menor ocorrência de falta de medicamentos de alta demanda.</td>
+</tr>
+<tr>
+<td><strong>Gestores públicos de saúde</strong></td>
+<td>Identificar regiões e períodos de aumento de demanda para orientar compras, distribuição e alocação de recursos.</td>
+<td>Melhor utilização dos recursos públicos e maior capacidade de <strong>abastecer regiões com aumento de demanda</strong>.</td>
+</tr>
+<tr>
+<td><strong>Órgãos de vigilância epidemiológica</strong></td>
+<td>Identificar alterações sazonais ou anormais no consumo de medicamentos que possam estar associadas a determinadas condições clínicas ou surtos.</td>
+<td>Maior capacidade de <strong>antecipação e preparação</strong> para períodos de aumento de demanda e possíveis cenários epidemiológicos.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-fontes-de-dados">2. Fontes de dados</h2>
+<table>
+<thead>
+<tr>
+<th>Fonte</th>
+<th>Link</th>
+<th>Formato</th>
+<th>Pergunta(s) que apoia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Venda de Medicamentos Controlados, Antimicrobianos e Agonistas de GLP-1(Jan/2019 ate Dez/2019)</td>
+<td>https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados</td>
+<td>CSV</td>
+<td>P1, P2, P3, P4, P5, P6</td>
+</tr>
+<tr>
+<td>Catálogo CID-10 (DATASUS / Ministério da Saúde)</td>
+<td>https://github.com/SidneyBissoli/cid10-br-mcp</td>
+<td>CSV (via Script Node.js)</td>
+<td>P5, P6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-escolha-do-banco-de-dados">3. Escolha do banco de dados</h2>
+<p>Banco escolhido: PostgreSQL 16</p>
+<p><strong>Principais argumentos:</strong></p>
+<ul>
+<li><strong>Workload:</strong> o projeto possui um workload predominantemente analítico, com consultas envolvendo agregações, filtros e agrupamentos por período, município, estado, princípio ativo, faixa etária e outras dimensões. O modelo utiliza uma tabela fato de vendas relacionada a diferentes dimensões, permitindo analisar tendências e padrões de consumo de medicamentos.</li>
+<li><strong>Modelo de dados:</strong> o PostgreSQL é adequado ao modelo relacional adotado pelo projeto, que possui relacionamentos entre a tabela <code>venda_medicamento</code> e dimensões como município, unidade federativa, período, medicamento, CID-10, conselho profissional e tipo de receituário. Essa estrutura facilita a realização de <code>JOINs</code> e consultas analíticas entre diferentes dimensões.</li>
+<li><strong>Volume, custo e operação:</strong> o conjunto de dados possui dezenas de milhões de registros. No recorte de 2020 utilizado atualmente no projeto, a tabela <code>venda_medicamento</code> possui aproximadamente <strong>68 milhões de registros</strong>, com cerca de <strong>10 GB de armazenamento incluindo índices</strong>. O PostgreSQL oferece recursos de indexação e otimização de consultas adequados a esse volume, além de ser uma solução open source, sem custos de licenciamento, e possuir suporte à execução em containers Docker.</li>
+<li><strong>Alternativas consideradas:</strong> bancos NoSQL foram considerados menos adequados devido ao modelo predominantemente relacional e à necessidade de realizar <code>JOINs</code> entre diferentes dimensões; soluções analíticas especializadas foram consideradas desnecessárias para o volume e escopo atuais, pois adicionariam complexidade operacional sem uma necessidade clara.</li>
+</ul>
+<p>➡️ ADR completa: <a href="https://github.com/gabrielfreitass1/FarmaData/blob/main/ADR.md">ADR-001 — Modelagem do Sistema de Origem FarmaData</a></p>
+<h2 id="4-pipeline-de-dados-versao-inicial">4. Pipeline de dados (versão inicial)</h2>
+<p>Diagrama: <img width="3076" height="1326" alt="diagramaE1" src="https://github.com/user-attachments/assets/6ae8daff-49ef-48f7-ad2a-a666becfbee1" /></p>
+<p>Etapas:</p>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>O que faz</th>
+<th>Ferramenta / script</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingestão</td>
+<td>Baixa 1 CSV por mês (<code>EDA_Industrializados_AAAAMM.csv</code>) da Anvisa, para <code>.part</code>, e só renomeia se o tamanho bater. Retenta em caso de falha. Baixa também o catálogo CID-10.</td>
+<td><code>scripts/carregar_sngpc.js</code>, <code>scripts/carregar_cid10.js</code></td>
+</tr>
+<tr>
+<td>Armazenamento bruto</td>
+<td>CSVs originais (<code>;</code>, Windows-1252) guardados em <code>tmp/</code> como cache, fora do Git. O arquivo de origem de cada linha fica em <code>arquivo_origem</code>.</td>
+<td>Sistema de arquivos (<code>tmp/</code>), volume Docker</td>
+</tr>
+<tr>
+<td>Transformação</td>
+<td>Passada 1 resolve município e medicamento (nome + UF; princípio ativo + apresentação). Passada 2 valida cada linha (período, UF, quantidade), mapeia sexo 1/2 para M/F, normaliza o CID-10 e converte a idade para anos. Linhas inválidas são rejeitadas e contadas por motivo.</td>
+<td><code>scripts/carregar_sngpc.js</code> (Node.js)</td>
+</tr>
+<tr>
+<td>Carga</td>
+<td>Uma transação por mês, junto com o registro em <code>carga_arquivo</code>. Índices são removidos antes e recriados no final. Rodar de novo pula os meses já carregados.</td>
+<td>PostgreSQL 16, <code>pg-copy-streams</code>, Docker Compose</td>
+</tr>
+<tr>
+<td>Consumo</td>
+<td>Consultas SQL de agregação por período, UF/município, princípio ativo e faixa etária, que respondem à pergunta de gestão.</td>
+<td><code>QUERIES.md</code>, <code>psql</code></td>
+</tr>
+</tbody>
+</table>
+<p>Status atual: Já roda: docker compose up sobe o banco, aplica as migrações e carrega os 12 meses de : ~68mi linhas, tabela fato de ~7 GB, índices de ~1,5 GB, ~10 GB no total. Cada mês leva ~250 s, mais ~90 s para criar os índices. A carga é idempotente e a qualidade fica registrada em carga_arquivo. </p>
+<p>Limitações conhecidas: sexo, idade e CID-10 só existem para antimicrobianos. A classificação eh_antimicrobiano é inferida pela presença desses campos. Município é identificado por nome + UF, sem código IBGE.</p>
+<p>Previsto para as próximas entregas: vamos adicionar uma nova base de dados para fazer a junção com a que já existe e resolver um problema, para a E2.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -13,6 +13,8 @@
       
       
       
+        <link rel="prev" href="../QUERIES/">
+      
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +22,7 @@
     
     
       
-        <title>Arquitetura e modelo de dados - Documentação do Projeto</title>
+        <title>Arquitetura - Documentação do Projeto</title>
       
     
     
@@ -96,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Arquitetura e modelo de dados
+              Arquitetura
             
           </span>
         </div>
@@ -192,11 +194,31 @@
     
     
       <li class="md-tabs__item">
-        <a href="../adr/ADR/" class="md-tabs__link">
+        <a href="../adr/ADR-001/" class="md-tabs__link">
           
   
   
   ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
 
         </a>
       </li>
@@ -274,6 +296,27 @@
     
   
   Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
 
       </a>
     </li>
@@ -385,7 +428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../adr/ADR/" class="md-nav__link">
+      <a href="../adr/ADR-001/" class="md-nav__link">
         
   
   
@@ -408,7 +451,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../adr/ADR-E2/" class="md-nav__link">
+      <a href="../adr/ADR-002/" class="md-nav__link">
         
   
   
@@ -431,12 +474,85 @@
   
   
     <li class="md-nav__item">
-      <a href="../adr/ADR-003-dado-atrasado/" class="md-nav__link">
+      <a href="../adr/ADR-003/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entregas/E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
     
   </span>
   
@@ -538,6 +654,217 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Visão geral
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-servicos-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Serviços (Docker Compose)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-caminho-1-ingestao-em-lote" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Caminho 1 — ingestão em lote
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-caminho-2-captura-de-mudancas-cdc" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Caminho 2 — captura de mudanças (CDC)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-camada-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Camada analítica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-modelo-de-dados-postgresql" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Modelo de dados (PostgreSQL)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Modelo de dados (PostgreSQL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-relacionamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 Relacionamentos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-dicionario-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Dicionário de dados
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 Dicionário de dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dimensoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensões
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fato" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fato
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bases-complementares-e-controle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bases complementares e controle
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-indices-da-tabela-de-fatos" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 Índices da tabela de fatos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-preenchimento-real-6mi-linhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.4 Preenchimento real ( ~6mi linhas)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.5 Volume
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-limitacoes-conhecidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Limitações conhecidas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
