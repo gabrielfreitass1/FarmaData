@@ -60,12 +60,21 @@
 
 ##  Navegação da Documentação (Entrega E2)
 
-* [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
-* [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-E2.md)
-* [ADR-003: Dado atrasado e janela da dispensação](docs/adr/ADR-003-dado-atrasado.md)
-* [Camada Analítica e Benchmark](docs/CAMADA_ANALITICA.md)
-* [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
-* [Uso de IA no Projeto](AI-USAGE.md)
+* [Diário de Bordo (Semanas 7 a 10)](diario/DIARIO_DE_BORDO.md)
+
+* [ADR-001: Modelagem do Sistema de Origem FarmaData](adr/ADR-001.md)
+* [ADR-002: Mecanismo de Ingestão e Formato Aberto](adr/ADR-002.md)
+* [ADR-003: Dado atrasado e janela da dispensação](adr/ADR-003.md)
+
+* [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)
+* [Bases Públicas Complementares](BASES_PUBLICAS.md)
+* [Arquitetura](ARQUITETURA.md)
+* [Consultas](QUERIES.md)
+* [CDC](CDC.md)
+
+* [E1](entregas/E1.md)
+
+
 
 ---
 
