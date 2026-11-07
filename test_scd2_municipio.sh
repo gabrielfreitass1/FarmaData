@@ -85,3 +85,28 @@ else
   echo "$ESPERADO_TODAS"
   exit 1
 fi
+
+echo
+echo "[3] Duas alterações no mesmo município no mesmo dia (mesma valid_from): não deve colidir"
+Q "UPDATE municipio SET nome_municipio = 'Vila Temporaria' WHERE id_municipio = ${ID_MUNICIPIO};" >/dev/null
+Q "SELECT aplicar_scd2_municipio(DATE '2024-06-20');" >/dev/null
+Q "UPDATE municipio SET nome_municipio = 'Vila Nova' WHERE id_municipio = ${ID_MUNICIPIO};" >/dev/null
+Q "SELECT aplicar_scd2_municipio(DATE '2024-06-20');" >/dev/null
+
+TODAS2="$(Q "SELECT nome_municipio || '|' || valid_from || '|' || COALESCE(valid_to::text,'NULL') || '|' || is_current FROM dim_municipio WHERE id_municipio = ${ID_MUNICIPIO} ORDER BY valid_from;")"
+echo "dim_municipio após 2 mudanças no mesmo dia (colapsa para o estado final do dia):"
+echo "$TODAS2"
+
+ESPERADO_TODAS2="Vila Antiga|1900-01-01|2024-06-15|false
+Vila Nova|2024-06-15|2024-06-20|false
+Vila Nova|2024-06-20|NULL|true"
+
+echo
+if [ "$TODAS2" = "$ESPERADO_TODAS2" ]; then
+  echo "=== RESULTADO: duas mudanças no mesmo dia não colidem na surrogate key; estado final correto ✓ ==="
+else
+  echo "=== RESULTADO: divergência ==="
+  echo "esperado:"
+  echo "$ESPERADO_TODAS2"
+  exit 1
+fi

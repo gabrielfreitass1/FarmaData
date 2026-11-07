@@ -63,6 +63,13 @@ BEGIN
           IS DISTINCT FROM (mu.nome_municipio, mu.sigla_uf, uf.regiao, mu.codigo_ibge);
     GET DIAGNOSTICS v_versionados = ROW_COUNT;
 
+    -- ON CONFLICT: se esta função já abriu uma versão para este município
+    -- hoje (duas mudanças no mesmo dia — valid_from na granularidade de
+    -- DATE, não TIMESTAMP), colapsa para o estado mais recente do dia em
+    -- vez de tentar criar uma segunda versão com a mesma sk_municipio.
+    -- ponytail: granularidade diária, não por execução; se duas alterações
+    -- reais no mesmo município no mesmo dia precisarem de versões
+    -- distintas, troque valid_from/valid_to para TIMESTAMP.
     INSERT INTO dim_municipio (sk_municipio, id_municipio, nome_municipio, sigla_uf, regiao, codigo_ibge, valid_from, valid_to, is_current)
     SELECT
         md5('municipio|' || mu.id_municipio || '|' || p_data_efetiva),
@@ -70,11 +77,14 @@ BEGIN
         p_data_efetiva, NULL, TRUE
     FROM municipio mu
     JOIN unidade_federativa uf ON uf.sigla = mu.sigla_uf
-    JOIN dim_municipio dm_fechada
-      ON dm_fechada.id_municipio = mu.id_municipio
-     AND dm_fechada.valid_to = p_data_efetiva
-     AND NOT dm_fechada.is_current
-    WHERE NOT EXISTS (SELECT 1 FROM dim_municipio dm_atual WHERE dm_atual.id_municipio = mu.id_municipio AND dm_atual.is_current);
+    WHERE NOT EXISTS (SELECT 1 FROM dim_municipio dm_atual WHERE dm_atual.id_municipio = mu.id_municipio AND dm_atual.is_current)
+    ON CONFLICT (sk_municipio) DO UPDATE
+        SET nome_municipio = EXCLUDED.nome_municipio,
+            sigla_uf        = EXCLUDED.sigla_uf,
+            regiao          = EXCLUDED.regiao,
+            codigo_ibge     = EXCLUDED.codigo_ibge,
+            valid_to        = NULL,
+            is_current      = TRUE;
 
     RETURN QUERY SELECT v_novos, v_versionados;
 END;
