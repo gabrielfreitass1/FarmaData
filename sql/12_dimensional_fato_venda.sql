@@ -49,6 +49,7 @@ CREATE OR REPLACE FUNCTION carregar_fato_venda_medicamento()
 RETURNS BIGINT AS $$
 DECLARE
     v_linhas BIGINT;
+    v_esperadas BIGINT;
 BEGIN
     TRUNCATE fato_venda_medicamento;
 
@@ -61,12 +62,12 @@ BEGIN
     )
     SELECT
         v.id_venda,
-        md5('tempo|' || v.id_periodo),
+        sk_hash('tempo', v.id_periodo),
         dm.sk_municipio,
-        md5('medicamento|' || v.id_medicamento),
-        CASE WHEN v.id_conselho IS NOT NULL THEN md5('conselho|' || v.id_conselho) END,
-        CASE WHEN v.id_tipo_receituario IS NOT NULL THEN md5('tipo_receituario|' || v.id_tipo_receituario) END,
-        CASE WHEN v.id_unidade_medida IS NOT NULL THEN md5('unidade_medida|' || v.id_unidade_medida) END,
+        sk_hash('medicamento', v.id_medicamento),
+        CASE WHEN v.id_conselho IS NOT NULL THEN sk_hash('conselho', v.id_conselho) END,
+        CASE WHEN v.id_tipo_receituario IS NOT NULL THEN sk_hash('tipo_receituario', v.id_tipo_receituario) END,
+        CASE WHEN v.id_unidade_medida IS NOT NULL THEN sk_hash('unidade_medida', v.id_unidade_medida) END,
         v.id_periodo, v.id_municipio, v.id_medicamento, v.id_conselho, v.id_tipo_receituario, v.id_unidade_medida,
         v.data_venda, v.quantidade_vendida,
         v.codigo_cid10, v.sexo_paciente, v.idade_paciente, v.id_unidade_idade, v.eh_antimicrobiano,
@@ -78,6 +79,19 @@ BEGIN
      AND v.data_venda <  COALESCE(dm.valid_to, DATE 'infinity');
 
     GET DIAGNOSTICS v_linhas = ROW_COUNT;
+
+    -- O JOIN acima é INNER: uma venda cujo município não tem (ainda) versão
+    -- SCD2 cobrindo data_venda desaparece da fato em silêncio. Falha alto e
+    -- cedo em vez disso — sintoma de aplicar_scd2_municipio() não ter rodado
+    -- para esse município antes (make modelo-dimensional roda as duas em
+    -- sequência; chamar só carregar_fato_venda_medicamento() isoladamente é o
+    -- caso que isto protege).
+    SELECT count(*) INTO v_esperadas FROM venda_medicamento;
+    IF v_linhas <> v_esperadas THEN
+        RAISE EXCEPTION 'carregar_fato_venda_medicamento: % linhas carregadas, % esperadas (venda_medicamento). % venda(s) sem versão de dim_municipio cobrindo data_venda — rode aplicar_scd2_municipio() antes.',
+            v_linhas, v_esperadas, v_esperadas - v_linhas;
+    END IF;
+
     RETURN v_linhas;
 END;
 $$ LANGUAGE plpgsql;
