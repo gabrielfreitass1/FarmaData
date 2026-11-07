@@ -7,6 +7,16 @@
 -- conselho, tipo de receituário, unidade de medida) são publicações oficiais
 -- imutáveis — não precisam de versionamento, só de uma surrogate key.
 
+-- Fórmula única de surrogate key: evita a mesma lógica (md5 do nome da
+-- dimensão + chave natural) reimplementada e podendo divergir em cada
+-- view/INSERT que a usa (sql/11 e sql/12).
+CREATE OR REPLACE FUNCTION sk_hash(p_dimensao TEXT, p_chave_natural ANYELEMENT)
+RETURNS CHAR(32) AS $$
+    SELECT md5(p_dimensao || '|' || p_chave_natural);
+$$ LANGUAGE sql IMMUTABLE;
+
+COMMENT ON FUNCTION sk_hash IS 'Surrogate key determinística (md5) de uma dimensão a partir da chave natural — fonte única usada por todas as dim_* e pela fato';
+
 CREATE TABLE IF NOT EXISTS dim_municipio (
     sk_municipio   CHAR(32)     PRIMARY KEY,
     id_municipio   INT          NOT NULL REFERENCES municipio(id_municipio),
@@ -41,7 +51,7 @@ BEGIN
     -- Município ainda sem nenhuma versão na dimensão: abre a primeira.
     INSERT INTO dim_municipio (sk_municipio, id_municipio, nome_municipio, sigla_uf, regiao, codigo_ibge, valid_from, valid_to, is_current)
     SELECT
-        md5('municipio|' || mu.id_municipio || '|' || DATE '1900-01-01'),
+        sk_hash('municipio', mu.id_municipio || '|' || DATE '1900-01-01'),
         mu.id_municipio, mu.nome_municipio, mu.sigla_uf, uf.regiao, mu.codigo_ibge,
         DATE '1900-01-01', NULL, TRUE
     FROM municipio mu
@@ -72,7 +82,7 @@ BEGIN
     -- distintas, troque valid_from/valid_to para TIMESTAMP.
     INSERT INTO dim_municipio (sk_municipio, id_municipio, nome_municipio, sigla_uf, regiao, codigo_ibge, valid_from, valid_to, is_current)
     SELECT
-        md5('municipio|' || mu.id_municipio || '|' || p_data_efetiva),
+        sk_hash('municipio', mu.id_municipio || '|' || p_data_efetiva),
         mu.id_municipio, mu.nome_municipio, mu.sigla_uf, uf.regiao, mu.codigo_ibge,
         p_data_efetiva, NULL, TRUE
     FROM municipio mu
@@ -93,23 +103,23 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION aplicar_scd2_municipio IS 'Sincroniza dim_municipio (SCD2) a partir de municipio/unidade_federativa; idempotente';
 
 -- Dimensões conformadas: views finas sobre tabelas já normalizadas e
--- imutáveis, só expondo a surrogate key determinística (md5 da chave natural).
+-- imutáveis, só expondo a surrogate key determinística (sk_hash da chave natural).
 CREATE OR REPLACE VIEW dim_tempo AS
-SELECT md5('tempo|' || id_periodo) AS sk_tempo, id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim
+SELECT sk_hash('tempo', id_periodo) AS sk_tempo, id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim
 FROM periodo;
 
 CREATE OR REPLACE VIEW dim_medicamento AS
-SELECT md5('medicamento|' || id_medicamento) AS sk_medicamento, id_medicamento, principio_ativo, descricao_apresentacao
+SELECT sk_hash('medicamento', id_medicamento) AS sk_medicamento, id_medicamento, principio_ativo, descricao_apresentacao
 FROM medicamento;
 
 CREATE OR REPLACE VIEW dim_conselho AS
-SELECT md5('conselho|' || id_conselho) AS sk_conselho, id_conselho, sigla, descricao
+SELECT sk_hash('conselho', id_conselho) AS sk_conselho, id_conselho, sigla, descricao
 FROM conselho_profissional;
 
 CREATE OR REPLACE VIEW dim_tipo_receituario AS
-SELECT md5('tipo_receituario|' || id_tipo_receituario) AS sk_tipo_receituario, id_tipo_receituario, codigo, descricao
+SELECT sk_hash('tipo_receituario', id_tipo_receituario) AS sk_tipo_receituario, id_tipo_receituario, codigo, descricao
 FROM tipo_receituario;
 
 CREATE OR REPLACE VIEW dim_unidade_medida AS
-SELECT md5('unidade_medida|' || id_unidade_medida) AS sk_unidade_medida, id_unidade_medida, descricao
+SELECT sk_hash('unidade_medida', id_unidade_medida) AS sk_unidade_medida, id_unidade_medida, descricao
 FROM unidade_medida;
