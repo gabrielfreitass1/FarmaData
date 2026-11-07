@@ -31,12 +31,14 @@
 * [ADR-001: Modelagem do Sistema de Origem FarmaData](docs/adr/ADR-001.md)
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-002.md)
 * [ADR-003: Dado atrasado e janela da dispensação](docs/adr/ADR-003.md)
+* [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](docs/adr/ADR-004.md)
 
 ### Execução e Arquitetura
 * [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
 * [Arquitetura da Plataforma](docs/ARQUITETURA.md)
 * [Captura de Mudanças no OLTP — CDC](docs/CDC.md)
 * [Camada Analítica Lakehouse e Benchmark](docs/CAMADA_ANALITICA.md)
+* [Modelo Dimensional e SCD2](docs/MODELO_DIMENSIONAL.md)
 * [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
 * [Consultas Analíticas](docs/QUERIES.md)
 * [Declaração de Uso de IA](AI-USAGE.md)
