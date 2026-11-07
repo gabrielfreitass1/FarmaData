@@ -10,8 +10,13 @@
 -- Fórmula única de surrogate key: evita a mesma lógica (md5 do nome da
 -- dimensão + chave natural) reimplementada e podendo divergir em cada
 -- view/INSERT que a usa (sql/11 e sql/12).
+-- Retorna TEXT (não CHAR/bpchar): md5() já devolve TEXT, e CREATE OR REPLACE
+-- VIEW não pode trocar o tipo de uma coluna existente — um sk_hash() com tipo
+-- de retorno diferente do md5() original quebraria o upgrade das views em
+-- qualquer banco que já as tivesse. As colunas de tabela (CHAR(32)) seguem
+-- recebendo o valor normalmente via cast de atribuição no INSERT.
 CREATE OR REPLACE FUNCTION sk_hash(p_dimensao TEXT, p_chave_natural ANYELEMENT)
-RETURNS CHAR(32) AS $$
+RETURNS TEXT AS $$
     SELECT md5(p_dimensao || '|' || p_chave_natural);
 $$ LANGUAGE sql IMMUTABLE;
 
