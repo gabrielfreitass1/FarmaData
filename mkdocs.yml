@@ -32,12 +32,14 @@ nav:
     - adr/ADR-001.md
     - adr/ADR-002.md
     - adr/ADR-003.md
+    - adr/ADR-004.md
   - Entregas:
     - entregas/E1.md
     - entregas/E2.md
   - Diario de Bordo: diario/DIARIO_DE_BORDO.md
   - Bases de Dados: BASES_PUBLICAS.md
   - Camada Analítica: CAMADA_ANALITICA.md
+  - Modelo Dimensional: MODELO_DIMENSIONAL.md
   - Consultas: QUERIES.md
   - Arquitetura: ARQUITETURA.md
   

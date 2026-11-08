@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -66,5 +66,15 @@ simular-atraso:
 # Evidência em docs/evidencias/reprocessamento_janela.txt. Não grava no banco farmadata.
 reprocessar-janela:
 	bash ./test_reprocessar_janela.sh
+
+# Modelo dimensional (ver docs/MODELO_DIMENSIONAL.md): sincroniza dim_municipio (SCD2)
+# e recarrega fato_venda_medicamento. Requer municipio/venda_medicamento já carregados.
+modelo-dimensional:
+	docker compose exec -T db psql -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-farmadata} -v ON_ERROR_STOP=1 -c \
+	  "SELECT * FROM aplicar_scd2_municipio(); SELECT carregar_fato_venda_medicamento() AS linhas_carregadas;"
+
+# Prova de versionamento SCD2 em dim_municipio (gera docs/evidencias/scd2.txt)
+test-scd2:
+	bash ./test_scd2_municipio.sh
 
 
