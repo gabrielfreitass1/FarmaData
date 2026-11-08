@@ -77,4 +77,12 @@ modelo-dimensional:
 test-scd2:
 	bash ./test_scd2_municipio.sh
 
+# Freshness da tabela de consumo. Ex.: make checar-freshness TABELA=fato_municipio_mes
+checar-freshness:
+	bash ./scripts/checar_freshness.sh $(TABELA)
+
+# Prova do atraso induzido (gera docs/evidencias/freshness.txt)
+test-freshness:
+	bash ./test_freshness.sh
+
 

@@ -1,9 +1,7 @@
-=== SCD2 dim_municipio — 2026-11-07T20:20:40-0300 ===
+=== SCD2 dim_municipio — 2026-11-07T21:46:59-0300 ===
 
- Network farmadata_default Creating 
- Network farmadata_default Created 
- Container farmadata_db Creating 
- Container farmadata_db Created 
+ Container farmadata_db Recreate 
+ Container farmadata_db Recreated 
  Container farmadata_db Starting 
  Container farmadata_db Started 
  Container farmadata_db Waiting 

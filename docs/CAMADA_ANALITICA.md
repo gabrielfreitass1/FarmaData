@@ -82,3 +82,29 @@ make lakehouse-bench  # benchmark antes/depois
 | Q3 evolução mensal (s, mediana de 5) | 0.644 | 0.192 |
 | Q8 princípio x região x trimestre (s, mediana de 5) | 0.608 | 0.570 |
 | Filtro UF+mês (DF, março) (s, mediana de 5) | 0.037 | 0.039 |
+
+
+## SLA e freshness da tabela de consumo (issue #29)
+
+**Tabela coberta:** a tabela de consumo do painel (`fato_municipio_mes`, nome a confirmar na #25).
+
+**Definição.** Freshness é a defasagem entre a última carga em `carga_arquivo.carregado_em`
+e a última construção da tabela de consumo, registrada em `controle_build.construido_em`.
+Se não há carga posterior à última construção, a tabela está em dia.
+
+**SLA.** A tabela de consumo é reconstruída em até **24 horas** após cada carga nova.
+
+| Estado | Condição | Ação |
+|---|---|---|
+| OK | nenhuma carga posterior à última construção | nenhuma |
+| WARN | carga pendente há mais de 24 h | avisar a squad e reconstruir |
+| ERRO | carga pendente há mais de 48 h, ou tabela nunca construída | bloquear a atualização do painel e reconstruir |
+
+**Limitação declarada.** A fonte (SNGPC) é histórica e publicada mensalmente. O SLA protege contra
+falha do pipeline (carga feita e tabela não reconstruída), não contra dado desatualizado do mundo real.
+
+**Verificação.** `make checar-freshness TABELA=...` (códigos de saída 0, 1 e 2, usáveis em CI ou no DAG da #27).
+Prova do atraso induzido: `make test-freshness`, evidência em `docs/evidencias/freshness.txt`.
+
+**Mitigação.** WARN: o log do pipeline registra o aviso e a squad reconstrói a tabela.
+ERRO: a etapa seguinte (painel) não roda até a reconstrução, e a falha é tratada como incidente.
