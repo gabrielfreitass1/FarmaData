@@ -91,6 +91,8 @@
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](adr/ADR-002.md)
 * [ADR-003: Dado atrasado e janela da dispensação](adr/ADR-003.md)
 * [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)
+* [Modelo Dimensional e SCD2](MODELO_DIMENSIONAL.md)
+* [Otimização de Performance e Planos de Execução](performance/RELATORIO_PERFORMANCE.md)
 * [Bases Públicas Complementares](BASES_PUBLICAS.md)
 * [Arquitetura](ARQUITETURA.md)
 * [Captura de Mudanças (CDC)](CDC.md)
