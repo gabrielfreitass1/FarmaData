@@ -1,8 +1,9 @@
 """DAG FarmaData: extração SNGPC -> modelo dimensional -> validação de qualidade.
 
 Uma execução (DAG run) = um mês de referência do SNGPC, dado pelo
-``data_interval_start`` do Airflow. Agendamento mensal; o histórico é
-reprocessado por backfill (``airflow dags backfill``), nunca por catchup
+``data_interval_start`` do Airflow. Agendamento mensal (@monthly, sem data
+final): no dia 1º o scheduler processa o mês que acabou de fechar. O histórico
+é reprocessado por backfill (``airflow dags backfill``), nunca por catchup
 automático. Ver docs/orchestration/README.md.
 
 Grafo (linear, sem ramos paralelos):
@@ -226,9 +227,11 @@ with DAG(
     dag_id="farmadata_pipeline",
     description="SNGPC mensal: extração -> modelo dimensional (SCD2 + fato) -> validação de qualidade",
     schedule="@monthly",
+    # Sem end_date: o agendamento segue ativo. No dia 1º de cada mês roda o mês
+    # anterior (data_interval_start); ANO_RECORTE da carga vem do próprio run.
+    # start_date = primeiro mês que o backfill pode reprocessar.
     start_date=pendulum.datetime(2020, 1, 1, tz="UTC"),
-    end_date=pendulum.datetime(2020, 12, 31, tz="UTC"),  # ANO_RECORTE; meses fora dele são rejeitados pela carga
-    catchup=False,           # histórico só via backfill explícito
+    catchup=False,           # ao ligar a DAG roda só o último mês; histórico via backfill explícito
     max_active_runs=1,       # meses em série: carga com lock + fato com TRUNCATE
     default_args=default_args,
     tags=["farmadata", "sngpc", "e3"],

@@ -1,57 +1,58 @@
-# Estado do banco farmadata após o backfill — 2026-11-08T20:01:57-03:00
+# Estado após o backfill jan–jun/2020 (Docker) — 2026-11-08T23:34:55Z
 
 ## airflow dags list-runs -d farmadata_pipeline
 dag_id             | run_id                              | state   | execution_date            | start_date                       | end_date                        
 ===================+=====================================+=========+===========================+==================================+=================================
-farmadata_pipeline | backfill__2020-06-01T00:00:00+00:00 | success | 2020-06-01T00:00:00+00:00 | 2026-11-08T23:01:29.820142+00:00 | 2026-11-08T23:01:34.115437+00:00
-farmadata_pipeline | backfill__2020-05-01T00:00:00+00:00 | success | 2020-05-01T00:00:00+00:00 | 2026-11-08T23:01:22.476954+00:00 | 2026-11-08T23:01:27.815358+00:00
-farmadata_pipeline | backfill__2020-04-01T00:00:00+00:00 | success | 2020-04-01T00:00:00+00:00 | 2026-11-08T23:01:16.161551+00:00 | 2026-11-08T23:01:20.471874+00:00
-farmadata_pipeline | backfill__2020-03-01T00:00:00+00:00 | success | 2020-03-01T00:00:00+00:00 | 2026-11-08T23:00:44.247464+00:00 | 2026-11-08T23:01:14.156009+00:00
-farmadata_pipeline | backfill__2020-02-01T00:00:00+00:00 | success | 2020-02-01T00:00:00+00:00 | 2026-11-08T23:00:37.038458+00:00 | 2026-11-08T23:00:42.242880+00:00
-farmadata_pipeline | backfill__2020-01-01T00:00:00+00:00 | success | 2020-01-01T00:00:00+00:00 | 2026-11-08T23:00:30.581006+00:00 | 2026-11-08T23:00:35.033479+00:00
+farmadata_pipeline | backfill__2020-07-01T00:00:00+00:00 | running | 2020-07-01T00:00:00+00:00 | 2026-11-08T23:34:47.455097+00:00 |                                 
+farmadata_pipeline | backfill__2020-06-01T00:00:00+00:00 | success | 2020-06-01T00:00:00+00:00 | 2026-11-08T23:34:33.436726+00:00 | 2026-11-08T23:34:37.827300+00:00
+farmadata_pipeline | backfill__2020-05-01T00:00:00+00:00 | success | 2020-05-01T00:00:00+00:00 | 2026-11-08T23:34:27.089761+00:00 | 2026-11-08T23:34:31.431965+00:00
+farmadata_pipeline | backfill__2020-04-01T00:00:00+00:00 | success | 2020-04-01T00:00:00+00:00 | 2026-11-08T23:34:19.613379+00:00 | 2026-11-08T23:34:25.075568+00:00
+farmadata_pipeline | backfill__2020-03-01T00:00:00+00:00 | success | 2020-03-01T00:00:00+00:00 | 2026-11-08T23:33:47.098398+00:00 | 2026-11-08T23:34:17.599089+00:00
+farmadata_pipeline | backfill__2020-02-01T00:00:00+00:00 | success | 2020-02-01T00:00:00+00:00 | 2026-11-08T23:33:39.683969+00:00 | 2026-11-08T23:33:45.085128+00:00
+farmadata_pipeline | backfill__2020-01-01T00:00:00+00:00 | success | 2020-01-01T00:00:00+00:00 | 2026-11-08T23:33:32.189017+00:00 | 2026-11-08T23:33:37.678187+00:00
                                                                                                                                                                     
 
-## Tentativas por task no backfill (task_instance)
+## Tentativas por task (banco de metadados do Airflow, UTC)
                run_id                |            task_id             |  state  | try_number | max_tentativas |       inicio        |         fim         
 -------------------------------------+--------------------------------+---------+------------+----------------+---------------------+---------------------
- backfill__2020-01-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 20:00:31 | 2026-11-08 20:00:31
- backfill__2020-01-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:00:32 | 2026-11-08 20:00:33
- backfill__2020-01-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:00:33 | 2026-11-08 20:00:33
- backfill__2020-01-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:00:34 | 2026-11-08 20:00:34
- backfill__2020-02-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 20:00:37 | 2026-11-08 20:00:38
- backfill__2020-02-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:00:38 | 2026-11-08 20:00:40
- backfill__2020-02-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:00:40 | 2026-11-08 20:00:41
- backfill__2020-02-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:00:41 | 2026-11-08 20:00:42
- backfill__2020-03-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          2 |              4 | 2026-11-08 20:01:09 | 2026-11-08 20:01:09
- backfill__2020-03-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:01:10 | 2026-11-08 20:01:11
- backfill__2020-03-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:01:11 | 2026-11-08 20:01:12
- backfill__2020-03-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:01:13 | 2026-11-08 20:01:13
- backfill__2020-04-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 20:01:16 | 2026-11-08 20:01:17
- backfill__2020-04-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:01:17 | 2026-11-08 20:01:18
- backfill__2020-04-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:01:19 | 2026-11-08 20:01:19
- backfill__2020-04-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:01:20 | 2026-11-08 20:01:20
- backfill__2020-05-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 20:01:23 | 2026-11-08 20:01:23
- backfill__2020-05-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:01:24 | 2026-11-08 20:01:25
- backfill__2020-05-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:01:26 | 2026-11-08 20:01:26
- backfill__2020-05-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:01:27 | 2026-11-08 20:01:27
- backfill__2020-06-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 20:01:30 | 2026-11-08 20:01:30
- backfill__2020-06-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 20:01:31 | 2026-11-08 20:01:32
- backfill__2020-06-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 20:01:32 | 2026-11-08 20:01:32
- backfill__2020-06-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 20:01:33 | 2026-11-08 20:01:33
+ backfill__2020-01-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          4 |              7 | 2026-11-08 23:33:33 | 2026-11-08 23:33:33
+ backfill__2020-01-01T00:00:00+00:00 | extrair_sngpc                  | success |          2 |              5 | 2026-11-08 23:33:34 | 2026-11-08 23:33:35
+ backfill__2020-01-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          2 |              5 | 2026-11-08 23:33:36 | 2026-11-08 23:33:36
+ backfill__2020-01-01T00:00:00+00:00 | validar_qualidade              | success |          2 |              5 | 2026-11-08 23:33:37 | 2026-11-08 23:33:37
+ backfill__2020-02-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 23:33:40 | 2026-11-08 23:33:40
+ backfill__2020-02-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 23:33:41 | 2026-11-08 23:33:42
+ backfill__2020-02-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 23:33:43 | 2026-11-08 23:33:44
+ backfill__2020-02-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 23:33:44 | 2026-11-08 23:33:45
+ backfill__2020-03-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          2 |              4 | 2026-11-08 23:34:13 | 2026-11-08 23:34:13
+ backfill__2020-03-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 23:34:14 | 2026-11-08 23:34:14
+ backfill__2020-03-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 23:34:16 | 2026-11-08 23:34:16
+ backfill__2020-03-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 23:34:17 | 2026-11-08 23:34:17
+ backfill__2020-04-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 23:34:20 | 2026-11-08 23:34:20
+ backfill__2020-04-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 23:34:21 | 2026-11-08 23:34:22
+ backfill__2020-04-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 23:34:23 | 2026-11-08 23:34:24
+ backfill__2020-04-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 23:34:24 | 2026-11-08 23:34:25
+ backfill__2020-05-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 23:34:27 | 2026-11-08 23:34:28
+ backfill__2020-05-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 23:34:28 | 2026-11-08 23:34:29
+ backfill__2020-05-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 23:34:30 | 2026-11-08 23:34:30
+ backfill__2020-05-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 23:34:31 | 2026-11-08 23:34:31
+ backfill__2020-06-01T00:00:00+00:00 | verificar_fonte_sngpc          | success |          1 |              4 | 2026-11-08 23:34:34 | 2026-11-08 23:34:34
+ backfill__2020-06-01T00:00:00+00:00 | extrair_sngpc                  | success |          1 |              4 | 2026-11-08 23:34:35 | 2026-11-08 23:34:36
+ backfill__2020-06-01T00:00:00+00:00 | transformar_modelo_dimensional | success |          1 |              4 | 2026-11-08 23:34:36 | 2026-11-08 23:34:36
+ backfill__2020-06-01T00:00:00+00:00 | validar_qualidade              | success |          1 |              4 | 2026-11-08 23:34:37 | 2026-11-08 23:34:37
 (24 rows)
 
-## carga_arquivo (uma linha por mês processado)
-             arquivo             | linhas_lidas | linhas_inseridas | linhas_rejeitadas |    carregado_em     
+## carga_arquivo (banco farmadata_orquestracao)
+             arquivo             | linhas_lidas | linhas_inseridas | linhas_rejeitadas |  carregado_em_utc   
 ---------------------------------+--------------+------------------+-------------------+---------------------
- EDA_Industrializados_202001.csv |            4 |                4 |                 0 | 2026-11-08 20:00:33
- EDA_Industrializados_202002.csv |            4 |                4 |                 0 | 2026-11-08 20:00:39
- EDA_Industrializados_202003.csv |            4 |                4 |                 0 | 2026-11-08 20:01:11
- EDA_Industrializados_202004.csv |            5 |                5 |                 0 | 2026-11-08 20:01:18
- EDA_Industrializados_202005.csv |            5 |                5 |                 0 | 2026-11-08 20:01:24
- EDA_Industrializados_202006.csv |            5 |                5 |                 0 | 2026-11-08 20:01:32
+ EDA_Industrializados_202001.csv |            4 |                4 |                 0 | 2026-11-08 23:33:35
+ EDA_Industrializados_202002.csv |            4 |                4 |                 0 | 2026-11-08 23:33:42
+ EDA_Industrializados_202003.csv |            4 |                4 |                 0 | 2026-11-08 23:34:14
+ EDA_Industrializados_202004.csv |            5 |                5 |                 0 | 2026-11-08 23:34:22
+ EDA_Industrializados_202005.csv |            5 |                5 |                 0 | 2026-11-08 23:34:29
+ EDA_Industrializados_202006.csv |            5 |                5 |                 0 | 2026-11-08 23:34:35
 (6 rows)
 
-## venda_medicamento x fato_venda_medicamento por mês (sem duplicação após reprocessar 202001)
+## venda_medicamento x fato_venda_medicamento por mês (202001 carregado 2x, sem duplicar)
  id_periodo | vendas | fato |  qtd   
 ------------+--------+------+--------
      202001 |      4 |    4 | 69.000
@@ -61,4 +62,10 @@ farmadata_pipeline | backfill__2020-01-01T00:00:00+00:00 | success | 2020-01-01T
      202005 |      5 |    5 | 90.000
      202006 |      5 |    5 | 95.000
 (6 rows)
+
+## banco farmadata (dados reais) não foi tocado pela demonstração
+ vendas_no_farmadata 
+---------------------
+                   0
+(1 row)
 

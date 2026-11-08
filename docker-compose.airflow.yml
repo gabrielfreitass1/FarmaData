@@ -14,7 +14,9 @@ x-airflow-env: &airflow-env
   AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@farmadata_airflow_metadb:5432/airflow
   AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "False"
   FARMADATA_DIR: /opt/farmadata
-  FARMADATA_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
+  # Banco que o pipeline grava. Para a demonstração com fixtures use o banco de
+  # testes criado por airflow/preparar_banco_demo.sh (ver docs/orchestration).
+  FARMADATA_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${FARMADATA_DB:-${POSTGRES_DB:-farmadata}}
   # Vazio = baixa da Anvisa para tmp/. Para a demonstração com fixtures, use
   # /opt/farmadata/scripts/fixtures/orquestracao (num banco de testes, não no farmadata real).
   FARMADATA_SNGPC_DIR: ${FARMADATA_SNGPC_DIR:-}

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sobe o Airflow + um PostgreSQL 16 local SEM Docker e SEM root (Linux/WSL).
-# Foi o ambiente usado para gerar as evidências de docs/orchestration/.
-# Com Docker disponível, prefira: make airflow-up (docker-compose.airflow.yml).
+# Alternativa ao Docker. As evidências de docs/orchestration/ foram geradas no
+# Docker (make airflow-demo); prefira-o quando disponível.
 #
 # Pré-requisitos: uv (https://docs.astral.sh/uv/) e Node.js 20 no PATH
 # (ou FARMADATA_NODE apontando para o binário).

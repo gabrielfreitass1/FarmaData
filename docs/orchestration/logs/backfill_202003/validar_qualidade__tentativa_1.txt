@@ -1,26 +1,26 @@
-[2026-11-08T20:01:13.227-0300] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
-[2026-11-08T20:01:13.240-0300] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [queued]>
-[2026-11-08T20:01:13.246-0300] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [queued]>
-[2026-11-08T20:01:13.247-0300] {taskinstance.py:2867} INFO - Starting attempt 1 of 4
-[2026-11-08T20:01:13.269-0300] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): validar_qualidade> on 2020-03-01 00:00:00+00:00
-[2026-11-08T20:01:13.274-0300] {logging_mixin.py:190} WARNING - /home/jpfmo/farmadata-airflow/venv/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=3816) is multi-threaded, use of fork() may lead to deadlocks in the child.
-[2026-11-08T20:01:13.274-0300] {standard_task_runner.py:72} INFO - Started process 3823 to run task
-[2026-11-08T20:01:13.274-0300] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'validar_qualidade', 'backfill__2020-03-01T00:00:00+00:00', '--job-id', '21', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpi8rr0gly']
-[2026-11-08T20:01:13.275-0300] {standard_task_runner.py:105} INFO - Job 21: Subtask validar_qualidade
-[2026-11-08T20:01:13.301-0300] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [running]> on host JoaoPedro.localdomain
-[2026-11-08T20:01:13.401-0300] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='farmadata' AIRFLOW_CTX_DAG_ID='farmadata_pipeline' AIRFLOW_CTX_TASK_ID='validar_qualidade' AIRFLOW_CTX_EXECUTION_DATE='2020-03-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='backfill__2020-03-01T00:00:00+00:00'
-[2026-11-08T20:01:13.402-0300] {taskinstance.py:732} INFO - ::endgroup::
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:202} INFO - Métricas 202003: {"carga_registrada": 1, "vendas_do_arquivo": 4, "vendas_no_periodo": 4, "fato_no_periodo": 4, "fato_total": 12, "venda_total": 12, "fato_sem_municipio_valido": 0, "fato_quantidade_invalida": 0, "municipios_com_2_versoes_correntes": 0}
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] arquivo do mês registrado em carga_arquivo
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] arquivo do mês trouxe vendas
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] fato do mês = vendas do mês (sem perda no join SCD2)
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] fato total = venda_medicamento total
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] toda venda na versão SCD2 vigente na data_venda
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] quantidade_vendida > 0
-[2026-11-08T20:01:13.465-0300] {farmadata_pipeline.py:204} INFO -   [OK] no máximo 1 versão corrente por município
-[2026-11-08T20:01:13.466-0300] {python.py:240} INFO - Done. Returned value was: {'carga_registrada': 1, 'vendas_do_arquivo': 4, 'vendas_no_periodo': 4, 'fato_no_periodo': 4, 'fato_total': 12, 'venda_total': 12, 'fato_sem_municipio_valido': 0, 'fato_quantidade_invalida': 0, 'municipios_com_2_versoes_correntes': 0}
-[2026-11-08T20:01:13.477-0300] {taskinstance.py:341} INFO - ::group::Post task execution logs
-[2026-11-08T20:01:13.478-0300] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=farmadata_pipeline, task_id=validar_qualidade, run_id=backfill__2020-03-01T00:00:00+00:00, execution_date=20200301T000000, start_date=20261108T230113, end_date=20261108T230113
-[2026-11-08T20:01:13.568-0300] {local_task_job_runner.py:266} INFO - Task exited with return code 0
-[2026-11-08T20:01:13.577-0300] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
-[2026-11-08T20:01:13.580-0300] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2026-11-08T23:34:16.789+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-08T23:34:16.811+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:34:16.818+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:34:16.818+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 4
+[2026-11-08T23:34:16.830+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): validar_qualidade> on 2020-03-01 00:00:00+00:00
+[2026-11-08T23:34:16.835+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'farmadata_pipeline', 'validar_qualidade', 'backfill__2020-03-01T00:00:00+00:00', '--job-id', '23', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmp0gaf05g6']
+[2026-11-08T23:34:16.837+0000] {standard_task_runner.py:105} INFO - Job 23: Subtask validar_qualidade
+[2026-11-08T23:34:16.837+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=813) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-11-08T23:34:16.838+0000] {standard_task_runner.py:72} INFO - Started process 814 to run task
+[2026-11-08T23:34:16.886+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-03-01T00:00:00+00:00 [running]> on host df21604829f9
+[2026-11-08T23:34:16.973+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='farmadata' AIRFLOW_CTX_DAG_ID='farmadata_pipeline' AIRFLOW_CTX_TASK_ID='validar_qualidade' AIRFLOW_CTX_EXECUTION_DATE='2020-03-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='backfill__2020-03-01T00:00:00+00:00'
+[2026-11-08T23:34:16.973+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:203} INFO - Métricas 202003: {"carga_registrada": 1, "vendas_do_arquivo": 4, "vendas_no_periodo": 4, "fato_no_periodo": 4, "fato_total": 12, "venda_total": 12, "fato_sem_municipio_valido": 0, "fato_quantidade_invalida": 0, "municipios_com_2_versoes_correntes": 0}
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] arquivo do mês registrado em carga_arquivo
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] arquivo do mês trouxe vendas
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] fato do mês = vendas do mês (sem perda no join SCD2)
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] fato total = venda_medicamento total
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] toda venda na versão SCD2 vigente na data_venda
+[2026-11-08T23:34:17.073+0000] {farmadata_pipeline.py:205} INFO -   [OK] quantidade_vendida > 0
+[2026-11-08T23:34:17.074+0000] {farmadata_pipeline.py:205} INFO -   [OK] no máximo 1 versão corrente por município
+[2026-11-08T23:34:17.074+0000] {python.py:240} INFO - Done. Returned value was: {'carga_registrada': 1, 'vendas_do_arquivo': 4, 'vendas_no_periodo': 4, 'fato_no_periodo': 4, 'fato_total': 12, 'venda_total': 12, 'fato_sem_municipio_valido': 0, 'fato_quantidade_invalida': 0, 'municipios_com_2_versoes_correntes': 0}
+[2026-11-08T23:34:17.105+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-08T23:34:17.105+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=farmadata_pipeline, task_id=validar_qualidade, run_id=backfill__2020-03-01T00:00:00+00:00, execution_date=20200301T000000, start_date=20261108T233416, end_date=20261108T233417
+[2026-11-08T23:34:17.172+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-08T23:34:17.188+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-11-08T23:34:17.220+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
