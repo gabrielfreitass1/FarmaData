@@ -28,6 +28,7 @@ services:
       - ./sql/10_ibge_populacao_faixa_etaria_municipio.sql:/docker-entrypoint-initdb.d/10_ibge_populacao_faixa_etaria_municipio.sql:ro
       - ./sql/11_dimensional_dim_municipio_scd.sql:/docker-entrypoint-initdb.d/11_dimensional_dim_municipio_scd.sql:ro
       - ./sql/12_dimensional_fato_venda.sql:/docker-entrypoint-initdb.d/12_dimensional_fato_venda.sql:ro
+      - ./sql/14_otimizacao_performance.sql:/docker-entrypoint-initdb.d/14_otimizacao_performance.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-farmadata}"]
       interval: 10s
