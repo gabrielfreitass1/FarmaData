@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 airflow-up airflow-down airflow-backfill airflow-falha airflow-sem-falha
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -78,3 +78,23 @@ test-scd2:
 	bash ./test_scd2_municipio.sh
 
 
+
+# Orquestração (Airflow) — ver docs/orchestration/README.md
+AIRFLOW = docker compose -f docker-compose.yml -f docker-compose.airflow.yml
+
+airflow-up:
+	$(AIRFLOW) up -d --build db airflow
+
+airflow-down:
+	$(AIRFLOW) stop airflow airflow-metadb
+
+# Reprocessamento histórico. Ex.: make airflow-backfill INICIO=2020-01-01 FIM=2020-06-01
+airflow-backfill:
+	$(AIRFLOW) exec airflow airflow dags backfill farmadata_pipeline -s $(or $(INICIO),2020-01-01) -e $(or $(FIM),2020-06-01)
+
+# Injeção de falha: verificar_fonte_sngpc falha nas N primeiras tentativas. Ex.: make airflow-falha FALHAS=2
+airflow-falha:
+	$(AIRFLOW) exec airflow airflow variables set farmadata_falha_injetada '{"task_id": "verificar_fonte_sngpc", "falhas": $(or $(FALHAS),2)}'
+
+airflow-sem-falha:
+	$(AIRFLOW) exec airflow airflow variables delete farmadata_falha_injetada
