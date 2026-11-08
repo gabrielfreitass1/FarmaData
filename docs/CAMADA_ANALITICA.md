@@ -108,3 +108,7 @@ Prova do atraso induzido: `make test-freshness`, evidência em `docs/evidencias/
 
 **Mitigação.** WARN: o log do pipeline registra o aviso e a squad reconstrói a tabela.
 ERRO: a etapa seguinte (painel) não roda até a reconstrução, e a falha é tratada como incidente.
+
+**Integração.** O teste de freshness roda no CI a cada push e pull request
+(`.github/workflows/freshness.yml`). A tarefa de checagem no DAG de orquestração
+fica para a issue #27.
