@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
