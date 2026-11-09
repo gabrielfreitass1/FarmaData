@@ -33,6 +33,7 @@ nav:
     - adr/ADR-002.md
     - adr/ADR-003.md
     - adr/ADR-004.md
+    - adr/0005-streamlit-conectado-ao-postgresql-star-schema-para-painel-analitico.md
   - Entregas:
     - entregas/E1.md
     - entregas/E2.md

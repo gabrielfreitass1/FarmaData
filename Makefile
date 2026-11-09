@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha dashboard benchmark-painel
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -112,3 +112,11 @@ airflow-falha:
 
 airflow-sem-falha:
 	$(AIRFLOW) exec airflow airflow variables delete farmadata_falha_injetada
+
+# Painel Analítico e Benchmark (Issue #30)
+dashboard:
+	streamlit run src/dashboard/app.py
+
+benchmark-painel:
+	python scripts/benchmark_painel.py
+
