@@ -1,0 +1,1102 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Teste manual — Modelo Dimensional & SCD2 (issue #24) - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#teste-manual-modelo-dimensional-scd2-issue-24" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Teste manual — Modelo Dimensional &amp; SCD2 (issue #24)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../MODELO_DIMENSIONAL/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Modelo Dimensional
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../orchestration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Orquestração
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entregas/E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entregas/E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MODELO_DIMENSIONAL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orquestração
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-teste-automatizado-make-test-scd2" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Teste automatizado (make test-scd2)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-fluxo-manual-completo-contra-o-banco-real-farmadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Fluxo manual completo contra o banco real (farmadata)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Fluxo manual completo contra o banco real (farmadata)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-make-modelo-dimensional-sobre-o-dataset-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 make modelo-dimensional sobre o dataset real
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-conferencia-de-grao-e-integridade" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Conferência de grão e integridade
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-teste-manual-de-alteracao-territorial-no-dataset-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Teste manual de alteração territorial no dataset real
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-bug-encontrado-e-corrigido" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Bug encontrado e corrigido
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-limpeza-dataset-real-restaurado" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Limpeza — dataset real restaurado
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-nota-operacional-achado-durante-o-teste-nao-e-bug-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Nota operacional (achado durante o teste, não é bug de código)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="teste-manual-modelo-dimensional-scd2-issue-24">Teste manual — Modelo Dimensional &amp; SCD2 (issue #24)</h1>
+<p><strong>Data:</strong> 2026-11-07
+<strong>Ambiente:</strong> container <code>farmadata_db</code> (postgres:16-alpine), via <code>docker compose</code>, porta mapeada em <code>55432</code> (a <code>5432</code> padrão estava ocupada por outro projeto nesta máquina — <code>anatoquizup-postgres</code>).</p>
+<p>Resumo: <strong>deu certo</strong>, com um bug real encontrado e corrigido no meio do caminho (detalhado na seção 4).</p>
+<hr />
+<h2 id="1-teste-automatizado-make-test-scd2">1. Teste automatizado (<code>make test-scd2</code>)</h2>
+<div class="highlight"><pre><span></span><code>$ POSTGRES_PORT=55432 make test-scd2
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[1] Município de teste: insere e aplica SCD2 (1a versão)
+dim_municipio após 1a carga: Vila Antiga|1900-01-01|NULL|true
+
+[2] Alteração territorial: IBGE renomeia o município; reaplica SCD2
+dim_municipio após renomeação (todas as versões, histórico preservado):
+Vila Antiga|1900-01-01|2024-06-15|false
+Vila Nova|2024-06-15|NULL|true
+
+=== RESULTADO: versão antiga preservada (is_current=f, valid_to fechado); nova versão corrente com sk_municipio distinta ✓ ===
+
+[3] Duas alterações no mesmo município no mesmo dia (mesma valid_from): não deve colidir
+dim_municipio após 2 mudanças no mesmo dia (colapsa para o estado final do dia):
+Vila Antiga|1900-01-01|2024-06-15|false
+Vila Nova|2024-06-15|2024-06-20|false
+Vila Nova|2024-06-20|NULL|true
+
+=== RESULTADO: duas mudanças no mesmo dia não colidem na surrogate key; estado final correto ✓ ===
+</code></pre></div>
+<p><strong>Passou.</strong> Evidência completa (saída real do script) em <a href="../scd2.txt"><code>docs/evidencias/scd2.txt</code></a>.</p>
+<hr />
+<h2 id="2-fluxo-manual-completo-contra-o-banco-real-farmadata">2. Fluxo manual completo contra o banco real (<code>farmadata</code>)</h2>
+<p>Container já existia com volume (<code>pgdata</code>) de uma carga anterior — Postgres só roda os scripts de <code>docker-entrypoint-initdb.d/</code> numa inicialização de volume vazio, então os arquivos <code>sql/11</code> e <code>sql/12</code> (novos nesta branch) foram aplicados manualmente e sem perda de dados:</p>
+<div class="highlight"><pre><span></span><code>$ docker compose exec -T db psql -U postgres -d farmadata -f /docker-entrypoint-initdb.d/11_dimensional_dim_municipio_scd.sql
+CREATE TABLE
+COMMENT
+CREATE INDEX
+CREATE INDEX
+CREATE FUNCTION
+COMMENT
+CREATE VIEW ×5
+
+$ docker compose exec -T db psql -U postgres -d farmadata -f /docker-entrypoint-initdb.d/12_dimensional_fato_venda.sql
+CREATE TABLE
+COMMENT
+CREATE INDEX ×3
+CREATE FUNCTION
+COMMENT
+</code></pre></div>
+<h3 id="21-make-modelo-dimensional-sobre-o-dataset-real">2.1 <code>make modelo-dimensional</code> sobre o dataset real</h3>
+<div class="highlight"><pre><span></span><code>$ POSTGRES_PORT=55432 make modelo-dimensional
+
+ municipios_novos | municipios_versionados
+------------------+------------------------
+             5130 |                      0
+
+ linhas_carregadas
+-------------------
+         112991859
+
+40:32,08 total (tempo de parede)
+</code></pre></div>
+<p>Levou <strong>~40 minutos</strong> para 112.991.859 linhas — volume bem maior que o recorte anual estimado no ADR-001 (~18M), então este <code>farmadata</code> tinha vários meses/anos carregados. Confirmei via <code>docker stats</code> que o container ficou a ~100% de CPU o tempo todo (não travou, só é uma junção custosa: nested loop + memoize + 6 <code>md5()</code> por linha, concorrendo CPU com outros 3 containers Postgres rodando na mesma máquina).</p>
+<h3 id="22-conferencia-de-grao-e-integridade">2.2 Conferência de grão e integridade</h3>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">venda_medicamento</span><span class="p">;</span><span class="w">        </span><span class="c1">-- 112991859</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">fato_venda_medicamento</span><span class="p">;</span><span class="w">   </span><span class="c1">-- 112991859  ✓ bate exatamente</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dim_municipio</span><span class="p">;</span><span class="w">            </span><span class="c1">-- 5130       ✓ = count(municipio)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dim_municipio</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">is_current</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 5130 ✓ 1 corrente por município</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">fato_venda_medicamento</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sk_municipio</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 0 ✓ nenhuma venda órfã</span>
+</code></pre></div>
+<p>Amostra da fato com as surrogate keys resolvidas:</p>
+<div class="highlight"><pre><span></span><code> id_venda |             sk_tempo             |           sk_municipio           |          sk_medicamento          | quantidade_vendida | data_venda
+----------+----------------------------------+----------------------------------+----------------------------------+---------------------+------------
+        1 | 53b152a96afe04ea93ebf656b1fb748a | d787e6946125c097dc0e376b6338d95c | ea3297f56bdf619a234ddaa9929614dc |               1.000 | 2020-01-01
+</code></pre></div>
+<p><strong>Resultado:</strong> grão idêntico à fonte, nenhuma venda sem dimensão resolvida. ✓</p>
+<hr />
+<h2 id="3-teste-manual-de-alteracao-territorial-no-dataset-real">3. Teste manual de alteração territorial no dataset real</h2>
+<p>Município escolhido: <code>id_municipio = 2566</code> (CAPÃO DA CANOA, RS).</p>
+<div class="highlight"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">municipio</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">nome_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;CAPAO DA CANOA (RENOMEADO IBGE)&#39;</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2566</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">aplicar_scd2_municipio</span><span class="p">(</span><span class="nb">DATE</span><span class="w"> </span><span class="s1">&#39;2026-11-07&#39;</span><span class="p">);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>nome_municipio                   | sigla_uf | valid_from | valid_to   | is_current | sk_municipio
+CAPÃO DA CANOA                   | RS       | 1900-01-01 | 2026-11-07 | false      | 6f36089b96587469f267e4283ade6ad5
+CAPAO DA CANOA (RENOMEADO IBGE)  | RS       | 2026-11-07 |            | true       | 2f224329b4e1d3e17bc0ec16289c83db
+</code></pre></div>
+<p>Versão antiga preservada (<code>is_current=false</code>, <code>valid_to</code> fechado), nova versão corrente com <code>sk_municipio</code> distinta — exatamente o comportamento do SCD2 exigido pela issue. ✓</p>
+<p>(O dado de teste foi revertido ao final — ver seção 5.)</p>
+<hr />
+<h2 id="4-bug-encontrado-e-corrigido">4. Bug encontrado e corrigido</h2>
+<p>Ao tentar <strong>reverter</strong> a mudança de teste (<code>UPDATE municipio</code> de volta ao nome original + <code>aplicar_scd2_municipio()</code> de novo, <strong>no mesmo dia</strong>), a função quebrou:</p>
+<div class="highlight"><pre><span></span><code>ERROR:  duplicate key value violates unique constraint &quot;dim_municipio_pkey&quot;
+DETAIL:  Key (sk_municipio)=(2f224329b4e1d3e17bc0ec16289c83db) already exists.
+</code></pre></div>
+<p><strong>Causa raiz:</strong> <code>sk_municipio = md5(id_municipio || valid_from)</code>. Se a função é chamada duas vezes no mesmo dia para o mesmo município (duas mudanças reais no mesmo dia, ou — como aqui — mudar e reverter), a segunda tentativa de abrir uma versão nova gera a <strong>mesma</strong> <code>valid_from</code> (hoje) e portanto a <strong>mesma</strong> <code>sk_municipio</code> da versão que acabou de ser fechada — violação de chave primária.</p>
+<p><strong>Correção</strong> (<code>sql/11_dimensional_dim_municipio_scd.sql</code>):
+- Adicionado <code>ON CONFLICT (sk_municipio) DO UPDATE</code> no INSERT final: se já existe uma versão para esse município com esse <code>valid_from</code> (= mudança no mesmo dia), a função colapsa para o estado mais recente do dia em vez de tentar inserir uma segunda linha.
+- Removido um <code>JOIN</code> redundante (<code>dm_fechada</code>) que, combinado com múltiplas linhas históricas antigas compartilhando o mesmo <code>valid_to</code>, causava duplicação de linhas na própria consulta de origem do INSERT (erro adicional: "ON CONFLICT DO UPDATE command cannot affect row a second time"). A condição <code>NOT EXISTS (linha corrente)</code> já era suficiente por si só.
+- Marcado como <code>ponytail:</code> o limite deliberado: <code>valid_from</code>/<code>valid_to</code> são <code>DATE</code>, não <code>TIMESTAMP</code> — duas mudanças reais no mesmo município no mesmo dia colapsam na última. Upgrade path documentado no comentário do código, caso granularidade por timestamp seja necessária.</p>
+<p><strong>Validação do fix:</strong> reproduzi o cenário exato (renomear → aplicar → reverter → aplicar, mesmo dia) depois da correção — funcionou. Também adicionei esse cenário como passo <code>[3]</code> permanente em <code>test_scd2_municipio.sh</code>, que passa (seção 1 acima).</p>
+<p>Commit: <code>fix: evita colisão de surrogate key em dim_municipio quando há 2 mudanças no mesmo dia</code>.</p>
+<hr />
+<h2 id="5-limpeza-dataset-real-restaurado">5. Limpeza — dataset real restaurado</h2>
+<p>O município de teste (2566) foi revertido ao estado original; nenhuma venda referencia a versão de demonstração (todas as vendas são de 2020, antes da data simulada), então a remoção foi segura (sem violar FK de <code>fato_venda_medicamento</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dim_municipio</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sk_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;2f224329b4e1d3e17bc0ec16289c83db&#39;</span><span class="p">;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">dim_municipio</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">valid_to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">is_current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">TRUE</span>
+<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sk_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;6f36089b96587469f267e4283ade6ad5&#39;</span><span class="p">;</span>
+</code></pre></div>
+<p>Conferência final:</p>
+<div class="highlight"><pre><span></span><code>SELECT count(*) FROM dim_municipio;             -- 5130
+SELECT count(*) FROM dim_municipio WHERE is_current; -- 5130
+SELECT count(*) FROM fato_venda_medicamento;     -- 112991859 (inalterado)
+</code></pre></div>
+<p>Container de teste (<code>farmadata_db</code> na porta <code>55432</code>) derrubado ao final (<code>docker compose down db</code>) — nenhum serviço ficou rodando.</p>
+<hr />
+<h2 id="6-nota-operacional-achado-durante-o-teste-nao-e-bug-de-codigo">6. Nota operacional (achado durante o teste, não é bug de código)</h2>
+<p>Neste ambiente, o bind mount de <code>./sql/*.sql</code> para <code>/docker-entrypoint-initdb.d/</code> <strong>não refletiu edições ao vivo</strong> — depois de editar <code>sql/11_dimensional_dim_municipio_scd.sql</code> com o container já rodando, <code>docker compose exec db grep ...</code> continuava mostrando o conteúdo antigo até um <code>docker compose down db &amp;&amp; docker compose up -d db</code> (recria o container; o volume <code>pgdata</code> não é afetado). Se outro ambiente Docker apresentar o mesmo comportamento, um <code>down</code>/<code>up</code> do serviço <code>db</code> resolve.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

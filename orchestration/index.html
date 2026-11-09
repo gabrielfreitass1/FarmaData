@@ -1,0 +1,1397 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../MODELO_DIMENSIONAL/">
+      
+      
+        <link rel="next" href="../QUERIES/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Orquestração - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#orquestracao-do-pipeline-apache-airflow" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Orquestração
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MODELO_DIMENSIONAL/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Modelo Dimensional
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Orquestração
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entregas/E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entregas/E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MODELO_DIMENSIONAL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Orquestração
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orquestração
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-grafo-de-dependencias-e-agendamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Grafo de dependências e agendamento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tolerancia-a-falhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Tolerância a falhas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-evidencia-retry-com-recuperacao-falha-injetada" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Evidência — retry com recuperação (falha injetada)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-evidencia-backfill-historico-janjun2020" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Evidência — backfill histórico (jan–jun/2020)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-evidencia-falha-definitiva-retries-esgotados-alerta-de-falha" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Evidência — falha definitiva (retries esgotados + alerta de falha)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-como-reproduzir-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Como reproduzir (Docker)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-escopo-da-evidencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Escopo da evidência
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-grafo-de-dependencias-e-agendamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Grafo de dependências e agendamento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tolerancia-a-falhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Tolerância a falhas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-evidencia-retry-com-recuperacao-falha-injetada" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Evidência — retry com recuperação (falha injetada)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-evidencia-backfill-historico-janjun2020" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Evidência — backfill histórico (jan–jun/2020)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-evidencia-falha-definitiva-retries-esgotados-alerta-de-falha" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Evidência — falha definitiva (retries esgotados + alerta de falha)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-como-reproduzir-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Como reproduzir (Docker)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-escopo-da-evidencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Escopo da evidência
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="orquestracao-do-pipeline-apache-airflow">Orquestração do pipeline — Apache Airflow</h1>
+<p>DAG: <a href="../../airflow/dags/farmadata_pipeline.py"><code>airflow/dags/farmadata_pipeline.py</code></a> · Airflow 2.10.5 · LocalExecutor · Docker (<a href="../../docker-compose.airflow.yml"><code>docker-compose.airflow.yml</code></a>)</p>
+<p>Todas as evidências desta página foram geradas no Docker (container <code>farmadata_airflow</code>), em 08/11/2026.</p>
+<h2 id="1-grafo-de-dependencias-e-agendamento">1. Grafo de dependências e agendamento</h2>
+<div class="highlight"><pre><span></span><code>verificar_fonte_sngpc ──► extrair_sngpc ──► transformar_modelo_dimensional ──► validar_qualidade
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Operador</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>verificar_fonte_sngpc</code></td>
+<td>Python</td>
+<td>Confirma que o CSV do mês existe: arquivo local em <code>FARMADATA_SNGPC_DIR</code> ou <code>HEAD</code> na Anvisa. Ponto de injeção de falha.</td>
+</tr>
+<tr>
+<td><code>extrair_sngpc</code></td>
+<td>Bash</td>
+<td><code>node scripts/carregar_sngpc.js</code> com <code>SNGPC_MESES=&lt;mês do run&gt;</code> e <code>SNGPC_FORCE=1</code>. Carga idempotente por arquivo (DELETE + COPY na mesma transação).</td>
+</tr>
+<tr>
+<td><code>transformar_modelo_dimensional</code></td>
+<td>Python</td>
+<td><code>aplicar_scd2_municipio()</code> + <code>carregar_fato_venda_medicamento()</code> (sql/11 e sql/12).</td>
+</tr>
+<tr>
+<td><code>validar_qualidade</code></td>
+<td>Python</td>
+<td>Regras de qualidade do mês. Se qualquer uma falhar, a task falha (ver tabela abaixo).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Agendamento:</strong> <code>@monthly</code>, começando em <code>2020-01-01</code>, sem data final. Cada run processa o mês dado por <code>data_interval_start</code>, então no dia 1º o scheduler processa o mês que acabou de fechar. A UI mostra a próxima execução agendada (<code>Next Run ID: 2026-10-01</code>, que processa outubro/2026).</p>
+<p><strong>Por que o grafo é linear e os runs não rodam em paralelo</strong>
+- Cada etapa consome o que a anterior gravou, então não há duas tasks independentes que pudessem rodar ao mesmo tempo.
+- <code>max_active_runs=1</code>: a carga SNGPC usa advisory lock, e a fato é recarregada com <code>TRUNCATE + INSERT</code>. Dois meses em paralelo ficariam esperando o lock ou um apagaria a fato do outro. No backfill, os meses rodam em série (ver 4).
+- <code>catchup=False</code>: ligar a DAG roda só o mês mais recente. O histórico só é reprocessado por backfill explícito.</p>
+<p><strong>Regras de <code>validar_qualidade</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Pega o quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>arquivo do mês registrado em <code>carga_arquivo</code></td>
+<td>carga que não chegou a commitar</td>
+</tr>
+<tr>
+<td>o arquivo do mês trouxe vendas</td>
+<td>CSV vazio/truncado</td>
+</tr>
+<tr>
+<td>fato do mês = vendas do mês</td>
+<td>vendas perdidas no join temporal SCD2</td>
+</tr>
+<tr>
+<td>fato total = <code>venda_medicamento</code> total</td>
+<td>fato desatualizada</td>
+</tr>
+<tr>
+<td>toda venda está na versão SCD2 vigente na <code>data_venda</code></td>
+<td>join temporal errado</td>
+</tr>
+<tr>
+<td><code>quantidade_vendida &gt; 0</code></td>
+<td>métrica inválida</td>
+</tr>
+<tr>
+<td>no máximo 1 versão corrente por município</td>
+<td>SCD2 corrompido</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grafo</td>
+<td><img alt="" src="img/01_grafo_dependencias.png" /></td>
+</tr>
+<tr>
+<td>Agendamento ativo (<code>@monthly</code>, próxima execução)</td>
+<td><img alt="" src="img/05_agendamento_ativo.png" /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-tolerancia-a-falhas">2. Tolerância a falhas</h2>
+<div class="highlight"><pre><span></span><code><span class="n">default_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>                              <span class="c1"># &gt;= 2; até 4 tentativas</span>
+    <span class="s2">&quot;retry_delay&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>      <span class="c1"># base do backoff</span>
+    <span class="s2">&quot;retry_exponential_backoff&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>         <span class="c1"># ~20s, ~40s, ~80s (+ jitter do Airflow)</span>
+    <span class="s2">&quot;max_retry_delay&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>  <span class="c1"># teto</span>
+    <span class="s2">&quot;on_retry_callback&quot;</span><span class="p">:</span> <span class="n">alerta_retry</span><span class="p">,</span>
+    <span class="s2">&quot;on_failure_callback&quot;</span><span class="p">:</span> <span class="n">alerta_falha</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Alerta:</strong> os dois callbacks registram um JSON com nível (<code>RETRY</code>/<code>FALHA</code>), task, run, mês, tentativa, horário da próxima tentativa e erro. Esse JSON vai para o log da task (<code>[ALERTA RETRY]</code> / <code>[ALERTA FALHA]</code>) e para <code>$AIRFLOW_HOME/alertas_farmadata.jsonl</code>. Num ambiente de produção, é aqui que entraria o envio por e-mail ou Slack. Aqui o destino é um arquivo, para que cada disparo possa ser conferido: <a href="logs/alertas_farmadata.jsonl"><code>logs/alertas_farmadata.jsonl</code></a>.</p>
+<p><strong>Injeção de falha:</strong> a Airflow Variable <code>farmadata_falha_injetada</code> faz <code>verificar_fonte_sngpc</code> falhar de propósito nas N primeiras tentativas, simulando a fonte da Anvisa fora do ar:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;task_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;verificar_fonte_sngpc&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;falhas&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;mes&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;202001&quot;</span><span class="p">}</span>
+</code></pre></div>
+<p>A chave <code>mes</code> é opcional e restringe a falha a um único mês. Para desligar a injeção, basta apagar a Variable.</p>
+<p>As esperas não dobram exatamente porque o Airflow sorteia cada uma dentro de uma faixa que dobra a cada tentativa: [20 s, 40 s), [40 s, 80 s), [80 s, 160 s).</p>
+<h2 id="3-evidencia-retry-com-recuperacao-falha-injetada">3. Evidência — retry com recuperação (falha injetada)</h2>
+<p><code>airflow dags backfill farmadata_pipeline -s 2020-01-01 -e 2020-01-01</code>, com <code>{"falhas": 2, "mes": "202001"}</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Tentativa</th>
+<th>Início (UTC)</th>
+<th>Resultado</th>
+<th>Próxima tentativa agendada</th>
+<th>Espera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>23:30:31</td>
+<td>falha injetada → <code>UP_FOR_RETRY</code> + alerta</td>
+<td>23:31:10</td>
+<td>39 s</td>
+</tr>
+<tr>
+<td>2</td>
+<td>23:31:11</td>
+<td>falha injetada → <code>UP_FOR_RETRY</code> + alerta</td>
+<td>23:32:30</td>
+<td>79 s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>23:32:30</td>
+<td><strong>sucesso</strong>; downstream roda e o run termina <code>success</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>A espera praticamente dobra (39 s → 79 s), como esperado do backoff exponencial. As tasks downstream só começaram depois do sucesso da tentativa 3.</p>
+<div class="highlight"><pre><span></span><code>[23:30:31] INFO - Starting attempt 1 of 4
+AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTTP 503) — tentativa 1/2 programada para falhar
+[23:30:31] INFO - Marking task as UP_FOR_RETRY. ... task_id=verificar_fonte_sngpc, run_id=backfill__2020-01-01T00:00:00+00:00
+[23:30:31] WARNING - [ALERTA RETRY] {&quot;nivel&quot;: &quot;RETRY&quot;, ..., &quot;tentativa&quot;: 1, &quot;max_tentativas&quot;: 4, &quot;proxima_tentativa_em&quot;: &quot;2026-11-08T23:31:10+00:00&quot;, ...}
+[23:31:11] INFO - Starting attempt 2 of 4
+[23:31:11] INFO - Marking task as UP_FOR_RETRY. ...
+[23:31:11] WARNING - [ALERTA RETRY] {..., &quot;tentativa&quot;: 2, ..., &quot;proxima_tentativa_em&quot;: &quot;2026-11-08T23:32:30+00:00&quot;, ...}
+[23:32:30] INFO - Starting attempt 3 of 4
+[23:32:30] INFO - [FALHA INJETADA] tentativa 3 &gt; 2 falhas programadas: seguindo normalmente
+[23:32:30] INFO - Marking task as SUCCESS. ...
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Durante o retry: tentativas 1 e 2 falhadas, task <code>up_for_retry</code>, log com <code>[ALERTA RETRY]</code></td>
+<td><img alt="" src="img/02a_retry_em_andamento.png" /></td>
+</tr>
+<tr>
+<td>Recuperação: tentativas 1 e 2 em vermelho, 3 em verde</td>
+<td><img alt="" src="img/02b_retry_recuperado_log.png" /></td>
+</tr>
+<tr>
+<td>Gantt: intervalos crescentes entre tentativas, downstream só depois do sucesso</td>
+<td><img alt="" src="img/02c_retry_gantt.png" /></td>
+</tr>
+</tbody>
+</table>
+<p>Logs: <a href="logs/retry_202001_cli.txt"><code>logs/retry_202001_cli.txt</code></a> (saída da CLI) e <a href="logs/retry_202001/"><code>logs/retry_202001/</code></a> (cada tentativa).</p>
+<h2 id="4-evidencia-backfill-historico-janjun2020">4. Evidência — backfill histórico (jan–jun/2020)</h2>
+<div class="highlight"><pre><span></span><code>airflow<span class="w"> </span>dags<span class="w"> </span>backfill<span class="w"> </span>farmadata_pipeline<span class="w"> </span>-s<span class="w"> </span><span class="m">2020</span>-01-01<span class="w"> </span>-e<span class="w"> </span><span class="m">2020</span>-06-01<span class="w"> </span>--reset-dagruns<span class="w"> </span>-y
+</code></pre></div>
+<ul>
+<li><strong>Reprocessamento:</strong> janeiro já tinha sido carregado no teste da seção 3, e o <code>--reset-dagruns</code> o reprocessou junto com os demais. Por isso o run de janeiro aparece com a tentativa 4 em <code>verificar_fonte_sngpc</code>, depois das 3 da seção 3.</li>
+<li><strong>Retry dentro do backfill:</strong> a Variable foi configurada com <code>{"falhas": 1, "mes": "202003"}</code>. A tentativa 1 de março falhou. O backfill esperou 24 s sem adiantar abril, e a tentativa 2 passou. Por isso esse run levou 30 s, contra 4–5 s dos demais.</li>
+<li><strong>Resultado:</strong> 6 runs <code>success</code> (<code>finished run 6 of 6 | succeeded: 24 | failed: 0</code>, exit 0), em série: cada mês começa só depois que o anterior termina.</li>
+<li><strong>Sem duplicação:</strong> janeiro foi carregado 2 vezes e continua com 4 vendas. A fato bate com <code>venda_medicamento</code> em todos os meses:</li>
+</ul>
+<div class="highlight"><pre><span></span><code> id_periodo | vendas | fato |  qtd
+     202001 |      4 |    4 | 69.000
+     202002 |      4 |    4 | 73.000
+     202003 |      4 |    4 | 77.000
+     202004 |      5 |    5 | 85.000
+     202005 |      5 |    5 | 90.000
+     202006 |      5 |    5 | 95.000
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grid: runs de backfill (jan–jun em verde; jul é o teste da seção 5)</td>
+<td><img alt="" src="img/03a_backfill_grid.png" /></td>
+</tr>
+<tr>
+<td>Lista de DAG runs: Run Type = backfill, um mês depois do outro</td>
+<td><img alt="" src="img/03b_backfill_lista_runs.png" /></td>
+</tr>
+<tr>
+<td>Retry no mês 202003 dentro do backfill</td>
+<td><img alt="" src="img/03c_backfill_retry_202003.png" /></td>
+</tr>
+<tr>
+<td>Validação de qualidade de 202003</td>
+<td><img alt="" src="img/03d_backfill_validacao_202003.png" /></td>
+</tr>
+</tbody>
+</table>
+<p>Arquivos:
+- <a href="logs/backfill_cli.txt"><code>logs/backfill_cli.txt</code></a>: saída completa da CLI.
+- <a href="logs/backfill_202003/"><code>logs/backfill_202003/</code></a>: logs por task e tentativa do mês com retry.
+- <a href="logs/estado_pos_backfill.txt"><code>logs/estado_pos_backfill.txt</code></a>: <code>list-runs</code>, tentativas por task instance, <code>carga_arquivo</code>, contagens venda × fato e a confirmação de que o banco <code>farmadata</code> não foi tocado.</p>
+<h2 id="5-evidencia-falha-definitiva-retries-esgotados-alerta-de-falha">5. Evidência — falha definitiva (retries esgotados + alerta de falha)</h2>
+<p>Este caso não usa injeção. <code>airflow dags backfill ... -s 2020-07-01 -e 2020-07-01</code> pede o mês 202007, cujo CSV não existe na fonte:</p>
+<table>
+<thead>
+<tr>
+<th>Tentativa</th>
+<th>Alerta (UTC)</th>
+<th>Próxima tentativa</th>
+<th>Espera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>RETRY</code> 23:34:48</td>
+<td>23:35:14</td>
+<td>26 s</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>RETRY</code> 23:35:15</td>
+<td>23:36:06</td>
+<td>51 s</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>RETRY</code> 23:36:07</td>
+<td>23:38:35</td>
+<td>148 s</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong><code>FALHA</code></strong> 23:38:36</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Depois disso, <code>extrair_sngpc</code>, <code>transformar_modelo_dimensional</code> e <code>validar_qualidade</code> ficaram <code>upstream_failed</code>. Nenhuma carga parcial foi feita, e o backfill terminou com <code>BackfillUnfinished: Some task instances failed</code> (exit 1).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 tentativas em vermelho; log da última com <code>[ALERTA FALHA]</code></td>
+<td><img alt="" src="img/04a_falha_definitiva_log.png" /></td>
+</tr>
+<tr>
+<td>Gantt das 4 tentativas</td>
+<td><img alt="" src="img/04b_falha_definitiva_gantt.png" /></td>
+</tr>
+</tbody>
+</table>
+<p>Logs: <a href="logs/falha_definitiva_202007_cli.txt"><code>logs/falha_definitiva_202007_cli.txt</code></a> e <a href="logs/falha_definitiva_202007/"><code>logs/falha_definitiva_202007/</code></a>.</p>
+<h2 id="6-como-reproduzir-docker">6. Como reproduzir (Docker)</h2>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>airflow-demo<span class="w">     </span><span class="c1"># cria o banco de testes farmadata_orquestracao e sobe db + Airflow com as fixtures</span>
+</code></pre></div>
+<p>A UI fica em http://localhost:8080, com usuário <code>admin</code> e senha <code>admin</code> (credenciais de desenvolvimento). Os testes desta página, na ordem:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>airflow-falha<span class="w"> </span><span class="nv">FALHAS</span><span class="o">=</span><span class="m">2</span><span class="w">                                   </span><span class="c1"># injeção (para restringir a um mês: Variable com &quot;mes&quot;)</span>
+make<span class="w"> </span>airflow-backfill<span class="w"> </span><span class="nv">INICIO</span><span class="o">=</span><span class="m">2020</span>-01-01<span class="w"> </span><span class="nv">FIM</span><span class="o">=</span><span class="m">2020</span>-01-01<span class="w">         </span><span class="c1"># retry com recuperação</span>
+make<span class="w"> </span>airflow-sem-falha
+make<span class="w"> </span>airflow-backfill<span class="w"> </span><span class="nv">INICIO</span><span class="o">=</span><span class="m">2020</span>-01-01<span class="w"> </span><span class="nv">FIM</span><span class="o">=</span><span class="m">2020</span>-06-01<span class="w"> </span><span class="nv">EXTRA</span><span class="o">=</span><span class="s2">&quot;--reset-dagruns -y&quot;</span><span class="w">   </span><span class="c1"># backfill histórico, reprocessando jan</span>
+make<span class="w"> </span>airflow-backfill<span class="w"> </span><span class="nv">INICIO</span><span class="o">=</span><span class="m">2020</span>-07-01<span class="w"> </span><span class="nv">FIM</span><span class="o">=</span><span class="m">2020</span>-07-01<span class="w">         </span><span class="c1"># falha definitiva (sem CSV de julho)</span>
+</code></pre></div>
+<p>Sem <code>make</code>, os comandos equivalentes são:</p>
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>airflow/preparar_banco_demo.sh
+<span class="nv">MSYS_NO_PATHCONV</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">FARMADATA_DB</span><span class="o">=</span>farmadata_orquestracao<span class="w"> </span><span class="nv">FARMADATA_SNGPC_DIR</span><span class="o">=</span>/opt/farmadata/scripts/fixtures/orquestracao<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.airflow.yml<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build<span class="w"> </span>db<span class="w"> </span>airflow
+docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.airflow.yml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>airflow<span class="w"> </span>airflow<span class="w"> </span>dags<span class="w"> </span>backfill<span class="w"> </span>farmadata_pipeline<span class="w"> </span>-s<span class="w"> </span><span class="m">2020</span>-01-01<span class="w"> </span>-e<span class="w"> </span><span class="m">2020</span>-06-01
+</code></pre></div>
+<p>No Windows com Git Bash, o <code>MSYS_NO_PATHCONV=1</code> é necessário. Sem ele, o Git Bash reescreve <code>/opt/...</code> como <code>C:/Program Files/Git/opt/...</code>.</p>
+<p>Para usar os dados reais, rode <code>make airflow-up</code>. Ele aponta para o banco <code>farmadata</code> e baixa os CSVs da Anvisa para <code>tmp/</code>.</p>
+<p>Há também um script sem Docker, para Linux/WSL sem root: <a href="../../airflow/local/airflow_local.sh"><code>airflow/local/airflow_local.sh</code></a>.</p>
+<h2 id="7-escopo-da-evidencia">7. Escopo da evidência</h2>
+<ul>
+<li>As execuções usaram as fixtures <a href="../../scripts/fixtures/orquestracao/"><code>scripts/fixtures/orquestracao/</code></a> (de 4 a 5 dispensações por mês), num banco de testes separado (<code>farmadata_orquestracao</code>), e não os CSVs completos da Anvisa (centenas de MB por mês). O código executado é o mesmo que roda com os dados reais. Mudam apenas <code>FARMADATA_SNGPC_DIR</code> e <code>FARMADATA_DB</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

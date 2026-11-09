@@ -1,0 +1,1643 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do projeto">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../CAMADA_ANALITICA/">
+      
+      
+        <link rel="next" href="../orchestration/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Modelo Dimensional - Documentação do Projeto</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modelo-dimensional-dimensao-de-variacao-lenta-scd" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentação do Projeto
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Modelo Dimensional
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Modelo Dimensional
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../orchestration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Orquestração
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentação do Projeto
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entregas/E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../entregas/E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Modelo Dimensional
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#declaracao-de-granularidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Declaração de granularidade
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-er-esquema-estrela" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrama ER (esquema estrela)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrategia-de-chave-substituta-surrogate-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estratégia de chave substituta (surrogate key)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dimensao-de-variacao-lenta-dim_municipio-scd-tipo-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensão de Variação Lenta: dim_municipio (SCD Tipo 2)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-recarregar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Como (re)carregar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dicionario-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dicionário de dados
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dicionário de dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dim_tempo-view-sobre-periodo" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_tempo (view sobre periodo)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_municipio-tabela-real-scd-tipo-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_municipio (tabela real, SCD Tipo 2)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_medicamento-view-sobre-medicamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_medicamento (view sobre medicamento)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_conselho-view-sobre-conselho_profissional" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_conselho (view sobre conselho_profissional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_tipo_receituario-view-sobre-tipo_receituario" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_tipo_receituario (view sobre tipo_receituario)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_unidade_medida-view-sobre-unidade_medida" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_unidade_medida (view sobre unidade_medida)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fato_venda_medicamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      fato_venda_medicamento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orquestração
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#declaracao-de-granularidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Declaração de granularidade
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-er-esquema-estrela" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrama ER (esquema estrela)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrategia-de-chave-substituta-surrogate-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estratégia de chave substituta (surrogate key)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dimensao-de-variacao-lenta-dim_municipio-scd-tipo-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensão de Variação Lenta: dim_municipio (SCD Tipo 2)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-recarregar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Como (re)carregar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dicionario-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dicionário de dados
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dicionário de dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dim_tempo-view-sobre-periodo" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_tempo (view sobre periodo)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_municipio-tabela-real-scd-tipo-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_municipio (tabela real, SCD Tipo 2)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_medicamento-view-sobre-medicamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_medicamento (view sobre medicamento)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_conselho-view-sobre-conselho_profissional" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_conselho (view sobre conselho_profissional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_tipo_receituario-view-sobre-tipo_receituario" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_tipo_receituario (view sobre tipo_receituario)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_unidade_medida-view-sobre-unidade_medida" class="md-nav__link">
+    <span class="md-ellipsis">
+      dim_unidade_medida (view sobre unidade_medida)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fato_venda_medicamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      fato_venda_medicamento
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="modelo-dimensional-dimensao-de-variacao-lenta-scd">Modelo Dimensional &amp; Dimensão de Variação Lenta (SCD)</h1>
+<p>Issue: #24. Implementação em <code>sql/11_dimensional_dim_municipio_scd.sql</code> e
+<code>sql/12_dimensional_fato_venda.sql</code>, sobre o OLTP normalizado da E1
+(<a href="../adr/ADR-001/">ADR-001</a>).</p>
+<h2 id="declaracao-de-granularidade">Declaração de granularidade</h2>
+<blockquote>
+<p><strong>Uma linha em <code>fato_venda_medicamento</code> = uma dispensação (venda) de
+medicamento controlado ou antimicrobiano registrada no SNGPC, atribuída à
+versão do município (geografia/nome) vigente na data da venda.</strong></p>
+</blockquote>
+<p>Mesmo grão de <code>venda_medicamento</code> (a fonte OLTP): nenhuma pré-agregação é
+aplicada na fato. Isso evita a armadilha de dupla contagem — agregar por UF
+e depois por município sobre a mesma fato não duplica linhas, porque não há
+atributos multivalorados nem joins que causem <em>fan-out</em>; a única dimensão
+versionada (<code>dim_municipio</code>) é resolvida por um join temporal que devolve
+exatamente uma versão por venda.</p>
+<h2 id="diagrama-er-esquema-estrela">Diagrama ER (esquema estrela)</h2>
+<div class="highlight"><pre><span></span><code>erDiagram
+    FATO_VENDA_MEDICAMENTO }o--|| DIM_TEMPO : sk_tempo
+    FATO_VENDA_MEDICAMENTO }o--|| DIM_MUNICIPIO : sk_municipio
+    FATO_VENDA_MEDICAMENTO }o--|| DIM_MEDICAMENTO : sk_medicamento
+    FATO_VENDA_MEDICAMENTO }o--o| DIM_CONSELHO : sk_conselho
+    FATO_VENDA_MEDICAMENTO }o--o| DIM_TIPO_RECEITUARIO : sk_tipo_receituario
+    FATO_VENDA_MEDICAMENTO }o--o| DIM_UNIDADE_MEDIDA : sk_unidade_medida
+
+    FATO_VENDA_MEDICAMENTO {
+        bigint id_venda PK
+        char_32 sk_tempo FK
+        char_32 sk_municipio FK
+        char_32 sk_medicamento FK
+        char_32 sk_conselho FK
+        char_32 sk_tipo_receituario FK
+        char_32 sk_unidade_medida FK
+        numeric quantidade_vendida &quot;medida aditiva&quot;
+        date data_venda
+        boolean eh_antimicrobiano &quot;degenerada&quot;
+    }
+    DIM_TEMPO {
+        char_32 sk_tempo PK
+        int id_periodo &quot;chave natural&quot;
+        int ano
+        int mes
+        int trimestre
+    }
+    DIM_MUNICIPIO {
+        char_32 sk_municipio PK
+        int id_municipio &quot;chave natural&quot;
+        varchar nome_municipio
+        char_2 sigla_uf
+        date valid_from &quot;SCD2&quot;
+        date valid_to &quot;SCD2&quot;
+        boolean is_current &quot;SCD2&quot;
+    }
+    DIM_MEDICAMENTO {
+        char_32 sk_medicamento PK
+        bigint id_medicamento &quot;chave natural&quot;
+        text principio_ativo
+    }
+    DIM_CONSELHO {
+        char_32 sk_conselho PK
+        smallint id_conselho &quot;chave natural&quot;
+    }
+    DIM_TIPO_RECEITUARIO {
+        char_32 sk_tipo_receituario PK
+        smallint id_tipo_receituario &quot;chave natural&quot;
+    }
+    DIM_UNIDADE_MEDIDA {
+        char_32 sk_unidade_medida PK
+        smallint id_unidade_medida &quot;chave natural&quot;
+    }
+</code></pre></div>
+<h2 id="estrategia-de-chave-substituta-surrogate-key">Estratégia de chave substituta (surrogate key)</h2>
+<p>Todas as <code>sk_*</code> são <strong>hash MD5 determinístico da chave natural</strong> (builtin
+<code>md5()</code>, sem extensão <code>pgcrypto</code>): <code>md5('&lt;dimensão&gt;|' || chave_natural)</code> para
+dimensões imutáveis, e <code>md5('municipio|' || id_municipio || '|' ||
+valid_from)</code> para <code>dim_municipio</code>, onde cada versão SCD2 tem sua própria
+surrogate key. Determinístico = reprocessar a carga nunca gera uma chave
+diferente para o mesmo dado, e a fato pode ser truncada/recarregada sem
+depender de sequência ou estado externo. Trade-offs e alternativas
+avaliadas em <a href="../adr/ADR-004/">ADR-004</a>.</p>
+<h2 id="dimensao-de-variacao-lenta-dim_municipio-scd-tipo-2">Dimensão de Variação Lenta: <code>dim_municipio</code> (SCD Tipo 2)</h2>
+<p>Município é a única dimensão sujeita a alteração do domínio público (IBGE
+pode renomear, desmembrar ou alterar os limites de um município). As demais
+dimensões vêm de publicações oficiais imutáveis (ADR-001) e não precisam de
+versionamento.</p>
+<ul>
+<li><code>valid_from</code> / <code>valid_to</code>: intervalo de vigência da versão (<code>valid_to
+  NULL</code> = vigente).</li>
+<li><code>is_current</code>: flag da versão corrente; índice único parcial garante só
+  uma linha corrente por município.</li>
+<li>Função <code>aplicar_scd2_municipio(p_data_efetiva date)</code>: idempotente — abre a
+  primeira versão (sentinela <code>1900-01-01</code>) para município novo; se os
+  atributos versionados mudaram, fecha a versão corrente e abre uma nova,
+  <strong>sem apagar a anterior</strong>.</li>
+<li>A fato resolve a versão correta via join temporal:
+  <code>data_venda BETWEEN valid_from AND COALESCE(valid_to, 'infinity')</code>.</li>
+<li>Prova de versionamento sem perda de histórico: <code>make test-scd2</code>
+  (<code>test_scd2_municipio.sh</code>), evidência em
+  <a href="../evidencias/scd2.txt"><code>docs/evidencias/scd2.txt</code></a>.</li>
+</ul>
+<h2 id="como-recarregar">Como (re)carregar</h2>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>carga-sngpc<span class="w"> </span><span class="nv">MESES</span><span class="o">=</span><span class="m">202001</span><span class="w">   </span><span class="c1"># popula municipio/venda_medicamento</span>
+make<span class="w"> </span>modelo-dimensional<span class="w">          </span><span class="c1"># sincroniza dim_municipio (SCD2) e recarrega a fato</span>
+</code></pre></div>
+<h2 id="dicionario-de-dados">Dicionário de dados</h2>
+<h3 id="dim_tempo-view-sobre-periodo"><code>dim_tempo</code> (view sobre <code>periodo</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_tempo</code></td>
+<td>char(32)</td>
+<td>Surrogate key (md5 de <code>id_periodo</code>)</td>
+</tr>
+<tr>
+<td><code>id_periodo</code></td>
+<td>int</td>
+<td>Chave natural, formato <code>AAAAMM</code></td>
+</tr>
+<tr>
+<td><code>ano</code></td>
+<td>int</td>
+<td>Ano</td>
+</tr>
+<tr>
+<td><code>mes</code></td>
+<td>int</td>
+<td>Mês (1-12)</td>
+</tr>
+<tr>
+<td><code>nome_mes</code></td>
+<td>varchar</td>
+<td>Nome do mês em português</td>
+</tr>
+<tr>
+<td><code>trimestre</code></td>
+<td>int</td>
+<td>Trimestre (1-4)</td>
+</tr>
+<tr>
+<td><code>semestre</code></td>
+<td>int</td>
+<td>Semestre (1-2)</td>
+</tr>
+<tr>
+<td><code>data_inicio</code></td>
+<td>date</td>
+<td>Primeiro dia do mês</td>
+</tr>
+<tr>
+<td><code>data_fim</code></td>
+<td>date</td>
+<td>Último dia do mês</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_municipio-tabela-real-scd-tipo-2"><code>dim_municipio</code> (tabela real, SCD Tipo 2)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_municipio</code></td>
+<td>char(32) PK</td>
+<td>Surrogate key (md5 de <code>id_municipio</code> + <code>valid_from</code>) — uma por versão</td>
+</tr>
+<tr>
+<td><code>id_municipio</code></td>
+<td>int</td>
+<td>Chave natural (FK lógica para <code>municipio</code>)</td>
+</tr>
+<tr>
+<td><code>nome_municipio</code></td>
+<td>varchar(150)</td>
+<td>Nome do município nesta versão</td>
+</tr>
+<tr>
+<td><code>sigla_uf</code></td>
+<td>char(2)</td>
+<td>UF nesta versão</td>
+</tr>
+<tr>
+<td><code>regiao</code></td>
+<td>varchar(20)</td>
+<td>Região (Norte/Nordeste/...) nesta versão</td>
+</tr>
+<tr>
+<td><code>codigo_ibge</code></td>
+<td>int</td>
+<td>Código IBGE nesta versão</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td>date</td>
+<td>Início da vigência desta versão</td>
+</tr>
+<tr>
+<td><code>valid_to</code></td>
+<td>date</td>
+<td>Fim da vigência (<code>NULL</code> = vigente)</td>
+</tr>
+<tr>
+<td><code>is_current</code></td>
+<td>boolean</td>
+<td><code>TRUE</code> para a versão vigente (única por município)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_medicamento-view-sobre-medicamento"><code>dim_medicamento</code> (view sobre <code>medicamento</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_medicamento</code></td>
+<td>char(32)</td>
+<td>Surrogate key (md5 de <code>id_medicamento</code>)</td>
+</tr>
+<tr>
+<td><code>id_medicamento</code></td>
+<td>bigint</td>
+<td>Chave natural</td>
+</tr>
+<tr>
+<td><code>principio_ativo</code></td>
+<td>text</td>
+<td>Princípio ativo</td>
+</tr>
+<tr>
+<td><code>descricao_apresentacao</code></td>
+<td>text</td>
+<td>Apresentação (ex.: "Comprimido 10mg")</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_conselho-view-sobre-conselho_profissional"><code>dim_conselho</code> (view sobre <code>conselho_profissional</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_conselho</code></td>
+<td>char(32)</td>
+<td>Surrogate key (md5 de <code>id_conselho</code>)</td>
+</tr>
+<tr>
+<td><code>id_conselho</code></td>
+<td>smallint</td>
+<td>Chave natural</td>
+</tr>
+<tr>
+<td><code>sigla</code></td>
+<td>varchar(10)</td>
+<td>Sigla do conselho (CRM, CRO, ...)</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>varchar(80)</td>
+<td>Nome completo do conselho</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_tipo_receituario-view-sobre-tipo_receituario"><code>dim_tipo_receituario</code> (view sobre <code>tipo_receituario</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_tipo_receituario</code></td>
+<td>char(32)</td>
+<td>Surrogate key (md5 de <code>id_tipo_receituario</code>)</td>
+</tr>
+<tr>
+<td><code>id_tipo_receituario</code></td>
+<td>smallint</td>
+<td>Chave natural</td>
+</tr>
+<tr>
+<td><code>codigo</code></td>
+<td>varchar(5)</td>
+<td>Código Anvisa (A, B1, B2, C1, D)</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>varchar(100)</td>
+<td>Descrição do tipo de receituário</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_unidade_medida-view-sobre-unidade_medida"><code>dim_unidade_medida</code> (view sobre <code>unidade_medida</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sk_unidade_medida</code></td>
+<td>char(32)</td>
+<td>Surrogate key (md5 de <code>id_unidade_medida</code>)</td>
+</tr>
+<tr>
+<td><code>id_unidade_medida</code></td>
+<td>smallint</td>
+<td>Chave natural</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>varchar(30)</td>
+<td>Unidade (Caixa, Frasco, Ampola, ...)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fato_venda_medicamento"><code>fato_venda_medicamento</code></h3>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_venda</code></td>
+<td>bigint PK</td>
+<td>Chave natural da dispensação (origem: <code>venda_medicamento.id_venda</code>)</td>
+</tr>
+<tr>
+<td><code>sk_tempo</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_tempo</code></td>
+</tr>
+<tr>
+<td><code>sk_municipio</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_municipio</code> (versão vigente na <code>data_venda</code>)</td>
+</tr>
+<tr>
+<td><code>sk_medicamento</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_medicamento</code></td>
+</tr>
+<tr>
+<td><code>sk_conselho</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_conselho</code> (pode ser <code>NULL</code>)</td>
+</tr>
+<tr>
+<td><code>sk_tipo_receituario</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_tipo_receituario</code> (pode ser <code>NULL</code>)</td>
+</tr>
+<tr>
+<td><code>sk_unidade_medida</code></td>
+<td>char(32) FK</td>
+<td>Surrogate key de <code>dim_unidade_medida</code> (pode ser <code>NULL</code>)</td>
+</tr>
+<tr>
+<td><code>id_periodo</code>, <code>id_municipio</code>, <code>id_medicamento</code>, <code>id_conselho</code>, <code>id_tipo_receituario</code>, <code>id_unidade_medida</code></td>
+<td>—</td>
+<td>Chaves naturais, mantidas para rastreabilidade até o OLTP</td>
+</tr>
+<tr>
+<td><code>data_venda</code></td>
+<td>date</td>
+<td>Data da dispensação</td>
+</tr>
+<tr>
+<td><code>quantidade_vendida</code></td>
+<td>numeric(10,3)</td>
+<td><strong>Medida aditiva</strong> — soma livremente por qualquer dimensão</td>
+</tr>
+<tr>
+<td><code>codigo_cid10</code></td>
+<td>varchar(10)</td>
+<td>CID-10 (somente antimicrobianos)</td>
+</tr>
+<tr>
+<td><code>sexo_paciente</code></td>
+<td>char(1)</td>
+<td>Sexo do paciente (somente antimicrobianos)</td>
+</tr>
+<tr>
+<td><code>idade_paciente</code></td>
+<td>smallint</td>
+<td>Idade do paciente (somente antimicrobianos)</td>
+</tr>
+<tr>
+<td><code>id_unidade_idade</code></td>
+<td>smallint</td>
+<td>Unidade da idade: anos/meses (somente antimicrobianos)</td>
+</tr>
+<tr>
+<td><code>eh_antimicrobiano</code></td>
+<td>boolean</td>
+<td>Flag degenerada — distingue o subconjunto antimicrobiano</td>
+</tr>
+<tr>
+<td><code>numero_notificacao</code></td>
+<td>varchar(30)</td>
+<td>Atributo degenerado — número da notificação de receita</td>
+</tr>
+<tr>
+<td><code>arquivo_origem</code></td>
+<td>varchar(80)</td>
+<td>Atributo degenerado — rastreabilidade do arquivo de carga</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

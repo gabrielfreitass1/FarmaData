@@ -1,0 +1,30 @@
+=== SCD2 dim_municipio — 2026-11-07T20:20:40-0300 ===
+
+ Network farmadata_default Creating 
+ Network farmadata_default Created 
+ Container farmadata_db Creating 
+ Container farmadata_db Created 
+ Container farmadata_db Starting 
+ Container farmadata_db Started 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+NOTICE:  database "farmadata_sim_scd2" does not exist, skipping
+DROP DATABASE
+CREATE DATABASE
+[1] Município de teste: insere e aplica SCD2 (1a versão)
+dim_municipio após 1a carga: Vila Antiga|1900-01-01|NULL|true
+
+[2] Alteração territorial: IBGE renomeia o município; reaplica SCD2
+dim_municipio após renomeação (todas as versões, histórico preservado):
+Vila Antiga|1900-01-01|2024-06-15|false
+Vila Nova|2024-06-15|NULL|true
+
+=== RESULTADO: versão antiga preservada (is_current=f, valid_to fechado); nova versão corrente com sk_municipio distinta ✓ ===
+
+[3] Duas alterações no mesmo município no mesmo dia (mesma valid_from): não deve colidir
+dim_municipio após 2 mudanças no mesmo dia (colapsa para o estado final do dia):
+Vila Antiga|1900-01-01|2024-06-15|false
+Vila Nova|2024-06-15|2024-06-20|false
+Vila Nova|2024-06-20|NULL|true
+
+=== RESULTADO: duas mudanças no mesmo dia não colidem na surrogate key; estado final correto ✓ ===

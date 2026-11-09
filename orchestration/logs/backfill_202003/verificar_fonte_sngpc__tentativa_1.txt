@@ -1,0 +1,107 @@
+[2026-11-08T23:33:47.414+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-08T23:33:47.431+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:33:47.437+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:33:47.437+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 4
+[2026-11-08T23:33:47.456+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): verificar_fonte_sngpc> on 2020-03-01 00:00:00+00:00
+[2026-11-08T23:33:47.461+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-03-01T00:00:00+00:00', '--job-id', '19', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpxr_x6wma']
+[2026-11-08T23:33:47.464+0000] {standard_task_runner.py:105} INFO - Job 19: Subtask verificar_fonte_sngpc
+[2026-11-08T23:33:47.464+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=784) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-11-08T23:33:47.464+0000] {standard_task_runner.py:72} INFO - Started process 785 to run task
+[2026-11-08T23:33:47.561+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-03-01T00:00:00+00:00 [running]> on host df21604829f9
+[2026-11-08T23:33:47.650+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='farmadata' AIRFLOW_CTX_DAG_ID='farmadata_pipeline' AIRFLOW_CTX_TASK_ID='verificar_fonte_sngpc' AIRFLOW_CTX_EXECUTION_DATE='2020-03-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='backfill__2020-03-01T00:00:00+00:00'
+[2026-11-08T23:33:47.651+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-08T23:33:47.682+0000] {taskinstance.py:3313} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 763, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/farmadata_pipeline.py", line 132, in verificar_fonte_sngpc
+    _falha_injetada(ti.task_id, ti.try_number, mes)
+  File "/opt/airflow/dags/farmadata_pipeline.py", line 119, in _falha_injetada
+    raise AirflowException(
+airflow.exceptions.AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTTP 503) — tentativa 1/1 programada para falhar
+[2026-11-08T23:33:47.690+0000] {taskinstance.py:1226} INFO - Marking task as UP_FOR_RETRY. dag_id=farmadata_pipeline, task_id=verificar_fonte_sngpc, run_id=backfill__2020-03-01T00:00:00+00:00, execution_date=20200301T000000, start_date=20261108T233347, end_date=20261108T233347
+[2026-11-08T23:33:47.690+0000] {taskinstance.py:1564} INFO - Executing callback at index 0: alerta_retry
+[2026-11-08T23:33:47.691+0000] {farmadata_pipeline.py:80} WARNING - [ALERTA RETRY] {"nivel": "RETRY", "emitido_em": "2026-11-08T23:33:47+00:00", "dag_id": "farmadata_pipeline", "task_id": "verificar_fonte_sngpc", "run_id": "backfill__2020-03-01T00:00:00+00:00", "mes_referencia": "202003", "tentativa": 1, "max_tentativas": 4, "proxima_tentativa_em": "2026-11-08T23:34:11+00:00", "erro": "[FALHA INJETADA] fonte SNGPC indisponível (simulação de HTTP 503) — tentativa 1/1 programada para falhar"}
+[2026-11-08T23:33:47.787+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-08T23:33:47.787+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 19 for task verificar_fonte_sngpc ([FALHA INJETADA] fonte SNGPC indisponível (simulação de HTTP 503) — tentativa 1/1 programada para falhar; 785)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3006, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 274, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3161, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3185, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 763, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/farmadata_pipeline.py", line 132, in verificar_fonte_sngpc
+    _falha_injetada(ti.task_id, ti.try_number, mes)
+  File "/opt/airflow/dags/farmadata_pipeline.py", line 119, in _falha_injetada
+    raise AirflowException(
+airflow.exceptions.AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTTP 503) — tentativa 1/1 programada para falhar
+[2026-11-08T23:33:47.799+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2026-11-08T23:33:47.820+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-11-08T23:33:47.849+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
