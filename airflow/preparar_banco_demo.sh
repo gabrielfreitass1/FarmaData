@@ -19,7 +19,7 @@ for f in 01_geografia_uf.sql 02_geografia_municipio.sql 03_tempo_periodo.sql 04_
          05_cid10.sql 05a_carga_cid10.sql 06_prescritor_listas.sql 07_venda_medicamento.sql \
          08_ibge_populacao_municipio.sql 09_clima_mensal_uf.sql \
          10_ibge_populacao_faixa_etaria_municipio.sql 11_dimensional_dim_municipio_scd.sql \
-         12_dimensional_fato_venda.sql; do
+         12_dimensional_fato_venda.sql 13_controle_build.sql; do
   psql_ -d "$PGD" -f "/docker-entrypoint-initdb.d/${f}" >/dev/null
 done
 echo "banco ${PGD} pronto"

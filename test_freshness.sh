@@ -2,6 +2,9 @@
 # Prova que um atraso induzido dispara WARN e ERRO (gera docs/evidencias/freshness.txt).
 set -euo pipefail
 cd "$(dirname "$0")"
+# Com o Airflow de pé (docker-compose.airflow.yml), o compose avisa sobre containers
+# "órfãos" e o aviso vazaria para a evidência. Só silencia o aviso; não remove nada.
+export COMPOSE_IGNORE_ORPHANS=1
 PGU="${POSTGRES_USER:-postgres}"
 PGD="farmadata_sim_freshness"
 T="fato_teste"

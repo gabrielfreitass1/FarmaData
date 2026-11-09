@@ -86,13 +86,19 @@ make lakehouse-bench  # benchmark antes/depois
 
 ## SLA e freshness da tabela de consumo (issue #29)
 
-**Tabela coberta:** a tabela de consumo do painel (`fato_municipio_mes`, nome a confirmar na #25).
+**Tabela coberta:** `fato_venda_medicamento` (modelo dimensional, `sql/12`). Se a #25 criar
+uma tabela agregada para o painel, ela entra chamando `registrar_build('<tabela>', linhas)`
+ao fim da sua construção.
 
 **Definição.** Freshness é a defasagem entre a última carga em `carga_arquivo.carregado_em`
 e a última construção da tabela de consumo, registrada em `controle_build.construido_em`.
 Se não há carga posterior à última construção, a tabela está em dia.
+`carregar_fato_venda_medicamento()` registra a construção na mesma transação da recarga,
+então só conta uma fato construída por inteiro.
 
 **SLA.** A tabela de consumo é reconstruída em até **24 horas** após cada carga nova.
+O recorte do projeto é fixo em 2020 (`ANO_RECORTE`), então não chega um mês novo por mês:
+o SLA vale para cada recarga e backfill desses meses (`make carga-sngpc`, `airflow dags backfill`).
 
 | Estado | Condição | Ação |
 |---|---|---|
@@ -103,12 +109,23 @@ Se não há carga posterior à última construção, a tabela está em dia.
 **Limitação declarada.** A fonte (SNGPC) é histórica e publicada mensalmente. O SLA protege contra
 falha do pipeline (carga feita e tabela não reconstruída), não contra dado desatualizado do mundo real.
 
-**Verificação.** `make checar-freshness TABELA=...` (códigos de saída 0, 1 e 2, usáveis em CI ou no DAG da #27).
+**Verificação.** A regra fica numa função só, `checar_freshness(tabela, warn_h, erro_h)`
+(`sql/13_controle_build.sql`), usada pela CLI e pela orquestração:
+
+- CLI: `make checar-freshness` (padrão `fato_venda_medicamento`; códigos de saída 0, 1 e 2).
+- Airflow: DAG `farmadata_freshness` (`airflow/dags/farmadata_freshness.py`), `@daily`.
+
 Prova do atraso induzido: `make test-freshness`, evidência em `docs/evidencias/freshness.txt`.
 
-**Mitigação.** WARN: o log do pipeline registra o aviso e a squad reconstrói a tabela.
-ERRO: a etapa seguinte (painel) não roda até a reconstrução, e a falha é tratada como incidente.
+**Mitigação.**
+
+- WARN: a DAG grava um alerta `FRESHNESS_WARN` em `alertas_farmadata.jsonl` (mesmo destino
+  dos alertas da `farmadata_pipeline`) e a task passa. A squad reconstrói a fato
+  (`make modelo-dimensional` ou rerun de `transformar_modelo_dimensional`).
+- ERRO: a task falha sem retry e gera alerta `FALHA`. Tasks a jusante não rodam, então a
+  atualização do painel, que entra depois de `checar_freshness_fato`, fica bloqueada até a
+  reconstrução. A falha é tratada como incidente.
 
 **Integração.** O teste de freshness roda no CI a cada push e pull request
-(`.github/workflows/freshness.yml`). A tarefa de checagem no DAG de orquestração
-fica para a issue #27.
+(`.github/workflows/freshness.yml`). Em produção, a checagem roda todo dia pela DAG
+`farmadata_freshness`.

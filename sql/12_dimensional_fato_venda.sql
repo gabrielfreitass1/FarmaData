@@ -92,6 +92,10 @@ BEGIN
             v_linhas, v_esperadas, v_esperadas - v_linhas;
     END IF;
 
+    -- Carimbo de construção para o freshness (sql/13, issue #29). Na mesma
+    -- transação da recarga: só fica registrado se a fato foi construída inteira.
+    PERFORM registrar_build('fato_venda_medicamento', v_linhas);
+
     RETURN v_linhas;
 END;
 $$ LANGUAGE plpgsql;
