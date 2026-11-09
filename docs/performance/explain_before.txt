@@ -1,7 +1,12 @@
 -- ============================================================================
 -- FarmaData — Plano de Execução PRÉ-OTIMIZAÇÃO (Issue #28)
 -- Camada de Consumo: Esquema Estrela (fato_venda_medicamento + dimensões)
--- Volume na fato_venda_medicamento: 6.143.427 linhas (1.263 MB heap / 161.683 blocos de 8 KB)
+-- Recorte de Dados Avaliado: Lote SNGPC 202001 (Janeiro/2020) — 6.143.427 linhas
+--   na fato_venda_medicamento (1.263 MB heap / 161.683 blocos de 8 KB),
+--   4.898 linhas em dim_municipio (68 blocos), 4.590 linhas em medicamento (62 blocos)
+--   e 12 meses de 2020 cadastrados em periodo (1 bloco).
+--   (Projeção para os 12 meses completos de 2020 — 68.264.756 linhas — documentada
+--   na Seção 6 de docs/performance/RELATORIO_PERFORMANCE.md).
 -- Pergunta de Gestão (E1): Quais princípios ativos, municípios e períodos
 -- concentram o maior volume de dispensações em um ano, e como esses padrões
 -- se distribuem por região e faixa etária?

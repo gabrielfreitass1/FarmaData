@@ -173,9 +173,9 @@ SELECT
     SUM(f.quantidade_vendida) AS volume_total_dispensado,
     COUNT(*) AS total_dispensacoes
 FROM fato_venda_medicamento f
-JOIN dim_tempo t        ON t.id_periodo = f.id_periodo
+JOIN dim_tempo t        ON t.sk_tempo = f.sk_tempo
 JOIN dim_municipio dm   ON dm.sk_municipio = f.sk_municipio
-JOIN dim_medicamento m  ON m.id_medicamento = f.id_medicamento
+JOIN dim_medicamento m  ON m.sk_medicamento = f.sk_medicamento
 WHERE f.eh_antimicrobiano = TRUE
   AND f.idade_paciente IS NOT NULL
   AND t.ano = 2020
