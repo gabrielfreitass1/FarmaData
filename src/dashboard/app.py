@@ -338,3 +338,4 @@ st.caption(
     "FarmaData — Projeto Integrado SBD2 / Universidade de Brasília (UnB). "
     "Dados: SNGPC/Anvisa, IBGE (Censo/População), INMET (Estadas Meteorológicas) e DATASUS (CID-10)."
 )
+

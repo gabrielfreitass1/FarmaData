@@ -78,3 +78,4 @@ Escolhemos a **Alternativa B**: **Streamlit conectado diretamente ao PostgreSQL 
 Esta decisão deverá ser revista se:
 1. O tempo de resposta p95 das consultas na primeira carga sem cache ultrapassar **7,0 segundos**, indicando necessidade de descarregar as leituras do PostgreSQL para réplicas de leitura dedicadas ou migrar o motor de visualização diretamente para a camada aberta DuckDB/Delta Lake.
 2. O número de usuários concorrentes no painel analítico degradar a janela de SLA/freshness da DAG diária de dados para além do limiar de tolerância de 24 horas.
+

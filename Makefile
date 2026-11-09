@@ -115,8 +115,9 @@ airflow-sem-falha:
 
 # Painel Analítico e Benchmark (Issue #30)
 dashboard:
-	streamlit run src/dashboard/app.py
+	docker compose up -d db
+	docker compose up dashboard
 
 benchmark-painel:
-	python scripts/benchmark_painel.py
+	docker compose run --rm dashboard python scripts/benchmark_painel.py
 
