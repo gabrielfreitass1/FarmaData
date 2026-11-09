@@ -86,6 +86,13 @@ diferente para o mesmo dado, e a fato pode ser truncada/recarregada sem
 depender de sequência ou estado externo. Trade-offs e alternativas
 avaliadas em [ADR-004](adr/ADR-004.md).
 
+Nas views `dim_conselho`, `dim_tipo_receituario` e `dim_unidade_medida` a
+`sk_*` é calculada na própria view. Em `dim_tempo` e `dim_medicamento` ela é
+uma coluna gerada armazenada (`CHAR(32) STORED`) em `periodo` e
+`medicamento`, com o mesmo tipo da fato — evita o cast `CHAR(32)` → `TEXT`
+no join (emenda ao ADR-004, issue #28; medição em
+[docs/performance/](performance/RELATORIO_PERFORMANCE.md)).
+
 ## Dimensão de Variação Lenta: `dim_municipio` (SCD Tipo 2)
 
 Município é a única dimensão sujeita a alteração do domínio público (IBGE
@@ -119,7 +126,7 @@ make modelo-dimensional          # sincroniza dim_municipio (SCD2) e recarrega a
 ### `dim_tempo` (view sobre `periodo`)
 | Coluna | Tipo | Descrição |
 |---|---|---|
-| `sk_tempo` | char(32) | Surrogate key (md5 de `id_periodo`) |
+| `sk_tempo` | char(32) | Surrogate key (md5 de `id_periodo`) — coluna gerada armazenada em `periodo` (`GENERATED ALWAYS ... STORED`, emenda ao [ADR-004](adr/ADR-004.md), issue #28) |
 | `id_periodo` | int | Chave natural, formato `AAAAMM` |
 | `ano` | int | Ano |
 | `mes` | int | Mês (1-12) |
@@ -145,7 +152,7 @@ make modelo-dimensional          # sincroniza dim_municipio (SCD2) e recarrega a
 ### `dim_medicamento` (view sobre `medicamento`)
 | Coluna | Tipo | Descrição |
 |---|---|---|
-| `sk_medicamento` | char(32) | Surrogate key (md5 de `id_medicamento`) |
+| `sk_medicamento` | char(32) | Surrogate key (md5 de `id_medicamento`) — coluna gerada armazenada em `medicamento` (`GENERATED ALWAYS ... STORED`, emenda ao [ADR-004](adr/ADR-004.md), issue #28) |
 | `id_medicamento` | bigint | Chave natural |
 | `principio_ativo` | text | Princípio ativo |
 | `descricao_apresentacao` | text | Apresentação (ex.: "Comprimido 10mg") |

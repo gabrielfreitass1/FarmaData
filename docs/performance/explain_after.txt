@@ -1,0 +1,168 @@
+-- ============================================================================
+-- FarmaData — Plano de Execução PÓS-OTIMIZAÇÃO (Issue #28)
+-- Camada de Consumo: Esquema Estrela (fato_venda_medicamento + dimensões)
+-- Recorte de Dados Avaliado: Lote SNGPC 202001 (Janeiro/2020) — 6.143.427 linhas
+--   na fato_venda_medicamento (mesmas condições de dados e EXATAMENTE a mesma
+--   consulta SQL do plano pré-otimização, sem alterar nenhuma linha da query).
+-- Intervenções aplicadas (sql/11_dimensional_dim_municipio_scd.sql + sql/14_otimizacao_performance.sql + sessão):
+--   1. Fator A — Materialização e tipagem estrita CHAR(32) das surrogate keys
+--      nas dimensões conformadas (periodo.sk_tempo e medicamento.sk_medicamento
+--      como GENERATED ALWAYS AS ... STORED + índices UNIQUE) e recriação de
+--      dim_tempo e dim_medicamento + sk_hash() PARALLEL SAFE.
+--      -> Elimina o cast implícito (f.sk_*)::text, ativa Inner Unique: true e
+--         substitui o Sort externo (245 MB) + Merge Join por Hash Join em RAM.
+--   2. Fator B — Índice B-Tree Composto Parcial com Cobertura (INCLUDE):
+--      idx_fato_venda_antimicrobiano_covering (sk_municipio, sk_tempo, sk_medicamento)
+--      INCLUDE (idade_paciente, quantidade_vendida)
+--      WHERE eh_antimicrobiano = TRUE AND idade_paciente IS NOT NULL + VACUUM ANALYZE.
+--      -> Substitui o Seq Scan de 161.683 blocos por Index Only Scan (Heap Fetches: 0),
+--         reduzindo os buffers compartilhados acessados de 161.832 para 42.751 (-73,6%).
+--   3. Fator C — Ajuste de memória analítica (work_mem = '256MB', jit = 'off'):
+--      -> Executa o HashAggregate em lote único em RAM (Batches: 1, 131 MB),
+--         eliminando 100% do spill to disk (temp read=0, written=0).
+-- ============================================================================
+
+-- Query analisada (Pós-Otimização — 100% idêntica à Pré-Otimização):
+EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS)
+SELECT
+    t.ano,
+    t.mes,
+    t.trimestre,
+    dm.regiao,
+    dm.sigla_uf,
+    dm.nome_municipio,
+    m.principio_ativo,
+    CASE
+        WHEN f.idade_paciente < 12 THEN '0-11 (criança)'
+        WHEN f.idade_paciente < 18 THEN '12-17 (adolescente)'
+        WHEN f.idade_paciente < 60 THEN '18-59 (adulto)'
+        ELSE '60+ (idoso)'
+    END AS faixa_etaria,
+    SUM(f.quantidade_vendida) AS volume_total_dispensado,
+    COUNT(*) AS total_dispensacoes
+FROM fato_venda_medicamento f
+JOIN dim_tempo t        ON t.sk_tempo = f.sk_tempo
+JOIN dim_municipio dm   ON dm.sk_municipio = f.sk_municipio
+JOIN dim_medicamento m  ON m.sk_medicamento = f.sk_medicamento
+WHERE f.eh_antimicrobiano = TRUE
+  AND f.idade_paciente IS NOT NULL
+  AND t.ano = 2020
+  AND dm.regiao = 'Sudeste'
+GROUP BY
+    t.ano, t.mes, t.trimestre,
+    dm.regiao, dm.sigla_uf, dm.nome_municipio,
+    m.principio_ativo,
+    faixa_etaria
+ORDER BY volume_total_dispensado DESC
+LIMIT 50;
+
+-- ============================================================================
+-- Saída 1: EXPLAIN (ANALYZE, BUFFERS) — 1ª execução
+-- ============================================================================
+                                                                                                                                                               QUERY PLAN                                                                                                                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=248982.01..248982.14 rows=50 width=132) (actual time=4870.378..4870.389 rows=50 loops=1)
+   Buffers: shared hit=4966 read=37788 written=5
+   ->  Sort  (cost=248982.01..251805.88 rows=1129548 width=132) (actual time=4870.376..4870.384 rows=50 loops=1)
+         Sort Key: (sum(f.quantidade_vendida)) DESC
+         Sort Method: top-N heapsort  Memory: 37kB
+         Buffers: shared hit=4966 read=37788 written=5
+         ->  HashAggregate  (cost=188868.28..211459.24 rows=1129548 width=132) (actual time=4668.350..4790.922 rows=216358 loops=1)
+               Group Key: periodo.mes, periodo.trimestre, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END
+               Batches: 1  Memory Usage: 131089kB
+               Buffers: shared hit=4963 read=37788 written=5
+               ->  Hash Join  (cost=233.13..166277.32 rows=1129548 width=97) (actual time=2.261..2939.192 rows=2122690 loops=1)
+                     Hash Cond: (f.sk_medicamento = medicamento.sk_medicamento)
+                     Buffers: shared hit=4963 read=37788 written=5
+                     ->  Hash Join  (cost=1.86..154606.64 rows=1129548 width=74) (actual time=0.158..2160.620 rows=2122690 loops=1)
+                           Hash Cond: (f.sk_tempo = periodo.sk_tempo)
+                           Buffers: shared hit=4835 read=37788 written=5
+                           ->  Nested Loop  (cost=0.56..150593.09 rows=1129548 width=95) (actual time=0.095..1452.802 rows=2122690 loops=1)
+                                 Buffers: shared hit=4834 read=37788 written=5
+                                 ->  Seq Scan on dim_municipio dm  (cost=0.00..129.22 rows=1609 width=55) (actual time=0.020..395.263 rows=1609 loops=1)
+                                       Filter: ((regiao)::text = 'Sudeste'::text)
+                                       Rows Removed by Filter: 3289
+                                       Buffers: shared hit=28 read=40
+                                 ->  Index Only Scan using idx_fato_venda_antimicrobiano_covering on fato_venda_medicamento f  (cost=0.56..82.89 rows=1062 width=106) (actual time=0.021..0.472 rows=1319 loops=1609)
+                                       Index Cond: (sk_municipio = dm.sk_municipio)
+                                       Heap Fetches: 0
+                                       Buffers: shared hit=4806 read=37748 written=5
+                           ->  Hash  (cost=1.15..1.15 rows=12 width=45) (actual time=0.037..0.037 rows=12 loops=1)
+                                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                 Buffers: shared hit=1
+                                 ->  Seq Scan on periodo  (cost=0.00..1.15 rows=12 width=45) (actual time=0.019..0.022 rows=12 loops=1)
+                                       Filter: (ano = 2020)
+                                       Buffers: shared hit=1
+                     ->  Hash  (cost=173.90..173.90 rows=4590 width=59) (actual time=2.037..2.038 rows=4590 loops=1)
+                           Buckets: 8192  Batches: 1  Memory Usage: 473kB
+                           Buffers: shared hit=128
+                           ->  Seq Scan on medicamento  (cost=0.00..173.90 rows=4590 width=59) (actual time=0.013..0.671 rows=4590 loops=1)
+                                 Buffers: shared hit=128
+ Planning:
+   Buffers: shared hit=514 read=1
+ Planning Time: 9.048 ms
+ Execution Time: 4920.514 ms
+(41 rows)
+
+-- ============================================================================
+-- Saída 2: EXPLAIN (ANALYZE, BUFFERS, VERBOSE, SETTINGS) — 2ª execução
+-- ============================================================================
+                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=248982.01..248982.14 rows=50 width=132) (actual time=4860.728..4860.740 rows=50 loops=1)
+   Output: periodo.ano, periodo.mes, periodo.trimestre, dm.regiao, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, (CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END), (sum(f.quantidade_vendida)), (count(*))
+   Buffers: shared hit=4819 read=37932
+   ->  Sort  (cost=248982.01..251805.88 rows=1129548 width=132) (actual time=4860.726..4860.734 rows=50 loops=1)
+         Output: periodo.ano, periodo.mes, periodo.trimestre, dm.regiao, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, (CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END), (sum(f.quantidade_vendida)), (count(*))
+         Sort Key: (sum(f.quantidade_vendida)) DESC
+         Sort Method: top-N heapsort  Memory: 37kB
+         Buffers: shared hit=4819 read=37932
+         ->  HashAggregate  (cost=188868.28..211459.24 rows=1129548 width=132) (actual time=4656.105..4780.018 rows=216358 loops=1)
+               Output: periodo.ano, periodo.mes, periodo.trimestre, dm.regiao, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, (CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END), sum(f.quantidade_vendida), count(*)
+               Group Key: periodo.mes, periodo.trimestre, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END
+               Batches: 1  Memory Usage: 131089kB
+               Buffers: shared hit=4819 read=37932
+               ->  Hash Join  (cost=233.13..166277.32 rows=1129548 width=97) (actual time=15.425..2798.269 rows=2122690 loops=1)
+                     Output: periodo.mes, periodo.trimestre, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, CASE WHEN (f.idade_paciente < 12) THEN '0-11 (criança)'::text WHEN (f.idade_paciente < 18) THEN '12-17 (adolescente)'::text WHEN (f.idade_paciente < 60) THEN '18-59 (adulto)'::text ELSE '60+ (idoso)'::text END, periodo.ano, dm.regiao, f.quantidade_vendida
+                     Inner Unique: true
+                     Hash Cond: (f.sk_medicamento = medicamento.sk_medicamento)
+                     Buffers: shared hit=4819 read=37932
+                     ->  Hash Join  (cost=1.86..154606.64 rows=1129548 width=74) (actual time=9.591..1885.395 rows=2122690 loops=1)
+                           Output: f.idade_paciente, f.quantidade_vendida, f.sk_medicamento, periodo.ano, periodo.mes, periodo.trimestre, dm.regiao, dm.sigla_uf, dm.nome_municipio
+                           Inner Unique: true
+                           Hash Cond: (f.sk_tempo = periodo.sk_tempo)
+                           Buffers: shared hit=4817 read=37806
+                           ->  Nested Loop  (cost=0.56..150593.09 rows=1129548 width=95) (actual time=9.492..1086.583 rows=2122690 loops=1)
+                                 Output: f.idade_paciente, f.quantidade_vendida, f.sk_tempo, f.sk_medicamento, dm.regiao, dm.sigla_uf, dm.nome_municipio
+                                 Buffers: shared hit=4817 read=37805
+                                 ->  Seq Scan on public.dim_municipio dm  (cost=0.00..129.22 rows=1609 width=55) (actual time=9.388..16.462 rows=1609 loops=1)
+                                       Output: dm.sk_municipio, dm.id_municipio, dm.nome_municipio, dm.sigla_uf, dm.regiao, dm.codigo_ibge, dm.valid_from, dm.valid_to, dm.is_current
+                                       Filter: ((dm.regiao)::text = 'Sudeste'::text)
+                                       Rows Removed by Filter: 3289
+                                       Buffers: shared read=68
+                                 ->  Index Only Scan using idx_fato_venda_antimicrobiano_covering on public.fato_venda_medicamento f  (cost=0.56..82.89 rows=1062 width=106) (actual time=0.019..0.449 rows=1319 loops=1609)
+                                       Output: f.sk_municipio, f.sk_tempo, f.sk_medicamento, f.idade_paciente, f.quantidade_vendida
+                                       Index Cond: (f.sk_municipio = dm.sk_municipio)
+                                       Heap Fetches: 0
+                                       Buffers: shared hit=4817 read=37737
+                           ->  Hash  (cost=1.15..1.15 rows=12 width=45) (actual time=0.067..0.067 rows=12 loops=1)
+                                 Output: periodo.ano, periodo.mes, periodo.trimestre, periodo.sk_tempo
+                                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                 Buffers: shared read=1
+                                 ->  Seq Scan on public.periodo  (cost=0.00..1.15 rows=12 width=45) (actual time=0.038..0.043 rows=12 loops=1)
+                                       Output: periodo.ano, periodo.mes, periodo.trimestre, periodo.sk_tempo
+                                       Filter: (periodo.ano = 2020)
+                                       Buffers: shared read=1
+                     ->  Hash  (cost=173.90..173.90 rows=4590 width=59) (actual time=5.747..5.748 rows=4590 loops=1)
+                           Output: medicamento.principio_ativo, medicamento.sk_medicamento
+                           Buckets: 8192  Batches: 1  Memory Usage: 473kB
+                           Buffers: shared hit=2 read=126
+                           ->  Seq Scan on public.medicamento  (cost=0.00..173.90 rows=4590 width=59) (actual time=0.014..2.055 rows=4590 loops=1)
+                                 Output: medicamento.principio_ativo, medicamento.sk_medicamento
+                                 Buffers: shared hit=2 read=126
+ Settings: work_mem = '256MB', jit = 'off'
+ Planning:
+   Buffers: shared hit=18 read=17
+ Planning Time: 3.572 ms
+ Execution Time: 4916.431 ms
+(56 rows)
