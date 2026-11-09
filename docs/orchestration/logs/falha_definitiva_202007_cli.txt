@@ -1,0 +1,289 @@
+$ airflow dags backfill farmadata_pipeline -s 2020-07-01 -e 2020-07-01    # 2026-11-08T23:34:42Z, container farmadata_airflow
+# Variable farmadata_falha_injetada = (nenhuma)
+[2026-11-08T23:34:47.078+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags
+[2026-11-08T23:34:47.315+0000] {executor_loader.py:258} INFO - Loaded executor: LocalExecutor
+[2026-11-08T23:34:47.563+0000] {base_executor.py:169} INFO - Adding to queue: ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpl9vl8ha8']
+[2026-11-08T23:34:47.626+0000] {local_executor.py:93} INFO - QueuedLocalWorker running ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpl9vl8ha8']
+[2026-11-08T23:34:47.640+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 3 | succeeded: 0 | running: 1 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:47.683+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/***/dags/farmadata_pipeline.py
+[2026-11-08T23:34:47.737+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]> on host df21604829f9
+[2026-11-08T23:34:48.717+0000] {backfill_job_runner.py:214} WARNING - Task instance <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [up_for_retry]> is up for retry
+[2026-11-08T23:34:48.723+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:49.815+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:50.903+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:51.988+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:53.127+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:54.170+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:55.256+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:56.345+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:57.440+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:58.568+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:34:59.604+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:00.695+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:01.834+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:02.873+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:04.014+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:05.042+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:06.130+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:07.222+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:08.254+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:09.341+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:10.427+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:11.514+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:12.655+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:13.746+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:14.760+0000] {base_executor.py:169} INFO - Adding to queue: ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpcul0lo25']
+[2026-11-08T23:35:14.821+0000] {local_executor.py:93} INFO - QueuedLocalWorker running ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpcul0lo25']
+[2026-11-08T23:35:14.828+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 3 | succeeded: 0 | running: 1 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:14.883+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/***/dags/farmadata_pipeline.py
+[2026-11-08T23:35:14.927+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]> on host df21604829f9
+[2026-11-08T23:35:15.859+0000] {backfill_job_runner.py:303} WARNING - TaskInstanceKey(dag_id='farmadata_pipeline', task_id='verificar_fonte_sngpc', run_id='backfill__2020-07-01T00:00:00+00:00', try_number=2, map_index=-1) state success not in running=dict_values([<TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]>])
+[2026-11-08T23:35:15.860+0000] {backfill_job_runner.py:214} WARNING - Task instance <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [up_for_retry]> is up for retry
+[2026-11-08T23:35:15.865+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:16.945+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:18.021+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:19.063+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:20.159+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:21.237+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:22.324+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:23.352+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:24.488+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:25.577+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:26.624+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:27.710+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:28.802+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:29.889+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:30.968+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:32.050+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:33.142+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:34.227+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:35.321+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:36.459+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:37.554+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:38.581+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:39.678+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:40.765+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:41.845+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:42.872+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:43.961+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:45.056+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:46.132+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:47.269+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:48.317+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:49.396+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:50.422+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:51.513+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:52.653+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:53.684+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:54.776+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:55.867+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:56.956+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:58.091+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:35:59.130+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:00.220+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:01.305+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:02.396+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:03.532+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:04.573+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:05.662+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:06.721+0000] {base_executor.py:169} INFO - Adding to queue: ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpvwhcxewl']
+[2026-11-08T23:36:06.739+0000] {local_executor.py:93} INFO - QueuedLocalWorker running ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpvwhcxewl']
+[2026-11-08T23:36:06.746+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 3 | succeeded: 0 | running: 1 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:06.799+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/***/dags/farmadata_pipeline.py
+[2026-11-08T23:36:06.856+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]> on host df21604829f9
+[2026-11-08T23:36:07.766+0000] {backfill_job_runner.py:303} WARNING - TaskInstanceKey(dag_id='farmadata_pipeline', task_id='verificar_fonte_sngpc', run_id='backfill__2020-07-01T00:00:00+00:00', try_number=3, map_index=-1) state success not in running=dict_values([<TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]>])
+[2026-11-08T23:36:07.767+0000] {backfill_job_runner.py:214} WARNING - Task instance <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [up_for_retry]> is up for retry
+[2026-11-08T23:36:07.773+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:08.903+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:09.953+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:11.038+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:12.126+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:13.211+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:14.294+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:15.322+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:16.393+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:17.488+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:18.523+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:19.659+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:20.748+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:21.840+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:22.879+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:23.971+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:25.108+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:26.185+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:27.236+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:28.364+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:29.402+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:30.533+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:31.573+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:32.672+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:33.745+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:34.773+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:35.911+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:36.950+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:38.038+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:39.125+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:40.220+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:41.299+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:42.325+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:43.350+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:44.437+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:45.529+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:46.619+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:47.704+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:48.794+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:49.884+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:50.971+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:52.111+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:53.143+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:54.236+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:55.315+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:56.346+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:57.441+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:58.515+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:36:59.601+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:00.640+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:01.713+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:02.809+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:03.949+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:04.977+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:06.009+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:07.096+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:08.182+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:09.253+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:10.301+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:11.390+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:12.479+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:13.557+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:14.653+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:15.742+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:16.820+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:17.909+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:19.050+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:20.093+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:21.184+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:22.264+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:23.354+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:24.496+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:25.524+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:26.614+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:27.708+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:28.787+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:29.878+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:30.905+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:31.994+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:33.086+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:34.164+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:35.257+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:36.340+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:37.437+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:38.525+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:39.603+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:40.695+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:41.785+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:42.873+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:43.955+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:45.049+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:46.133+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:47.224+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:48.315+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:49.407+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:50.491+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:51.585+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:52.658+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:53.756+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:54.848+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:55.931+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:57.012+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:58.039+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:37:59.122+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:00.158+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:01.234+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:02.382+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:03.423+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:04.506+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:05.598+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:06.676+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:07.766+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:08.791+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:09.817+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:10.908+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:11.988+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:13.088+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:14.163+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:15.260+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:16.339+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:17.433+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:18.518+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:19.615+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:20.704+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:21.785+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:22.878+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:23.959+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:25.056+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:26.134+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:27.232+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:28.306+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:29.407+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:30.496+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:31.576+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:32.671+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:33.755+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:34.839+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 4 | succeeded: 0 | running: 0 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:35.913+0000] {base_executor.py:169} INFO - Adding to queue: ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpv0i272ps']
+[2026-11-08T23:38:35.973+0000] {local_executor.py:93} INFO - QueuedLocalWorker running ['airflow', 'tasks', 'run', 'farmadata_pipeline', 'verificar_fonte_sngpc', 'backfill__2020-07-01T00:00:00+00:00', '--depends-on-past', 'ignore', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmpv0i272ps']
+[2026-11-08T23:38:35.979+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 0 of 1 | tasks waiting: 3 | succeeded: 0 | running: 1 | failed: 0 | skipped: 0 | deadlocked: 0 | not ready: 3
+[2026-11-08T23:38:36.037+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/***/dags/farmadata_pipeline.py
+[2026-11-08T23:38:36.085+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]> on host df21604829f9
+[2026-11-08T23:38:36.984+0000] {backfill_job_runner.py:550} ERROR - Task instance <TaskInstance: farmadata_pipeline.extrair_sngpc backfill__2020-07-01T00:00:00+00:00 [upstream_failed]> with state upstream_failed
+[2026-11-08T23:38:37.014+0000] {backfill_job_runner.py:622} ERROR - Task instance <TaskInstance: farmadata_pipeline.transformar_modelo_dimensional backfill__2020-07-01T00:00:00+00:00 [upstream_failed]> upstream failed
+[2026-11-08T23:38:37.023+0000] {backfill_job_runner.py:622} ERROR - Task instance <TaskInstance: farmadata_pipeline.validar_qualidade backfill__2020-07-01T00:00:00+00:00 [upstream_failed]> upstream failed
+[2026-11-08T23:38:37.066+0000] {backfill_job_runner.py:303} WARNING - TaskInstanceKey(dag_id='farmadata_pipeline', task_id='verificar_fonte_sngpc', run_id='backfill__2020-07-01T00:00:00+00:00', try_number=4, map_index=-1) state success not in running=dict_values([<TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [queued]>])
+[2026-11-08T23:38:37.068+0000] {backfill_job_runner.py:208} ERROR - Task instance <TaskInstance: farmadata_pipeline.verificar_fonte_sngpc backfill__2020-07-01T00:00:00+00:00 [failed]> failed
+[2026-11-08T23:38:37.070+0000] {dagrun.py:823} ERROR - Marking run <DagRun farmadata_pipeline @ 2020-07-01 00:00:00+00:00: backfill__2020-07-01T00:00:00+00:00, state:running, queued_at: None. externally triggered: False> failed
+[2026-11-08T23:38:37.070+0000] {dagrun.py:905} INFO - DagRun Finished: dag_id=farmadata_pipeline, execution_date=2020-07-01 00:00:00+00:00, run_id=backfill__2020-07-01T00:00:00+00:00, run_start_date=2026-11-08 23:34:47.455097+00:00, run_end_date=2026-11-08 23:38:37.070761+00:00, run_duration=229.615664, state=failed, external_trigger=False, run_type=backfill, data_interval_start=2020-07-01 00:00:00+00:00, data_interval_end=2020-08-01 00:00:00+00:00, dag_hash=None
+[2026-11-08T23:38:37.072+0000] {backfill_job_runner.py:464} INFO - [backfill progress] | finished run 1 of 1 | tasks waiting: 0 | succeeded: 0 | running: 0 | failed: 4 | skipped: 0 | deadlocked: 0 | not ready: 0
+[2026-11-08T23:38:38.075+0000] {local_executor.py:423} INFO - Shutting down LocalExecutor; waiting for running tasks to finish.  Signal again if you don't want to wait.
+Traceback (most recent call last):
+  File "/home/airflow/.local/bin/airflow", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/__main__.py", line 62, in main
+    args.func(args)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/providers_configuration_loader.py", line 55, in wrapped_function
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/dag_command.py", line 165, in dag_backfill
+    _run_dag_backfill(dags, args)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/dag_command.py", line 109, in _run_dag_backfill
+    dag.run(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/dag.py", line 2948, in run
+    run_job(job=job, execute_callable=job_runner._execute)
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 421, in run_job
+    return execute_job(job, execute_callable=execute_callable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 450, in execute_job
+    ret = execute_callable()
+          ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/backfill_job_runner.py", line 1025, in _execute
+    raise BackfillUnfinished(err, ti_status)
+airflow.exceptions.BackfillUnfinished: Some task instances failed:
+DAG ID              Task ID                         Run ID                                 Try number
+------------------  ------------------------------  -----------------------------------  ------------
+farmadata_pipeline  extrair_sngpc                   backfill__2020-07-01T00:00:00+00:00             0
+farmadata_pipeline  transformar_modelo_dimensional  backfill__2020-07-01T00:00:00+00:00             0
+farmadata_pipeline  validar_qualidade               backfill__2020-07-01T00:00:00+00:00             0
+farmadata_pipeline  verificar_fonte_sngpc           backfill__2020-07-01T00:00:00+00:00             3
+# exit: 1
