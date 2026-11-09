@@ -111,27 +111,49 @@ A inspeção do `EXPLAIN (ANALYZE, BUFFERS)` revelou **quatro gargalos estrutura
 
 ---
 
-## 3. Intervenções Aplicadas (`sql/14_otimizacao_performance.sql`)
+## 3. Intervenções Aplicadas (`sql/11` + `sql/14` + Sessão Analítica)
 
-Todas as intervenções foram consolidadas no script [`sql/14_otimizacao_performance.sql`](../../sql/14_otimizacao_performance.sql). Cada comando incluído no script tem participação direta e verificável no plano de execução pós-otimização:
+Para manter a separação limpa entre **modelo dimensional** e **índices de performance** (e garantir idempotência em qualquer ordem de reaplicação de scripts):
+* As colunas geradas armazenadas (`CHAR(32) STORED`) e as views `dim_tempo` e `dim_medicamento` têm **definição única** em [`sql/11_dimensional_dim_municipio_scd.sql`](../../sql/11_dimensional_dim_municipio_scd.sql) (formalizada na Emenda ao [`ADR-004.md`](../adr/ADR-004.md) e no dicionário de [`MODELO_DIMENSIONAL.md`](../MODELO_DIMENSIONAL.md)).
+* O script [`sql/14_otimizacao_performance.sql`](../../sql/14_otimizacao_performance.sql) contém **exclusivamente índices e estatísticas (`ANALYZE`)**.
+* O ajuste de `work_mem` e `jit` é aplicado **apenas na sessão analítica** (ou no `ROLE` do painel via `ALTER ROLE painel SET work_mem = '256MB'`), nunca via `ALTER DATABASE`, para não impactar conexões de carga/ETL.
 
-1. **Fator A — Materialização e Tipagem Estrita `CHAR(32)` das Surrogate Keys nas Dimensões Conformadas + `PARALLEL SAFE`:**
+Cada intervenção tem participação direta e verificável no plano de execução pós-otimização:
+
+1. **Fator A — Materialização e Tipagem Estrita `CHAR(32)` das Surrogate Keys nas Dimensões Conformadas (`sql/11`) + Índices `UNIQUE` (`sql/14`):**
    ```sql
-   ALTER FUNCTION sk_hash(TEXT, ANYELEMENT) PARALLEL SAFE;
+   -- Em sql/11_dimensional_dim_municipio_scd.sql:
+   CREATE OR REPLACE FUNCTION sk_hash(p_dimensao TEXT, p_chave_natural ANYELEMENT)
+   RETURNS TEXT AS $$
+       SELECT md5(p_dimensao || '|' || p_chave_natural);
+   $$ LANGUAGE sql IMMUTABLE PARALLEL SAFE;
 
    ALTER TABLE periodo
-       ADD COLUMN sk_tempo CHAR(32)
+       ADD COLUMN IF NOT EXISTS sk_tempo CHAR(32)
        GENERATED ALWAYS AS (sk_hash('tempo', id_periodo)::char(32)) STORED;
-   CREATE UNIQUE INDEX IF NOT EXISTS idx_periodo_sk_tempo ON periodo (sk_tempo);
 
    ALTER TABLE medicamento
-       ADD COLUMN sk_medicamento CHAR(32)
+       ADD COLUMN IF NOT EXISTS sk_medicamento CHAR(32)
        GENERATED ALWAYS AS (sk_hash('medicamento', id_medicamento)::char(32)) STORED;
+
+   DROP VIEW IF EXISTS dim_tempo;
+   CREATE VIEW dim_tempo AS
+   SELECT sk_tempo, id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim
+   FROM periodo;
+
+   DROP VIEW IF EXISTS dim_medicamento;
+   CREATE VIEW dim_medicamento AS
+   SELECT sk_medicamento, id_medicamento, principio_ativo, descricao_apresentacao
+   FROM medicamento;
+
+   -- Em sql/14_otimizacao_performance.sql:
+   CREATE UNIQUE INDEX IF NOT EXISTS idx_periodo_sk_tempo ON periodo (sk_tempo);
    CREATE UNIQUE INDEX IF NOT EXISTS idx_medicamento_sk_medicamento ON medicamento (sk_medicamento);
    ```
    * **Efeito:** Resolve a dívida técnica do [`ADR-004.md`](../adr/ADR-004.md) persistindo `sk_tempo` e `sk_medicamento` com o mesmo tipo `CHAR(32)` (`bpchar`) da tabela fato e expondo-as nas views `dim_tempo` e `dim_medicamento`. Isso **elimina o cast `(f.sk_*)::text`** sem tocar na query SQL, corrige o erro de estimativa de cardinalidade de 31x, substitui o `Merge Join + Sort (245 MB)` por `Hash Join` em memória e ativa a propriedade **`Inner Unique: true`** no otimizador graças aos índices `UNIQUE`.
+   * **Compatibilidade com a Carga e Idempotência:** Como `sql/03_tempo_periodo.sql` e `scripts/carregar_sngpc.js` inserem em `periodo` e `medicamento` declarando explicitamente a lista de colunas, as colunas `GENERATED ALWAYS ... STORED` são populadas automaticamente sem quebrar a ingestão nem a exportação Delta/CDC (comprovado automaticamente em `make test-scd2`, que aplica `sql/11`, `sql/12` e `sql/14` duas vezes seguidas e testa `INSERT` em `medicamento` e `periodo`).
 
-2. **Fator B — Índice B-Tree Composto Parcial com Cobertura (`INCLUDE` / Covering Index) na Fato:**
+2. **Fator B — Índice B-Tree Composto Parcial com Cobertura (`INCLUDE` / Covering Index) na Fato (`sql/14`):**
    ```sql
    CREATE INDEX IF NOT EXISTS idx_fato_venda_antimicrobiano_covering
        ON fato_venda_medicamento (sk_municipio, sk_tempo, sk_medicamento)
@@ -139,13 +161,15 @@ Todas as intervenções foram consolidadas no script [`sql/14_otimizacao_perform
        WHERE eh_antimicrobiano = TRUE AND idade_paciente IS NOT NULL;
    ```
    * **Efeito:** Indexa diretamente as três surrogate keys usadas nos joins da query original (`sk_municipio`, `sk_tempo`, `sk_medicamento`), filtra nativamente o predicado `WHERE eh_antimicrobiano = TRUE AND idade_paciente IS NOT NULL` e inclui no *payload* das páginas-folha (`INCLUDE`) as colunas `idade_paciente` e `quantidade_vendida`. Após `VACUUM ANALYZE`, permite responder à consulta via **`Index Only Scan` com `Heap Fetches: 0`**, reduzindo os blocos compartilhados lidos de **`161.832` para `42.751` (-73,6%)**.
+   * **Ressalva Operacional:** Como `CREATE INDEX` (sem `CONCURRENTLY`) adquire lock de escrita na `fato_venda_medicamento` durante a construção, `make otimizar-performance` deve ser executado após o término da carga, nunca concorrentemente a ela.
 
-3. **Fator C — Ajuste de Memória de Trabalho Analítica (`work_mem = '256MB'` e `jit = 'off'`):**
+3. **Fator C — Ajuste de Memória de Trabalho na Sessão Analítica / Role do Painel (`work_mem = '256MB'` e `jit = 'off'`):**
    ```sql
-   ALTER DATABASE farmadata SET work_mem = '256MB';
-   ALTER DATABASE farmadata SET jit = 'off';
+   -- Na sessão do benchmark/painel (ou via ALTER ROLE painel SET work_mem = '256MB'):
+   SET work_mem = '256MB';
+   SET jit = 'off';
    ```
-   * **Efeito:** Permite que o `HashAggregate` final aloque `131.089 KB (~128 MB)` em RAM e consolide os `216.358` grupos em **1 único lote (`Batches: 1`)**, reduzindo o *spill to disk* de `234.122` blocos temporários (`1,83 GB`) para **zero (`temp read=0, written=0`)**.
+   * **Efeito:** Permite que o `HashAggregate` final aloque `131.089 KB (~128 MB)` em RAM e consolide os `216.358` grupos em **1 único lote (`Batches: 1`)**, reduzindo o *spill to disk* de `234.122` blocos temporários (`1,83 GB`) para **zero (`temp read=0, written=0`)**, sem alterar o `work_mem` global do banco (`4MB`) usado pelos processos de ingestão.
 
 ---
 
@@ -274,14 +298,20 @@ Quando os 12 meses (`68,26M` linhas) estão carregados, três ajustes complement
 
 ---
 
-## 7. Como Reproduzir
+## 7. Como Reproduzir com Segurança
 
 Com o banco carregado e o modelo dimensional populado (`make modelo-dimensional`):
 
 ```bash
-# Aplicar apenas as otimizações estruturais e atualizar o Visibility Map
+# 1. Aplicar o modelo dimensional atualizado (sql/11), índices (sql/14) e VACUUM ANALYZE
 make otimizar-performance
 
-# Executar o benchmark completo (gera explain_before.txt e explain_after.txt com a mesma query)
+# 2. Executar o benchmark completo (gera explain_before.txt, explain_ablacao.txt e explain_after.txt)
+#    O estado "antes" e as etapas intermediárias da ablação rodam dentro de transações
+#    BEGIN ... ROLLBACK com SET LOCAL, de modo que o banco real nunca perde as colunas
+#    geradas nem o índice de cobertura e não altera o work_mem global.
 make benchmark-performance
+
+# 3. Validar idempotência de sql/11, sql/12 e sql/14 (aplicados 2x seguidas) e INSERT nas colunas geradas
+make test-scd2
 ```

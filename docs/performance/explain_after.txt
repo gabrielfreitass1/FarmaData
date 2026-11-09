@@ -4,7 +4,7 @@
 -- Recorte de Dados Avaliado: Lote SNGPC 202001 (Janeiro/2020) — 6.143.427 linhas
 --   na fato_venda_medicamento (mesmas condições de dados e EXATAMENTE a mesma
 --   consulta SQL do plano pré-otimização, sem alterar nenhuma linha da query).
--- Intervenções aplicadas (sql/14_otimizacao_performance.sql):
+-- Intervenções aplicadas (sql/11_dimensional_dim_municipio_scd.sql + sql/14_otimizacao_performance.sql + sessão):
 --   1. Fator A — Materialização e tipagem estrita CHAR(32) das surrogate keys
 --      nas dimensões conformadas (periodo.sk_tempo e medicamento.sk_medicamento
 --      como GENERATED ALWAYS AS ... STORED + índices UNIQUE) e recriação de

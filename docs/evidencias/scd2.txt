@@ -1,16 +1,23 @@
-=== SCD2 dim_municipio — 2026-11-07T20:20:40-0300 ===
+=== SCD2 dim_municipio — 2026-11-09T09:39:54-0300 ===
 
- Network farmadata_default Creating 
- Network farmadata_default Created 
- Container farmadata_db Creating 
- Container farmadata_db Created 
+ Container farmadata_db Recreate 
+ Container farmadata_db Recreated 
  Container farmadata_db Starting 
  Container farmadata_db Started 
  Container farmadata_db Waiting 
  Container farmadata_db Healthy 
-NOTICE:  database "farmadata_sim_scd2" does not exist, skipping
 DROP DATABASE
+NOTICE:  database "farmadata_sim_scd2" does not exist, skipping
 CREATE DATABASE
+psql:/docker-entrypoint-initdb.d/11_dimensional_dim_municipio_scd.sql:134: NOTICE:  view "dim_tempo" does not exist, skipping
+psql:/docker-entrypoint-initdb.d/11_dimensional_dim_municipio_scd.sql:139: NOTICE:  view "dim_medicamento" does not exist, skipping
+[idempotência] sql/11, 12, 13 e 14 aplicados duas vezes sem erro ✓
+  dim_tempo.sk_tempo: character(32)
+  dim_medicamento.sk_medicamento: character(32)
+  INSERT medicamento (lista de colunas) -> id|len(sk)|sk=md5: 1|32|true
+  INSERT periodo (lista de colunas)     -> len(sk)|sk=md5: 32|true
+[colunas geradas] sk_medicamento e sk_tempo gerados automaticamente ✓
+
 [1] Município de teste: insere e aplica SCD2 (1a versão)
 dim_municipio após 1a carga: Vila Antiga|1900-01-01|NULL|true
 
