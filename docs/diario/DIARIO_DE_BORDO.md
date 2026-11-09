@@ -175,12 +175,8 @@ transação. Outra surpresa: o Docker monta cada `.sql` de `docker-entrypoint-in
 os testes passaram a ler o SQL direto do repositório. O atraso induzido disparando WARN e ERRO
 está em `docs/evidencias/freshness.txt` e roda no CI a cada push.
 
-**Transformação declarativa (#25, Pedro Augusto) e ADR + painel (#30, Ruan).** Ainda sem PR no
-repositório quando este diário foi fechado. Até a #25 entrar, as transformações do modelo
-dimensional são funções PL/pgSQL versionadas em `sql/11` e `sql/12`; o ADR-004 descartou o dbt
-apenas para o versionamento SCD2 (snapshot), não para a camada de transformação como um todo.
+**Transformação declarativa (#25, Pedro Augusto).** Até a #25 entrar, as transformações do modelo dimensional são funções PL/pgSQL versionadas em `sql/11` e `sql/12`; o ADR-004 descartou o dbt apenas para o versionamento SCD2 (snapshot), não para a camada de transformação como um todo.
 
-**Decisões da semana.** Star schema em PostgreSQL com `dim_municipio` em SCD2 e grão de uma linha
-por dispensação (ADR-004); checar o freshness numa DAG diária separada da mensal, porque logo
-depois da transformação a checagem sempre daria OK; manter o recorte em 2020 na E3 e deixar a
-carga de anos mais recentes como candidata para a E4.
+**ADR e painel analítico (#30, Ruan).** Implementação do painel analítico em Streamlit (`src/dashboard/app.py`), acionável via `make dashboard`, respondendo de ponta a ponta à pergunta central de gestão da E1 através de três visões interativas: territorial e demanda per capita (cruzamento com IBGE População), sazonalidade climática (temperatura e chuva do INMET) e indicação diagnóstica (CID-10 para antimicrobianos). A decisão técnica de adotar o Streamlit conectado diretamente ao PostgreSQL Star Schema com cache em memória (`@st.cache_data`) foi registrada no ADR-005, acompanhada de benchmark comparativo reproduzível (`scripts/benchmark_painel.py`, `make benchmark-painel`). Também foi formalizado o vocabulário canônico em `GLOSSARY.md` e reestruturado o ADR-003 nos 6 passos com medição reproduzível em banco de simulação.
+
+**Decisões da semana.** Star schema em PostgreSQL com `dim_municipio` em SCD2 e grão de uma linha por dispensação (ADR-004); Streamlit conectado ao PostgreSQL Star Schema para visualização analítica (ADR-005); checar o freshness numa DAG diária separada da mensal, porque logo depois da transformação a checagem sempre daria OK; manter o recorte em 2020 na E3 e deixar a carga de anos mais recentes como candidata para a E4.
