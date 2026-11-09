@@ -1,0 +1,33 @@
+name: Qualidade dos dados
+
+on:
+  push:
+    paths: ['sql/**', 'tests/**', 'Makefile', 'docker-compose.yml', '.github/workflows/qualidade-dados.yml']
+  pull_request:
+    paths: ['sql/**', 'tests/**', 'Makefile', 'docker-compose.yml', '.github/workflows/qualidade-dados.yml']
+
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: farmadata
+    steps:
+      - uses: actions/checkout@v4
+      - name: Iniciar PostgreSQL e aplicar esquema
+        run: docker compose up -d --wait db
+      - name: Popular fixture e modelo dimensional
+        run: docker compose exec -T db psql -U postgres -d farmadata -v ON_ERROR_STOP=1 < tests/fixture_qualidade.sql
+      - name: Executar suíte
+        run: make test-qualidade MIN_VENDAS=12
+      - name: Publicar log da execução
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencia-qualidade-dados
+          path: docs/evidencias/qualidade_dados.txt
+          if-no-files-found: ignore
+      - name: Encerrar serviços
+        if: always()
+        run: docker compose down -v
