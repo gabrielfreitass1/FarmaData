@@ -12,9 +12,11 @@ scripts/checar_freshness.sh. SLA em docs/CAMADA_ANALITICA.md.
     WARN -> alerta em alertas_farmadata.jsonl; task passa
     ERRO -> task falha sem retry (AirflowFailException) e alerta; nada a jusante roda
 
-Bloqueio a jusante: a atualização do painel entra como task depois de
-checar_freshness_fato (checar_freshness_fato >> atualizar_painel), então um
-ERRO impede o painel de publicar dado defasado.
+Bloqueio a jusante: checar_freshness_fato >> atualizar_painel. atualizar_painel
+é um marcador (EmptyOperator) do ponto onde entra a publicação do painel; com o
+trigger_rule padrão (all_success) ela só roda se a checagem passar. No ERRO fica
+upstream_failed, que é a prova visível de que dado defasado não é publicado.
+No WARN a checagem passa, então o painel publica (avisa sem bloquear).
 
 Variáveis de ambiente: FARMADATA_DATABASE_URL (obrigatória),
 FRESHNESS_TABELA [fato_venda_medicamento], FRESHNESS_WARN_H [24], FRESHNESS_ERRO_H [48].
@@ -30,6 +32,7 @@ from pathlib import Path
 import pendulum
 from airflow import DAG
 from airflow.exceptions import AirflowException, AirflowFailException
+from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
 log = logging.getLogger(__name__)
@@ -110,7 +113,12 @@ with DAG(
     tags=["farmadata", "freshness", "e3"],
     doc_md=__doc__,
 ) as dag:
-    PythonOperator(
+    checar = PythonOperator(
         task_id="checar_freshness_fato",
         python_callable=checar_freshness_fato,
     )
+
+    # Marcador da publicação do painel: substituir pelo operador real quando existir.
+    atualizar_painel = EmptyOperator(task_id="atualizar_painel")
+
+    checar >> atualizar_painel

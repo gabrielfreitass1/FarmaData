@@ -85,7 +85,7 @@ checar-freshness:
 test-freshness:
 	bash ./test_freshness.sh
 
-# DAG farmadata_freshness no Airflow da demo: OK -> WARN -> ERRO -> OK (gera docs/evidencias/freshness_airflow.txt)
+# DAG farmadata_freshness no Airflow da demo: OK -> WARN -> ERRO (painel bloqueado) -> OK (gera docs/evidencias/freshness_airflow.txt)
 test-freshness-airflow:
 	bash ./test_freshness_airflow.sh
 
