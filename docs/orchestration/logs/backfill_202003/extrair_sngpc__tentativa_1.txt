@@ -1,0 +1,42 @@
+[2026-11-08T23:34:13.538+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-08T23:34:13.561+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: farmadata_pipeline.extrair_sngpc backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:34:13.568+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: farmadata_pipeline.extrair_sngpc backfill__2020-03-01T00:00:00+00:00 [queued]>
+[2026-11-08T23:34:13.569+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 4
+[2026-11-08T23:34:13.578+0000] {taskinstance.py:2890} INFO - Executing <Task(BashOperator): extrair_sngpc> on 2020-03-01 00:00:00+00:00
+[2026-11-08T23:34:13.584+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'farmadata_pipeline', 'extrair_sngpc', 'backfill__2020-03-01T00:00:00+00:00', '--job-id', '21', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/farmadata_pipeline.py', '--cfg-path', '/tmp/tmp1aqlyw0r']
+[2026-11-08T23:34:13.586+0000] {standard_task_runner.py:105} INFO - Job 21: Subtask extrair_sngpc
+[2026-11-08T23:34:13.586+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=795) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-11-08T23:34:13.587+0000] {standard_task_runner.py:72} INFO - Started process 796 to run task
+[2026-11-08T23:34:13.677+0000] {task_command.py:467} INFO - Running <TaskInstance: farmadata_pipeline.extrair_sngpc backfill__2020-03-01T00:00:00+00:00 [running]> on host df21604829f9
+[2026-11-08T23:34:13.765+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='farmadata' AIRFLOW_CTX_DAG_ID='farmadata_pipeline' AIRFLOW_CTX_TASK_ID='extrair_sngpc' AIRFLOW_CTX_EXECUTION_DATE='2020-03-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='backfill__2020-03-01T00:00:00+00:00'
+[2026-11-08T23:34:13.766+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-08T23:34:13.777+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-11-08T23:34:13.777+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'test -n "$FARMADATA_DATABASE_URL" || { echo "FARMADATA_DATABASE_URL não definida"; exit 1; }; cd "$FARMADATA_DIR" && DATABASE_URL="$FARMADATA_DATABASE_URL" SNGPC_DIR="${FARMADATA_SNGPC_DIR:-tmp}" "${FARMADATA_NODE:-node}" scripts/carregar_sngpc.js']
+[2026-11-08T23:34:13.783+0000] {subprocess.py:99} INFO - Output:
+[2026-11-08T23:34:14.130+0000] {subprocess.py:106} INFO - FarmaData — carga SNGPC (ano 2020)
+[2026-11-08T23:34:14.131+0000] {subprocess.py:106} INFO - 
+[2026-11-08T23:34:14.150+0000] {subprocess.py:106} INFO - [OK] Conectado ao PostgreSQL.
+[2026-11-08T23:34:14.152+0000] {subprocess.py:106} INFO - [!] SNGPC_FORCE=1: arquivos já carregados serão recarregados.
+[2026-11-08T23:34:14.160+0000] {subprocess.py:106} INFO - [OK] Períodos de 2020 verificados.
+[2026-11-08T23:34:14.180+0000] {subprocess.py:106} INFO - [OK] Catálogo CID-10: 14233 códigos (coluna codigo).
+[2026-11-08T23:34:14.181+0000] {subprocess.py:106} INFO - [+] Criando índices (pode levar alguns minutos)...
+[2026-11-08T23:34:14.214+0000] {subprocess.py:106} INFO - [OK] Índices criados em 0s.
+[2026-11-08T23:34:14.214+0000] {subprocess.py:106} INFO - 
+[2026-11-08T23:34:14.215+0000] {subprocess.py:106} INFO - ── 202003 ──
+[2026-11-08T23:34:14.219+0000] {subprocess.py:106} INFO -   [CACHE] arquivo local encontrado.
+[2026-11-08T23:34:14.219+0000] {subprocess.py:106} INFO -   [→] EDA_Industrializados_202003.csv: passada 1 (dimensões)
+[2026-11-08T23:34:14.228+0000] {subprocess.py:106} INFO -       dimensões: +0 municípios, +0 medicamentos
+[2026-11-08T23:34:14.229+0000] {subprocess.py:106} INFO -   [→] EDA_Industrializados_202003.csv: passada 2 (COPY)
+[2026-11-08T23:34:14.275+0000] {subprocess.py:106} INFO -       ✓ 4 inseridas | ✗ 0 rejeitadas
+[2026-11-08T23:34:14.275+0000] {subprocess.py:106} INFO -   [OK] EDA_Industrializados_202003.csv em 0s
+[2026-11-08T23:34:14.279+0000] {subprocess.py:106} INFO - 
+[2026-11-08T23:34:14.279+0000] {subprocess.py:106} INFO - ══════════════════════════════════════════════
+[2026-11-08T23:34:14.290+0000] {subprocess.py:106} INFO -  Inseridas nesta execução: 4
+[2026-11-08T23:34:14.291+0000] {subprocess.py:106} INFO -  Total no banco: 12 linhas em 3 arquivos
+[2026-11-08T23:34:14.291+0000] {subprocess.py:106} INFO -  Tempo: 0s
+[2026-11-08T23:34:14.291+0000] {subprocess.py:106} INFO - ══════════════════════════════════════════════
+[2026-11-08T23:34:14.293+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-11-08T23:34:14.348+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-08T23:34:14.348+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=farmadata_pipeline, task_id=extrair_sngpc, run_id=backfill__2020-03-01T00:00:00+00:00, execution_date=20200301T000000, start_date=20261108T233413, end_date=20261108T233414
+[2026-11-08T23:34:14.442+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-08T23:34:14.454+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
