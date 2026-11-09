@@ -34,7 +34,7 @@
 * [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](docs/adr/ADR-004.md)
 
 ### Execução e Arquitetura
-* [Diário de Bordo (Semanas 7 a 10)](docs/diario/DIARIO_DE_BORDO.md)
+* [Diário de Bordo (Semanas 7 a 13)](docs/diario/DIARIO_DE_BORDO.md)
 * [Arquitetura da Plataforma](docs/ARQUITETURA.md)
 * [Captura de Mudanças no OLTP — CDC](docs/CDC.md)
 * [Camada Analítica Lakehouse e Benchmark](docs/CAMADA_ANALITICA.md)
@@ -194,7 +194,7 @@ de linhas gera bloat — a evolução natural é particionar `venda_medicamento`
 
 ## Dado atrasado
 
-A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Decisão e motivos em [`docs/adr/ADR-003-dado-atrasado.md`](docs/adr/ADR-003-dado-atrasado.md).
+A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Decisão e motivos em [`docs/adr/ADR-003.md`](docs/adr/ADR-003.md).
 
 | Situação | O que a carga faz |
 |---|---|

@@ -1,9 +1,9 @@
-# Diário de bordo — Semanas 7 a 10
+# Diário de bordo — Semanas 7 a 13
 
-> Registro das decisões, bloqueios e responsáveis da Squad para a Entrega 2 (issue #10).
-> Ritual: reunião da Squad após as aulas de segunda e quarta de cada semana. Decisões
-> pontuais fora desse ritual foram alinhadas por mensagem direta no grupo do WhatsApp da
-> Squad e aplicadas direto no código/commit correspondente.
+> Registro das decisões, bloqueios e responsáveis da Squad para as Entregas 2 e 3.
+> Ritual nas semanas 7 a 10: reunião da Squad após as aulas de segunda e quarta de cada semana.
+> Nas semanas 11 a 13 a coordenação foi feita pelo grupo do WhatsApp da Squad. Em todas as
+> semanas, as decisões foram aplicadas direto no código/commit correspondente.
 
 ## Semana 7 — 22/09 a 28/09
 
@@ -89,3 +89,98 @@ A demonstração usa os CSVs em `scripts/fixtures/dado_atrasado/`. `make simular
 `make reprocessar-janela` carrega antes o CSV de janeiro (quantidade 10 em `202001`) e depois o de fevereiro, que traz uma venda de janeiro (quantidade 1). Recarregar fevereiro executa `DELETE` e `COPY` só das linhas daquele `arquivo_origem`. A quantidade 10 permanece e a venda atrasada não duplica. A saída está em `docs/evidencias/reprocessamento_janela.txt`.
 
 Não houve bloqueio novo.
+
+## Semana 11 — 20/10 a 26/10
+
+Semana de fechamento da documentação da E2, coordenada pelo WhatsApp da Squad. Eu (Eduardo)
+publiquei a documentação do projeto no GitHub Pages com MkDocs (PR #17, configurado em 17/10),
+escrevi `docs/ARQUITETURA.md` com o diagrama da plataforma e padronizei os nomes dos ADRs
+(`ADR-001` a `ADR-003`), ajustando a navegação do site (PRs #22 e #23). Ruan escreveu as Release
+Notes da E2 (`docs/entregas/E2.md`) e atualizou a lista de membros e a navegação. Os PRs da E2
+que ainda estavam abertos — ingestão idempotente (#18 e #21), CDC com Debezium (#19) e dado
+atrasado (#20) — já tinham sido mergeados em 18/10, então a `main` fechou a semana com a E2
+inteira integrada.
+
+Não houve bloqueio: o único ajuste foi refazer o deploy do Pages algumas vezes até a navegação
+e os links relativos dos ADRs renomeados ficarem corretos.
+
+## Semana 12 — 27/10 a 02/11
+
+Semana de planejamento da E3, com pouca atividade no repositório: a Squad deu uma pausa no
+código e não houve commits nesse período. Pelo WhatsApp, lemos o enunciado da E3 e dividimos o
+checklist de aceite em issues, uma por pessoa:
+
+| Issue | Tema | Responsável |
+|---|---|---|
+| #24 | Modelagem dimensional e dimensão de variação lenta (SCD) | João Paulo |
+| #25 | Transformação declarativa em camadas (dbt / SQLMesh) | Pedro Augusto |
+| #26 | Suíte de testes de qualidade de dados (integridade, volume e distribuição) | Gabriel |
+| #27 | Orquestração com DAG, políticas de retry e demonstração de backfill | João Pedro |
+| #28 | Otimização de performance com análise de plano de execução | Paola |
+| #29 | SLA e métrica de freshness dos dados | Eduardo |
+| #30 | ADR de decisão técnica e painel analítico da pergunta da E1 | Ruan |
+
+A
+professora adiou a entrega da E3 de 03/11 para 09/11, o que deu à Squad a semana 13 inteira
+para implementar.
+
+## Semana 13 — 03/11 a 09/11 (entrega)
+
+Semana de implementação da E3, coordenada pelo WhatsApp, com os PRs entrando entre 07 e 09/11.
+
+**Modelo dimensional (#24, PR #31, João Paulo).** Esquema estrela em PostgreSQL com grão de uma
+linha por dispensação, `dim_municipio` como SCD Tipo 2 e as demais dimensões como views finas
+com surrogate key determinística (`sk_hash()`, md5 da chave natural). A decisão está no ADR-004,
+que avaliou e descartou o star schema no Delta Lake e o dbt snapshot por custo maior sem ganho
+para a entrega. A revisão de código pegou três problemas antes do merge: colisão de surrogate key
+quando um município muda duas vezes no mesmo dia, `sk_hash()` retornando um tipo que quebrava o
+upgrade das views em banco já migrado, e vendas sumindo em silêncio no join temporal — agora a
+carga da fato falha se a contagem não bater com `venda_medicamento`. Evidência em
+`docs/evidencias/scd2.txt`.
+
+**Testes de dados (#26, Gabriel).** Suíte em `tests/qualidade_dados.sql` (`make test-qualidade`)
+cobrindo unicidade e nulos em PKs, integridade de todas as FKs, domínios (quantidade, idade,
+sexo, campos de antimicrobiano), volume mínimo e igualdade de contagem entre origem e fato. O
+teste de distribuição calcula o z-score mensal da série nacional e alerta com |z| > 3; um
+autoteste injeta um salto sintético e confirma que ele é detectado (z = 3,32). Roda no CI com
+doze linhas sintéticas. Evidência em `docs/evidencias/qualidade_dados.txt`.
+
+**Orquestração (#27, PR #34, João Pedro).** DAG `farmadata_pipeline` no Airflow 2.10, agendada
+`@monthly`: verificar fonte → extrair SNGPC → transformar modelo dimensional → validar qualidade,
+com 3 retries e backoff exponencial. Com falha injetada, a fonte falhou duas vezes e passou na
+terceira, com esperas de 39 s e 79 s (o backoff dobrando). O backfill de jan–jun/2020 rodou mês a
+mês. O mês 202007, cujo CSV não existe, esgotou as 4 tentativas, disparou o alerta de falha e
+deixou as tasks seguintes como `upstream_failed`, sem carga parcial. Evidências em
+`docs/orchestration/`.
+
+**Otimização de consulta (#28, Paola).** A query crítica do esquema estrela (fato + três
+dimensões, recorte jan/2020, 6,1 milhões de linhas) levava 40,0 s. O `EXPLAIN (ANALYZE, BUFFERS)`
+mostrou a surpresa da semana: as dimensões em view calculavam `sk_hash()` em tempo de execução e
+retornavam `TEXT`, enquanto a fato guarda `CHAR(32)`, então o PostgreSQL fazia cast em todas as
+linhas, errava a estimativa de cardinalidade e despejava 1,83 GB em disco temporário. Persistir as
+surrogate keys com o mesmo tipo da fato, um índice parcial de cobertura e ajuste de `work_mem`
+levaram a mesma query a 4,9 s (−87,7%), com leitura de blocos caindo 73,6% e spill zerado.
+Planos antes/depois e estudo de ablação em `docs/performance/`.
+
+**SLA e freshness (#29, PR #32, eu).** SLA declarado para a `fato_venda_medicamento`: ela é
+reconstruída em até 24 h depois de cada carga, recarga ou backfill (como o recorte é fixo em
+2020, não chega um mês novo por mês). A regra fica na função `checar_freshness()` (OK / WARN após
+24 h / ERRO após 48 h ou tabela nunca construída), usada por `make checar-freshness` e por uma
+DAG diária, `farmadata_freshness`, que grava alerta no WARN e falha sem retry no ERRO, bloqueando
+o que vem a jusante. Na revisão percebi que a primeira versão não funcionava no banco real: ela
+apontava para uma tabela que não existia e ninguém registrava quando a fato era reconstruída, então
+o alarme daria sempre ERRO. Corrigi fazendo a própria carga da fato registrar o build na mesma
+transação. Outra surpresa: o Docker monta cada `.sql` de `docker-entrypoint-initdb.d` como arquivo
+único, e o container continua vendo a versão antiga de um arquivo regravado até ser reiniciado —
+os testes passaram a ler o SQL direto do repositório. O atraso induzido disparando WARN e ERRO
+está em `docs/evidencias/freshness.txt` e roda no CI a cada push.
+
+**Transformação declarativa (#25, Pedro Augusto) e ADR + painel (#30, Ruan).** Ainda sem PR no
+repositório quando este diário foi fechado. Até a #25 entrar, as transformações do modelo
+dimensional são funções PL/pgSQL versionadas em `sql/11` e `sql/12`; o ADR-004 descartou o dbt
+apenas para o versionamento SCD2 (snapshot), não para a camada de transformação como um todo.
+
+**Decisões da semana.** Star schema em PostgreSQL com `dim_municipio` em SCD2 e grão de uma linha
+por dispensação (ADR-004); checar o freshness numa DAG diária separada da mensal, porque logo
+depois da transformação a checagem sempre daria OK; manter o recorte em 2020 na E3 e deixar a
+carga de anos mais recentes como candidata para a E4.
