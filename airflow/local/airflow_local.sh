@@ -60,7 +60,7 @@ case "${1:-}" in
     for f in 01_geografia_uf 02_geografia_municipio 03_tempo_periodo 04_medicamento 05_cid10 \
              05_carga_catalogo_cid10 06_prescritor_listas 07_venda_medicamento 08_ibge_populacao_municipio \
              09_clima_mensal_uf 10_ibge_populacao_faixa_etaria_municipio 11_dimensional_dim_municipio_scd \
-             12_dimensional_fato_venda; do
+             12_dimensional_fato_venda 13_controle_build; do
       psql_ -d farmadata -f "$REPO/sql/$f.sql" >/dev/null
     done
     (cd "$REPO" && npm install --omit=dev --no-audit --no-fund --silent)

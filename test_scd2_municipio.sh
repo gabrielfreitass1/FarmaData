@@ -48,7 +48,8 @@ for f in \
   06_prescritor_listas.sql \
   07_venda_medicamento.sql \
   11_dimensional_dim_municipio_scd.sql \
-  12_dimensional_fato_venda.sql
+  12_dimensional_fato_venda.sql \
+  13_controle_build.sql
 do
   docker compose exec -T db psql -U "$PGU" -d "$PGD" -v ON_ERROR_STOP=1 \
     -f "/docker-entrypoint-initdb.d/${f}" >/dev/null
