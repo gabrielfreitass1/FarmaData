@@ -1,0 +1,31 @@
+=== DAG farmadata_freshness no Airflow — 2026-11-09T19:56:01-03:00 ===
+Airflow 2.10.5 | banco: farmadata_orquestracao
+
+[1] Fato reconstruída depois da última carga (esperado: OK, task SUCCESS)
+   Freshness fato_venda_medicamento: {"tabela": "fato_venda_medicamento", "status": "OK", "ultima_carga": "2026-11-07T20:55:55.009964+00:00", "ultimo_build": "2026-11-09T22:56:03.961799+00:00", "limites_h": {"warn": 24, "erro": 48}}
+   Marking task as SUCCESS. dag_id=farmadata_freshness, task_id=checar_freshness_fato, run_id=manual__2026-11-01T00:00:00+00:00, execution_date=20261101T000000, start_date=, end_date=20261109T225606
+   ✓ task terminou SUCCESS, como esperado (exit do dags test: 0)
+
+[2] Carga há 30h, fato construída há 40h (esperado: WARN com alerta, task SUCCESS)
+   Freshness fato_venda_medicamento: {"tabela": "fato_venda_medicamento", "status": "WARN", "ultima_carga": "2026-11-08T16:56:06.990126+00:00", "ultimo_build": "2026-11-08T06:56:06.990126+00:00", "limites_h": {"warn": 24, "erro": 48}}
+   [ALERTA FRESHNESS_WARN] {"nivel": "FRESHNESS_WARN", "emitido_em": "2026-11-09T22:56:09+00:00", "dag_id": "farmadata_freshness", "task_id": "checar_freshness_fato", "run_id": "manual__2026-11-02T00:00:00+00:00", "tentativa": 1, "tabela": "fato_venda_medicamento", "status": "WARN", "ultima_carga": "2026-11-08T16:56:06.990126+00:00", "ultimo_build": "2026-11-08T06:56:06.990126+00:00", "limites_h": {"warn": 24, "erro": 48}}
+   Marking task as SUCCESS. dag_id=farmadata_freshness, task_id=checar_freshness_fato, run_id=manual__2026-11-02T00:00:00+00:00, execution_date=20261102T000000, start_date=, end_date=20261109T225609
+   ✓ task terminou SUCCESS, como esperado (exit do dags test: 0)
+
+[3] Mesma carga pendente há 50h (esperado: ERRO, task FAILED sem retry, alerta FALHA)
+   Freshness fato_venda_medicamento: {"tabela": "fato_venda_medicamento", "status": "ERRO", "ultima_carga": "2026-11-07T20:56:10.115853+00:00", "ultimo_build": "2026-11-07T10:56:10.115853+00:00", "limites_h": {"warn": 24, "erro": 48}}
+   AirflowFailException: Freshness ERRO em fato_venda_medicamento: última carga 2026-11-07T20:56:10.115853+00:00, última construção 2026-11-07T10:56:10.115853+00:00 (limite 48h)
+   Marking task as FAILED. dag_id=farmadata_freshness, task_id=checar_freshness_fato, run_id=manual__2026-11-03T00:00:00+00:00, execution_date=20261103T000000, start_date=, end_date=20261109T225612
+   [ALERTA FALHA] {"nivel": "FALHA", "emitido_em": "2026-11-09T22:56:12+00:00", "dag_id": "farmadata_freshness", "task_id": "checar_freshness_fato", "run_id": "manual__2026-11-03T00:00:00+00:00", "tentativa": 1, "erro": "Freshness ERRO em fato_venda_medicamento: última carga 2026-11-07T20:56:10.115853+00:00, última construção 2026-11-07T10:56:10.115853+00:00 (limite 48h)"}
+   ✓ task terminou FAILED, como esperado (exit do dags test: 1)
+
+[4] Mitigação: fato reconstruída (esperado: OK, task SUCCESS)
+   Freshness fato_venda_medicamento: {"tabela": "fato_venda_medicamento", "status": "OK", "ultima_carga": "2026-11-07T20:56:10.115853+00:00", "ultimo_build": "2026-11-09T22:56:13.213849+00:00", "limites_h": {"warn": 24, "erro": 48}}
+   Marking task as SUCCESS. dag_id=farmadata_freshness, task_id=checar_freshness_fato, run_id=manual__2026-11-04T00:00:00+00:00, execution_date=20261104T000000, start_date=, end_date=20261109T225615
+   ✓ task terminou SUCCESS, como esperado (exit do dags test: 0)
+
+--- alertas gravados pela DAG em $AIRFLOW_HOME/alertas_farmadata.jsonl (desde o início do teste) ---
+{"nivel": "FRESHNESS_WARN", "emitido_em": "2026-11-09T22:56:09+00:00", "dag_id": "farmadata_freshness", "task_id": "checar_freshness_fato", "run_id": "manual__2026-11-02T00:00:00+00:00", "tentativa": 1, "tabela": "fato_venda_medicamento", "status": "WARN", "ultima_carga": "2026-11-08T16:56:06.990126+00:00", "ultimo_build": "2026-11-08T06:56:06.990126+00:00", "limites_h": {"warn": 24, "erro": 48}}
+{"nivel": "FALHA", "emitido_em": "2026-11-09T22:56:12+00:00", "dag_id": "farmadata_freshness", "task_id": "checar_freshness_fato", "run_id": "manual__2026-11-03T00:00:00+00:00", "tentativa": 1, "erro": "Freshness ERRO em fato_venda_medicamento: última carga 2026-11-07T20:56:10.115853+00:00, última construção 2026-11-07T10:56:10.115853+00:00 (limite 48h)"}
+
+=== RESULTADO: a DAG agenda a checagem, alerta no WARN e falha no ERRO; reconstruir volta a OK ✓ ===

@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness test-freshness-airflow airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -84,6 +84,10 @@ checar-freshness:
 # Prova do atraso induzido (gera docs/evidencias/freshness.txt)
 test-freshness:
 	bash ./test_freshness.sh
+
+# DAG farmadata_freshness no Airflow da demo: OK -> WARN -> ERRO -> OK (gera docs/evidencias/freshness_airflow.txt)
+test-freshness-airflow:
+	bash ./test_freshness_airflow.sh
 
 
 
