@@ -1,6 +1,6 @@
 
-site_name: Documentação do Projeto
-site_description: Documentação técnica do projeto
+site_name: FarmaData
+site_description: Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)
 site_author: Equipe de desenvolvimento
 
 theme:
