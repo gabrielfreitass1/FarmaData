@@ -2,55 +2,31 @@
 
 -- Cobertura genérica de todas as PKs: nullabilidade e unicidade (inclui chaves compostas).
 DO $$
-DECLARE r record; n bigint;
+DECLARE n integer;
 BEGIN
-  FOR r IN
-    SELECT c.conrelid::regclass rel, c.conname,
-      string_agg(format('%I',a.attname),', ' ORDER BY k.ord) cols,
-      string_agg(format('t.%I IS NULL',a.attname),' OR ' ORDER BY k.ord) nulls
-    FROM pg_constraint c
-    CROSS JOIN LATERAL unnest(c.conkey) WITH ORDINALITY k(attnum,ord)
-    JOIN pg_attribute a ON a.attrelid=c.conrelid AND a.attnum=k.attnum
-    WHERE c.contype='p' AND c.connamespace=current_schema()::regnamespace
-    GROUP BY c.conrelid,c.conname
-  LOOP
-    EXECUTE format('SELECT count(*) FROM %s t WHERE %s',r.rel,r.nulls) INTO n;
-    IF n>0 THEN RAISE EXCEPTION 'PK % em % contém % chave(s) nula(s)',r.conname,r.rel,n; END IF;
-    EXECUTE format('SELECT count(*) FROM (SELECT %s FROM %s GROUP BY %s HAVING count(*)>1) d',r.cols,r.rel,r.cols) INTO n;
-    IF n>0 THEN RAISE EXCEPTION 'PK % em % contém duplicidade',r.conname,r.rel; END IF;
-  END LOOP;
+  -- PK/UNIQUE/FK são garantidas pelo próprio PostgreSQL. Conferimos que os
+  -- constraints e índices existem/estão válidos sem agrupar dezenas de milhões de PKs.
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE connamespace=current_schema()::regnamespace
+             AND contype IN ('p','f') AND NOT convalidated)
+  THEN RAISE EXCEPTION 'Há chave primária ou estrangeira não validada'; END IF;
+  IF EXISTS (
+      SELECT 1 FROM pg_constraint c JOIN pg_index i ON i.indexrelid=c.conindid
+      WHERE c.connamespace=current_schema()::regnamespace AND c.contype='p'
+        AND (NOT i.indisvalid OR NOT i.indisunique)
+  ) THEN RAISE EXCEPTION 'Há índice de chave primária inválido ou não único'; END IF;
+  IF EXISTS (
+      SELECT 1 FROM pg_constraint c
+      CROSS JOIN LATERAL unnest(c.conkey) k(attnum)
+      JOIN pg_attribute a ON a.attrelid=c.conrelid AND a.attnum=k.attnum
+      WHERE c.connamespace=current_schema()::regnamespace AND c.contype='p' AND NOT a.attnotnull
+  ) THEN RAISE EXCEPTION 'Há coluna de chave primária sem NOT NULL'; END IF;
 
-  -- Integridade referencial de todas as FKs declaradas, inclusive compostas.
-  FOR r IN SELECT conrelid,confrelid,conname,conkey,confkey FROM pg_constraint
-           WHERE contype='f' AND connamespace=current_schema()::regnamespace
-  LOOP
-    DECLARE join_sql text; nonnull_sql text;
-    BEGIN
-      SELECT string_agg(format('c.%I=p.%I',ca.attname,pa.attname),' AND ' ORDER BY ck.ord),
-             string_agg(format('c.%I IS NOT NULL',ca.attname),' AND ' ORDER BY ck.ord)
-        INTO join_sql,nonnull_sql
-      FROM unnest(r.conkey) WITH ORDINALITY ck(attnum,ord)
-      JOIN unnest(r.confkey) WITH ORDINALITY pk(attnum,ord) USING(ord)
-      JOIN pg_attribute ca ON ca.attrelid=r.conrelid AND ca.attnum=ck.attnum
-      JOIN pg_attribute pa ON pa.attrelid=r.confrelid AND pa.attnum=pk.attnum;
-      EXECUTE format('SELECT count(*) FROM %s c WHERE (%s) AND NOT EXISTS (SELECT 1 FROM %s p WHERE %s)',
-        r.conrelid::regclass,nonnull_sql,r.confrelid::regclass,join_sql) INTO n;
-      IF n>0 THEN RAISE EXCEPTION 'FK % em % possui % registro(s) órfão(s)',r.conname,r.conrelid::regclass,n; END IF;
-    END;
-  END LOOP;
-
-  IF EXISTS (SELECT 1 FROM venda_medicamento WHERE quantidade_vendida<=0 OR idade_paciente<0
-      OR (sexo_paciente IS NOT NULL AND sexo_paciente NOT IN ('M','F')) OR data_venda>CURRENT_DATE
-      OR (NOT eh_antimicrobiano AND (codigo_cid10 IS NOT NULL OR sexo_paciente IS NOT NULL OR idade_paciente IS NOT NULL)))
-  THEN RAISE EXCEPTION 'venda_medicamento viola domínio de quantidade, idade, sexo, data ou antimicrobiano'; END IF;
-  IF EXISTS (SELECT 1 FROM fato_venda_medicamento WHERE quantidade_vendida<=0 OR idade_paciente<0
-      OR (sexo_paciente IS NOT NULL AND sexo_paciente NOT IN ('M','F')) OR data_venda>CURRENT_DATE
-      OR (NOT eh_antimicrobiano AND (codigo_cid10 IS NOT NULL OR sexo_paciente IS NOT NULL OR idade_paciente IS NOT NULL)))
-  THEN RAISE EXCEPTION 'fato_venda_medicamento viola regra de domínio'; END IF;
   IF EXISTS (SELECT 1 FROM unidade_federativa WHERE regiao NOT IN ('Norte','Nordeste','Centro-Oeste','Sudeste','Sul'))
   THEN RAISE EXCEPTION 'Região fora do domínio em unidade_federativa'; END IF;
   IF EXISTS (SELECT 1 FROM tipo_receituario WHERE codigo NOT IN ('A','B1','B2','C1','D'))
   THEN RAISE EXCEPTION 'Código de receituário fora do domínio'; END IF;
+  IF EXISTS (SELECT 1 FROM unidade_idade WHERE descricao NOT IN ('Anos','Meses'))
+  THEN RAISE EXCEPTION 'Unidade de idade fora do domínio'; END IF;
   IF EXISTS (SELECT 1 FROM periodo WHERE mes NOT BETWEEN 1 AND 12 OR trimestre NOT BETWEEN 1 AND 4
       OR semestre NOT BETWEEN 1 AND 2 OR id_periodo<>ano*100+mes OR data_fim<data_inicio OR data_fim>CURRENT_DATE)
   THEN RAISE EXCEPTION 'Período contém valor inválido ou data futura'; END IF;
@@ -77,25 +53,54 @@ BEGIN
      OR EXISTS (SELECT sk_unidade_medida FROM dim_unidade_medida GROUP BY sk_unidade_medida HAVING count(*)>1)
   THEN RAISE EXCEPTION 'sk_unidade_medida nula ou duplicada'; END IF;
 
-  -- As FKs para dimensões implementadas como views são verificadas por suas SKs hash.
-  IF EXISTS (SELECT 1 FROM fato_venda_medicamento f WHERE f.sk_tempo IS NULL OR NOT EXISTS
-      (SELECT 1 FROM dim_tempo d WHERE d.sk_tempo=f.sk_tempo))
-  THEN RAISE EXCEPTION 'fato possui sk_tempo nula ou sem dimensão'; END IF;
-  IF EXISTS (SELECT 1 FROM fato_venda_medicamento f WHERE f.sk_medicamento IS NULL OR NOT EXISTS
-      (SELECT 1 FROM dim_medicamento d WHERE d.sk_medicamento=f.sk_medicamento))
-  THEN RAISE EXCEPTION 'fato possui sk_medicamento nula ou sem dimensão'; END IF;
-  IF EXISTS (SELECT 1 FROM fato_venda_medicamento f WHERE f.sk_conselho IS NOT NULL AND NOT EXISTS
-      (SELECT 1 FROM dim_conselho d WHERE d.sk_conselho=f.sk_conselho))
-     OR EXISTS (SELECT 1 FROM fato_venda_medicamento f WHERE f.sk_tipo_receituario IS NOT NULL AND NOT EXISTS
-      (SELECT 1 FROM dim_tipo_receituario d WHERE d.sk_tipo_receituario=f.sk_tipo_receituario))
-     OR EXISTS (SELECT 1 FROM fato_venda_medicamento f WHERE f.sk_unidade_medida IS NOT NULL AND NOT EXISTS
-      (SELECT 1 FROM dim_unidade_medida d WHERE d.sk_unidade_medida=f.sk_unidade_medida))
-  THEN RAISE EXCEPTION 'fato possui chave substituta sem dimensão correspondente'; END IF;
-  RAISE NOTICE 'PKs, FKs e domínios: OK';
+  RAISE NOTICE 'Constraints de chave, dimensões e domínios estáticos: OK';
+END $$;
+
+-- Agrega a origem e a fato uma vez; as mesmas métricas alimentam volume,
+-- regras de linha e série temporal, evitando várias varreduras completas.
+CREATE TEMP TABLE _qualidade_origem_mensal AS
+SELECT p.id_periodo, count(v.id_venda)::bigint AS vendas,
+       coalesce(bool_or(v.quantidade_vendida<=0 OR v.idade_paciente<0
+         OR (v.sexo_paciente IS NOT NULL AND v.sexo_paciente NOT IN ('M','F'))
+         OR v.data_venda>CURRENT_DATE
+         OR v.data_venda NOT BETWEEN p.data_inicio AND p.data_fim
+         OR (NOT v.eh_antimicrobiano AND (v.codigo_cid10 IS NOT NULL OR v.sexo_paciente IS NOT NULL OR v.idade_paciente IS NOT NULL)))
+         FILTER (WHERE v.id_venda IS NOT NULL),false) AS dominio_invalido
+FROM periodo p LEFT JOIN venda_medicamento v USING(id_periodo)
+GROUP BY p.id_periodo;
+
+CREATE TEMP TABLE _qualidade_fato_mensal AS
+SELECT f.id_periodo,count(*)::bigint AS vendas,
+       coalesce(bool_or(f.quantidade_vendida<=0 OR f.idade_paciente<0
+         OR (f.sexo_paciente IS NOT NULL AND f.sexo_paciente NOT IN ('M','F'))
+         OR f.data_venda>CURRENT_DATE
+         OR p.id_periodo IS NULL OR f.data_venda NOT BETWEEN p.data_inicio AND p.data_fim
+         OR (NOT f.eh_antimicrobiano AND (f.codigo_cid10 IS NOT NULL OR f.sexo_paciente IS NOT NULL OR f.idade_paciente IS NOT NULL))),false) AS dominio_invalido,
+       coalesce(bool_or(f.sk_tempo::text<>sk_hash('tempo',f.id_periodo)
+         OR f.sk_medicamento::text<>sk_hash('medicamento',f.id_medicamento)
+         OR (f.id_conselho IS NULL)<>(f.sk_conselho IS NULL)
+         OR (f.id_conselho IS NOT NULL AND f.sk_conselho::text<>sk_hash('conselho',f.id_conselho))
+         OR (f.id_tipo_receituario IS NULL)<>(f.sk_tipo_receituario IS NULL)
+         OR (f.id_tipo_receituario IS NOT NULL AND f.sk_tipo_receituario::text<>sk_hash('tipo_receituario',f.id_tipo_receituario))
+         OR (f.id_unidade_medida IS NULL)<>(f.sk_unidade_medida IS NULL)
+         OR (f.id_unidade_medida IS NOT NULL AND f.sk_unidade_medida::text<>sk_hash('unidade_medida',f.id_unidade_medida))),false) AS sk_invalida
+FROM fato_venda_medicamento f LEFT JOIN periodo p ON p.id_periodo=f.id_periodo GROUP BY f.id_periodo;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM _qualidade_origem_mensal WHERE dominio_invalido)
+  THEN RAISE EXCEPTION 'venda_medicamento viola domínio de quantidade, idade, sexo, data ou antimicrobiano'; END IF;
+  IF EXISTS (SELECT 1 FROM _qualidade_fato_mensal WHERE dominio_invalido)
+  THEN RAISE EXCEPTION 'fato_venda_medicamento viola regra de domínio'; END IF;
+  IF EXISTS (SELECT 1 FROM _qualidade_fato_mensal WHERE sk_invalida)
+  THEN RAISE EXCEPTION 'fato possui chave substituta inválida para sua chave natural'; END IF;
+  IF EXISTS (SELECT 1 FROM _qualidade_fato_mensal f LEFT JOIN dim_tempo d ON d.id_periodo=f.id_periodo WHERE d.id_periodo IS NULL)
+  THEN RAISE EXCEPTION 'fato possui id_periodo sem dimensão de tempo'; END IF;
+  RAISE NOTICE 'Domínios de venda/fato e relacionamentos das chaves substitutas: OK';
 END $$;
 
 -- O limite padrão representa uma carga anual homologada; o CI passa 12 para fixture reduzida.
-SELECT count(*) AS volume_vendas FROM venda_medicamento \gset
+SELECT coalesce(sum(vendas),0) AS volume_vendas FROM _qualidade_origem_mensal \gset
 \if :{?min_vendas}
 \else
   \set min_vendas 1000000
@@ -103,46 +108,60 @@ SELECT count(*) AS volume_vendas FROM venda_medicamento \gset
 \echo Volume mínimo: :volume_vendas / :min_vendas
 SELECT 1 / CASE WHEN :volume_vendas::bigint >= :min_vendas::bigint THEN 1 ELSE 0 END;
 
--- Anomalia silenciosa: volume mensal nacional com z-score populacional acima de 3.
+-- Detector reutilizado pela série real e pelo teste negativo, temporário à sessão do psql.
+CREATE TEMP TABLE _qualidade_bootstrap (x integer);
+CREATE OR REPLACE FUNCTION pg_temp.anomalias_mensais(
+  p_periodos integer[], p_volumes numeric[], p_limite_relativo numeric DEFAULT 0.40
+)
+RETURNS TABLE(id_periodo integer, volume numeric, mediana numeric, desvio_relativo numeric)
+LANGUAGE sql IMMUTABLE AS $$
+  WITH serie AS (
+    SELECT s.id_periodo, s.volume
+    FROM unnest(p_periodos, p_volumes) AS s(id_periodo, volume)
+  ), referencia AS (
+    SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY volume::double precision)::numeric AS mediana
+    FROM serie
+  )
+  SELECT s.id_periodo, s.volume, r.mediana,
+         abs(s.volume-r.mediana)/NULLIF(r.mediana,0) AS desvio_relativo
+  FROM serie s CROSS JOIN referencia r
+  WHERE r.mediana > 0
+    AND abs(s.volume-r.mediana)/NULLIF(r.mediana,0) >= p_limite_relativo
+$$;
+
+-- Anomalia silenciosa: detecta variações de pelo menos 40% contra a mediana mensal.
 DO $$
-DECLARE n_meses integer; outliers text;
+DECLARE n_meses integer; periodos integer[]; volumes numeric[]; outliers text;
 BEGIN
-  WITH mensal AS (
-         SELECT p.id_periodo,count(v.id_venda)::numeric vendas
-         FROM periodo p LEFT JOIN venda_medicamento v USING(id_periodo)
-         GROUP BY p.id_periodo
-       ),
-       resumo AS (SELECT avg(vendas) media,stddev_pop(vendas) desvio FROM mensal),
-       escores AS (SELECT m.id_periodo,m.vendas,
-          CASE WHEN r.desvio IS NULL OR r.desvio=0 THEN 0 ELSE (m.vendas-r.media)/r.desvio END z
-          FROM mensal m CROSS JOIN resumo r)
-  SELECT count(*),string_agg(id_periodo||' (z='||round(z,2)||')',', ' ORDER BY id_periodo)
-    INTO n_meses,outliers FROM escores WHERE abs(z)>3;
-  SELECT count(*) INTO n_meses FROM periodo;
+  SELECT count(*),array_agg(id_periodo ORDER BY id_periodo),array_agg(vendas::numeric ORDER BY id_periodo)
+    INTO n_meses,periodos,volumes FROM _qualidade_origem_mensal;
   IF n_meses<6 THEN RAISE EXCEPTION 'Série histórica insuficiente: % meses; mínimo 6',n_meses; END IF;
-  IF outliers IS NOT NULL THEN RAISE EXCEPTION 'Anomalia mensal (|z-score| > 3): %',outliers; END IF;
-  RAISE NOTICE 'Distribuição mensal: OK (% meses; nenhum |z-score| > 3)',n_meses;
+  SELECT string_agg(id_periodo||' (volume='||volume||', variação='||round(desvio_relativo*100,1)||'%)',', ' ORDER BY id_periodo)
+    INTO outliers FROM pg_temp.anomalias_mensais(periodos,volumes,0.40);
+  IF outliers IS NOT NULL THEN RAISE EXCEPTION 'Anomalia mensal (desvio relativo >= 40%% da mediana): %',outliers; END IF;
+  RAISE NOTICE 'Distribuição mensal: OK (% meses; nenhum desvio relativo >= 40%% da mediana)',n_meses;
 END $$;
 
--- Prova de sensibilidade: uma série conhecida com um salto extremo precisa cruzar o limite.
+-- Teste negativo: injeta uma queda de 50% e exige que o mesmo detector a sinalize.
 DO $$
-DECLARE z_max numeric;
+DECLARE detectadas integer; periodo_anomalo integer;
 BEGIN
-  WITH serie AS (
-    SELECT 100::numeric valor FROM generate_series(1,11)
-    UNION ALL SELECT 10000::numeric
-  ), resumo AS (SELECT avg(valor) media,stddev_pop(valor) desvio FROM serie)
-  SELECT max(abs((s.valor-r.media)/NULLIF(r.desvio,0))) INTO z_max
-  FROM serie s CROSS JOIN resumo r;
-  IF z_max<=3 THEN RAISE EXCEPTION 'Autoteste estatístico falhou: salto extremo produziu z-score %',z_max; END IF;
-  RAISE NOTICE 'Autoteste do detector estatístico: salto sintético detectado (z-score %)',round(z_max,2);
+  SELECT count(*),min(id_periodo) INTO detectadas,periodo_anomalo
+  FROM pg_temp.anomalias_mensais(
+    ARRAY[202001,202002,202003,202004,202005,202006,202007,202008,202009,202010,202011,202012],
+    ARRAY[97,98,99,100,50,101,102,103,104,105,106,107]::numeric[],
+    0.40
+  );
+  IF detectadas<>1 OR periodo_anomalo<>202005
+  THEN RAISE EXCEPTION 'Teste negativo falhou: esperada detecção da queda de 50%% em 202005; encontradas % anomalia(s)',detectadas; END IF;
+  RAISE NOTICE 'Teste negativo: queda de 50%% detectada em 202005 pelo mesmo detector da série real';
 END $$;
 
 DO $$
 DECLARE origem bigint; fato bigint;
 BEGIN
-  SELECT count(*) INTO origem FROM venda_medicamento;
-  SELECT count(*) INTO fato FROM fato_venda_medicamento;
+  SELECT coalesce(sum(vendas),0) INTO origem FROM _qualidade_origem_mensal;
+  SELECT coalesce(sum(vendas),0) INTO fato FROM _qualidade_fato_mensal;
   IF origem>0 AND origem<>fato THEN RAISE EXCEPTION 'Contagem origem/fato divergente: % / %',origem,fato; END IF;
   RAISE NOTICE 'Origem/fato dimensional: OK (% / %)',origem,fato;
 END $$;
