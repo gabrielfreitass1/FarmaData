@@ -15,10 +15,13 @@
 -- de retorno diferente do md5() original quebraria o upgrade das views em
 -- qualquer banco que já as tivesse. As colunas de tabela (CHAR(32)) seguem
 -- recebendo o valor normalmente via cast de atribuição no INSERT.
+-- PARALLEL SAFE: sem a marcação explícita, o Postgres trata a função como
+-- PARALLEL UNSAFE e nenhuma consulta que a avalie pode usar workers paralelos
+-- (issue #28, docs/performance/RELATORIO_PERFORMANCE.md).
 CREATE OR REPLACE FUNCTION sk_hash(p_dimensao TEXT, p_chave_natural ANYELEMENT)
 RETURNS TEXT AS $$
     SELECT md5(p_dimensao || '|' || p_chave_natural);
-$$ LANGUAGE sql IMMUTABLE;
+$$ LANGUAGE sql IMMUTABLE PARALLEL SAFE;
 
 COMMENT ON FUNCTION sk_hash IS 'Surrogate key determinística (md5) de uma dimensão a partir da chave natural — fonte única usada por todas as dim_* e pela fato';
 
@@ -109,12 +112,33 @@ COMMENT ON FUNCTION aplicar_scd2_municipio IS 'Sincroniza dim_municipio (SCD2) a
 
 -- Dimensões conformadas: views finas sobre tabelas já normalizadas e
 -- imutáveis, só expondo a surrogate key determinística (sk_hash da chave natural).
-CREATE OR REPLACE VIEW dim_tempo AS
-SELECT sk_hash('tempo', id_periodo) AS sk_tempo, id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim
+--
+-- dim_tempo e dim_medicamento (emenda ao ADR-004, issue #28): a sk_* é uma
+-- coluna gerada armazenada (CHAR(32), STORED) em periodo/medicamento, com o
+-- mesmo tipo da fato. Calculada na view, ela saía como TEXT e o join com a
+-- fato (CHAR(32)) virava (f.sk_*)::text: sem estatística, erro de
+-- cardinalidade de 31x e Sort externo de 245 MB (docs/performance/).
+-- Coluna gerada não aceita valor explícito: INSERTs em periodo/medicamento
+-- precisam de lista de colunas (já é o caso em sql/03 e carregar_sngpc.js).
+-- Idempotente: ADD COLUMN IF NOT EXISTS + DROP VIEW IF EXISTS permitem
+-- reaplicar este arquivo em banco novo ou já otimizado (sql/14) sem erro —
+-- CREATE OR REPLACE VIEW não serviria, porque não troca o tipo de coluna.
+ALTER TABLE periodo
+    ADD COLUMN IF NOT EXISTS sk_tempo CHAR(32)
+    GENERATED ALWAYS AS (sk_hash('tempo', id_periodo)::char(32)) STORED;
+
+ALTER TABLE medicamento
+    ADD COLUMN IF NOT EXISTS sk_medicamento CHAR(32)
+    GENERATED ALWAYS AS (sk_hash('medicamento', id_medicamento)::char(32)) STORED;
+
+DROP VIEW IF EXISTS dim_tempo;
+CREATE VIEW dim_tempo AS
+SELECT sk_tempo, id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim
 FROM periodo;
 
-CREATE OR REPLACE VIEW dim_medicamento AS
-SELECT sk_hash('medicamento', id_medicamento) AS sk_medicamento, id_medicamento, principio_ativo, descricao_apresentacao
+DROP VIEW IF EXISTS dim_medicamento;
+CREATE VIEW dim_medicamento AS
+SELECT sk_medicamento, id_medicamento, principio_ativo, descricao_apresentacao
 FROM medicamento;
 
 CREATE OR REPLACE VIEW dim_conselho AS

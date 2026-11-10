@@ -95,6 +95,7 @@
 * [Modelo Dimensional e SCD2](MODELO_DIMENSIONAL.md)
 * [Orquestração (Airflow)](orchestration/README.md)
 * [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)
+* [Otimização de Performance e Planos de Execução](performance/RELATORIO_PERFORMANCE.md)
 * [Bases Públicas Complementares](BASES_PUBLICAS.md)
 * [Arquitetura](ARQUITETURA.md)
 * [Captura de Mudanças (CDC)](CDC.md)

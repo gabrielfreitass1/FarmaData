@@ -41,6 +41,7 @@ nav:
   - Bases de Dados: BASES_PUBLICAS.md
   - Camada Analítica: CAMADA_ANALITICA.md
   - Modelo Dimensional: MODELO_DIMENSIONAL.md
+  - Otimização de Performance: performance/RELATORIO_PERFORMANCE.md
   - Orquestração: orchestration/README.md
   - Consultas: QUERIES.md
   - Arquitetura: ARQUITETURA.md
