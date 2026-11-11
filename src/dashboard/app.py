@@ -72,24 +72,30 @@ if engine:
 # -----------------------------------------------------------------------------
 # Consultas em Cache (com fallback e rastreabilidade explícita de erro)
 # -----------------------------------------------------------------------------
+ANO_RECORTE = int(os.environ.get("ANO_RECORTE", "2020"))
+# Abaixo disso o per capita oscila muito (poucas dispensações viram taxas extremas).
+POP_MIN_PER_CAPITA = 30000
+
+
 @st.cache_data(ttl=3600)
 def carregar_dados_per_capita():
+    # Todos os municípios: cada ranking (absoluto e per capita) é ordenado à parte na aba 1.
+    # Métrica = dispensações (linhas de venda). quantidade_vendida mistura caixas e frascos
+    # e é dominada por poucos registros grandes, o que distorce o per capita.
     if engine:
         try:
             sql = """
             SELECT m.nome_municipio, m.sigla_uf,
                    p.populacao,
-                   SUM(f.quantidade_vendida) AS total_vendido,
-                   ROUND((SUM(f.quantidade_vendida) / p.populacao) * 1000, 2) AS vendas_por_1000_hab
+                   COUNT(*) AS dispensacoes,
+                   ROUND(COUNT(*)::numeric / p.populacao * 1000, 2) AS dispensacoes_por_1000_hab
             FROM fato_venda_medicamento f
             JOIN dim_municipio m ON f.sk_municipio = m.sk_municipio
-            JOIN ibge_populacao_municipio p ON m.id_municipio = p.id_municipio
-            WHERE p.populacao > 30000
-            GROUP BY m.nome_municipio, m.sigla_uf, p.populacao
-            ORDER BY vendas_por_1000_hab DESC
-            LIMIT 100;
+            LEFT JOIN ibge_populacao_municipio p
+                   ON p.id_municipio = m.id_municipio AND p.ano = :ano
+            GROUP BY m.id_municipio, m.nome_municipio, m.sigla_uf, p.populacao;
             """
-            return pd.read_sql(sql, engine), False, None
+            return pd.read_sql(text(sql), engine, params={"ano": ANO_RECORTE}), False, None
         except Exception as e:
             return None, True, str(e)
 
@@ -105,10 +111,10 @@ def mock_per_capita():
         "sigla_uf": ["DF", "SP", "RJ", "MG", "PR", "RS", "GO", "SP", "SP", "SC", "PR", "PR", "RS", "MG", "SP"],
         "populacao": [3055149, 12396372, 6775561, 2530701, 1963726, 1492530, 1555626, 1223237, 720116, 516524,
                       436472, 580870, 523716, 706597, 695328],
-        "total_vendido": [4850000, 16500000, 8900000, 3900000, 3300000, 2700000, 2400000, 2100000, 1500000, 1200000,
-                          1050000, 1350000, 1150000, 1450000, 1300000],
-        "vendas_por_1000_hab": [1587.48, 1331.03, 1313.54, 1541.07, 1680.48, 1808.99, 1542.79, 1716.76, 2082.99, 2323.22,
-                                2405.65, 2324.10, 2195.85, 2052.09, 1869.62],
+        "dispensacoes": [4850000, 16500000, 8900000, 3900000, 3300000, 2700000, 2400000, 2100000, 1500000, 1200000,
+                         1050000, 1350000, 1150000, 1450000, 1300000],
+        "dispensacoes_por_1000_hab": [1587.48, 1331.03, 1313.54, 1541.07, 1680.48, 1808.99, 1542.79, 1716.76, 2082.99,
+                                      2323.22, 2405.65, 2324.10, 2195.85, 2052.09, 1869.62],
     })
 
 
@@ -132,7 +138,10 @@ def carregar_dados_clima(uf_selecionada):
             GROUP BY id_periodo
             ORDER BY id_periodo;
             """
-            return pd.read_sql(text(sql), engine, params={"uf": uf_selecionada}), False, None
+            df = pd.read_sql(text(sql), engine, params={"uf": uf_selecionada})
+            # YYYYMM como texto: como número o Plotly formata o eixo como "202.002k".
+            df["id_periodo"] = df["id_periodo"].astype(str)
+            return df, False, None
         except Exception as e:
             return None, True, str(e)
 
@@ -244,40 +253,48 @@ with tab1:
     if uf_filtro != "TODAS":
         df_filtered_tab1 = df_filtered_tab1[df_filtered_tab1["sigla_uf"] == uf_filtro]
 
+    st.caption(
+        "Métrica: dispensações (registros de venda). O per capita usa a população IBGE de "
+        f"{ANO_RECORTE} e considera só municípios com mais de {POP_MIN_PER_CAPITA // 1000} mil habitantes."
+    )
+
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("**Top 10 Municípios em Volume Absoluto de Vendas**")
-        top_abs = df_filtered_tab1.sort_values(by="total_vendido", ascending=False).head(10)
+        st.markdown("**Top 10 Municípios em Dispensações (volume absoluto)**")
+        top_abs = df_filtered_tab1.sort_values(by="dispensacoes", ascending=False).head(10)
         fig_abs = px.bar(
             top_abs,
-            x="total_vendido",
+            x="dispensacoes",
             y="nome_municipio",
             orientation="h",
             color="sigla_uf",
-            labels={"total_vendido": "Total de Unidades Dispensadas", "nome_municipio": "Município"},
+            labels={"dispensacoes": "Dispensações", "nome_municipio": "Município"},
         )
         fig_abs.update_layout(yaxis={"autorange": "reversed"}, height=350)
         st.plotly_chart(fig_abs, use_container_width=True)
 
     with col2:
-        st.markdown("**Top 10 Municípios por Taxa per Capita (Vendas / 1.000 hab)**")
-        top_pc = df_filtered_tab1.sort_values(by="vendas_por_1000_hab", ascending=False).head(10)
+        st.markdown("**Top 10 Municípios por Dispensações / 1.000 hab**")
+        base_pc = df_filtered_tab1[df_filtered_tab1["populacao"] > POP_MIN_PER_CAPITA]
+        top_pc = base_pc.sort_values(by="dispensacoes_por_1000_hab", ascending=False).head(10)
         fig_pc = px.bar(
             top_pc,
-            x="vendas_por_1000_hab",
+            x="dispensacoes_por_1000_hab",
             y="nome_municipio",
             orientation="h",
-            color="vendas_por_1000_hab",
+            color="dispensacoes_por_1000_hab",
             color_continuous_scale="Viridis",
-            labels={"vendas_por_1000_hab": "Vendas por 1.000 Hab.", "nome_municipio": "Município"},
+            labels={"dispensacoes_por_1000_hab": "Dispensações por 1.000 hab.", "nome_municipio": "Município"},
         )
         fig_pc.update_layout(yaxis={"autorange": "reversed"}, height=350)
         st.plotly_chart(fig_pc, use_container_width=True)
 
     st.markdown("#### Detalhamento Municipal")
     st.dataframe(
-        df_filtered_tab1[["nome_municipio", "sigla_uf", "populacao", "total_vendido", "vendas_por_1000_hab"]],
+        df_filtered_tab1.sort_values(by="dispensacoes", ascending=False)[
+            ["nome_municipio", "sigla_uf", "populacao", "dispensacoes", "dispensacoes_por_1000_hab"]
+        ],
         use_container_width=True,
     )
 
@@ -287,8 +304,10 @@ with tab1:
 with tab2:
     st.subheader("Correlação entre Temperatura e Dispensação de Antimicrobianos")
     st.write(
-        "A série histórica de temperatura média e precipitação do INMET comprova a hipótese da sazonalidade: "
-        "a queda de temperatura durante o inverno induz picos acentuados no consumo de antibióticos."
+        "Hipótese: meses mais frios teriam mais dispensação de antimicrobianos. O gráfico cruza o volume "
+        "mensal com a temperatura média do INMET para testar isso. Em 2020 a série é afetada pela pandemia "
+        "(queda em abril com o isolamento), e na visão nacional a temperatura é a média das UFs, que mistura "
+        "regiões com e sem inverno marcado. Filtrar uma UF do Sul dá uma leitura mais limpa."
     )
 
     df_clima, is_mock2, err2 = carregar_dados_clima(uf_filtro)
@@ -310,7 +329,7 @@ with tab2:
         fig_dual.add_trace(go.Bar(
             x=df_clima["id_periodo"],
             y=df_clima["volume_antimicrobianos"],
-            name="Volume de Antimicrobianos",
+            name="Embalagens de antimicrobianos",
             marker_color="rgba(55, 128, 191, 0.7)",
             yaxis="y",
         ))
@@ -324,8 +343,8 @@ with tab2:
         ))
         fig_dual.update_layout(
             title="Evolução Mensal: Demanda de Antimicrobianos vs. Temperatura Média",
-            xaxis=dict(title="Período (Ano/Mês)"),
-            yaxis=dict(title="Unidades Dispensadas", side="left"),
+            xaxis=dict(title="Período (Ano/Mês)", type="category"),
+            yaxis=dict(title="Embalagens (caixas/frascos)", side="left"),
             yaxis2=dict(title="Temperatura (°C)", overlaying="y", side="right"),
             height=400,
             legend=dict(x=0.01, y=0.99),
@@ -340,17 +359,23 @@ with tab2:
             y="volume_antimicrobianos",
             trendline="ols",
             title="Dispersão: Temp. vs Volume",
-            labels={"temp_media_c": "Temp. Média (°C)", "volume_antimicrobianos": "Volume Dispensado"},
+            labels={"temp_media_c": "Temp. Média (°C)", "volume_antimicrobianos": "Embalagens dispensadas"},
         )
         fig_scatter.update_layout(height=400)
         st.plotly_chart(fig_scatter, use_container_width=True)
 
     corr = df_clima["temp_media_c"].corr(df_clima["volume_antimicrobianos"])
+    if pd.isna(corr):
+        leitura = "Sem dados suficientes"
+    else:
+        forca = "forte" if abs(corr) >= 0.7 else "moderada" if abs(corr) >= 0.4 else "fraca"
+        sentido = "negativa (mais frio, mais antimicrobiano)" if corr < 0 else "positiva (mais calor, mais antimicrobiano)"
+        leitura = f"Correlação {forca} {sentido}"
     st.metric(
-        label="Coeficiente de Correlação de Pearson (Temperatura x Antimicrobianos)",
-        value=f"{corr:.2f}",
-        delta="Correlação Inversa Forte" if corr < -0.7 else "Correlação Moderada",
-        delta_color="inverse",
+        label=f"Correlação de Pearson, temperatura x antimicrobianos ({len(df_clima)} meses)",
+        value="—" if pd.isna(corr) else f"{corr:.2f}",
+        delta=leitura,
+        delta_color="off",
     )
 
 # -----------------------------------------------------------------------------
@@ -382,7 +407,7 @@ with tab3:
             x="volume_dispensado",
             y="cid_descricao",
             orientation="h",
-            labels={"volume_dispensado": "Volume Dispensado", "cid_descricao": "Condição Diagnóstica (CID-10)"},
+            labels={"volume_dispensado": "Embalagens dispensadas", "cid_descricao": "Condição Diagnóstica (CID-10)"},
             color="volume_dispensado",
             color_continuous_scale="Teal",
         )

@@ -137,4 +137,4 @@ dashboard:
 	docker compose up dashboard
 
 benchmark-painel:
-	docker compose run --rm dashboard python scripts/benchmark_painel.py
+	docker compose run --rm dashboard sh -c "pip install -q -r src/dashboard/requirements.txt && python scripts/benchmark_painel.py"
