@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 otimizar-performance benchmark-performance checar-freshness test-freshness test-freshness-airflow airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha test-qualidade dashboard benchmark-painel
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 otimizar-performance benchmark-performance checar-freshness test-dbt test-freshness test-freshness-airflow airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha test-qualidade dashboard benchmark-painel
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -98,6 +98,10 @@ benchmark-performance:
 # Freshness da tabela de consumo (padrão: fato_venda_medicamento). Ex.: make checar-freshness TABELA=fato_venda_medicamento
 checar-freshness:
 	bash ./scripts/checar_freshness.sh $(TABELA)
+
+# Pipeline dbt em banco temporário: build, linhagem e fato incremental (gera docs/evidencias/dbt.txt)
+test-dbt:
+	bash ./test_dbt.sh
 
 # Prova do atraso induzido (gera docs/evidencias/freshness.txt)
 test-freshness:
