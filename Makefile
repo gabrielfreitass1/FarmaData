@@ -130,3 +130,11 @@ airflow-falha:
 
 airflow-sem-falha:
 	$(AIRFLOW) exec airflow airflow variables delete farmadata_falha_injetada
+
+# Painel Analítico e Benchmark (Issue #30)
+dashboard:
+	docker compose up -d db
+	docker compose up dashboard
+
+benchmark-painel:
+	docker compose run --rm dashboard sh -c "pip install -q -r src/dashboard/requirements.txt duckdb==1.1.3 && python scripts/benchmark_painel.py"

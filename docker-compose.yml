@@ -81,6 +81,24 @@ services:
     command: ["sh", "-c", "python exportar_delta.py && python compactar_delta.py && python validar_duckdb.py"]
     restart: "no"
 
+  # ---------------------------------------------------------------------------
+  # Painel Analítico Streamlit (Issue #30)
+  # ---------------------------------------------------------------------------
+  dashboard:
+    image: python:3.12-slim
+    container_name: farmadata_dashboard
+    working_dir: /app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+      - pip_cache:/root/.cache/pip
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
+    command: >
+      sh -c "pip install -q -r src/dashboard/requirements.txt && streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true"
+    restart: "no"
+
 volumes:
   pgdata:
   node_modules:

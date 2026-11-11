@@ -3,7 +3,7 @@
 > Projeto da disciplina Sistemas de Bancos de Dados 2 — UnB.  
 > Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, ano configurável).
 
-**Pergunta de gestão:** Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em um ano, e como esses padrões se distribuem por região e faixa etária?
+**Pergunta de gestão:** Quais princípios ativos, classes terapêuticas e municípios concentram o maior volume de dispensações no Brasil, e de que forma indicadores demográficos per capita (IBGE População e Faixa Etária), condições clínicas diagnósticas (DATASUS CID-10) e dinâmicas meteorológicas sazonais (INMET Temperatura e Precipitação) explicam os padrões territoriais e os picos de consumo?
 
 ---
 
@@ -30,8 +30,9 @@
 ### Decisões Arquiteturais (ADRs)
 * [ADR-001: Modelagem do Sistema de Origem FarmaData](docs/adr/ADR-001.md)
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-002.md)
-* [ADR-003: Dado atrasado e janela da dispensação](docs/adr/ADR-003.md)
+* [ADR-003: Realocar eventos atrasados para o período da dispensação](docs/adr/ADR-003.md)
 * [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](docs/adr/ADR-004.md)
+* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](docs/adr/ADR-005.md)
 
 ### Execução e Arquitetura
 * [Diário de Bordo (Semanas 7 a 13)](docs/diario/DIARIO_DE_BORDO.md)
