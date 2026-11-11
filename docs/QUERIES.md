@@ -150,3 +150,41 @@ ORDER BY f.populacao DESC;
 ```
 
 Insight Analítico: A importação da pirâmide etária do IBGE revela que o DF tem uma forte concentração populacional entre os 20 e 49 anos, e uma base estreita (queda de natalidade em 0-4 anos). Isto viabiliza a transformação do volume absoluto de vendas de antimicrobianos (Query 5) em taxas de consumo proporcional por habitante de cada faixa etária, revelando o verdadeiro padrão de medicalização da população.
+
+## 11. Consulta principal da camada de consumo (Esquema Estrela — E3 / Issue #28)
+
+Responde de forma integrada à pergunta de gestão da E1 sobre o modelo dimensional (`fato_venda_medicamento` + `dim_tempo` + `dim_municipio` SCD2 + `dim_medicamento`), otimizada para execução via *Index-Only Scan* (`Heap Fetches: 0`) e agregação em memória sem *spill to disk* (análise completa em [`docs/performance/RELATORIO_PERFORMANCE.md`](performance/RELATORIO_PERFORMANCE.md)):
+
+```sql
+SELECT
+    t.ano,
+    t.mes,
+    t.trimestre,
+    dm.regiao,
+    dm.sigla_uf,
+    dm.nome_municipio,
+    m.principio_ativo,
+    CASE
+        WHEN f.idade_paciente < 12 THEN '0-11 (criança)'
+        WHEN f.idade_paciente < 18 THEN '12-17 (adolescente)'
+        WHEN f.idade_paciente < 60 THEN '18-59 (adulto)'
+        ELSE '60+ (idoso)'
+    END AS faixa_etaria,
+    SUM(f.quantidade_vendida) AS volume_total_dispensado,
+    COUNT(*) AS total_dispensacoes
+FROM fato_venda_medicamento f
+JOIN dim_tempo t        ON t.sk_tempo = f.sk_tempo
+JOIN dim_municipio dm   ON dm.sk_municipio = f.sk_municipio
+JOIN dim_medicamento m  ON m.sk_medicamento = f.sk_medicamento
+WHERE f.eh_antimicrobiano = TRUE
+  AND f.idade_paciente IS NOT NULL
+  AND t.ano = 2020
+  AND dm.regiao = 'Sudeste'
+GROUP BY
+    t.ano, t.mes, t.trimestre,
+    dm.regiao, dm.sigla_uf, dm.nome_municipio,
+    m.principio_ativo,
+    faixa_etaria
+ORDER BY volume_total_dispensado DESC
+LIMIT 50;
+```

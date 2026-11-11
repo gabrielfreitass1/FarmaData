@@ -1,0 +1,22 @@
+=== Suíte de qualidade FarmaData | 2026-11-10T19:02:32-03:00 | mínimo=1000000 ===
+psql:<stdin>:57: NOTICE:  Constraints de chave, dimensões e domínios estáticos: OK
+DO
+SELECT 12
+SELECT 12
+psql:<stdin>:100: NOTICE:  Domínios de venda/fato e relacionamentos das chaves substitutas: OK
+DO
+Volume mínimo: 68264756 / 1000000
+ ?column? 
+----------
+        1
+(1 row)
+
+CREATE TABLE
+CREATE FUNCTION
+DO
+psql:<stdin>:143: NOTICE:  Distribuição mensal: OK (12 meses; nenhum desvio relativo >= 40% da mediana)
+DO
+psql:<stdin>:158: NOTICE:  Teste negativo: queda de 50% detectada em 202005 pelo mesmo detector da série real
+psql:<stdin>:167: NOTICE:  Origem/fato dimensional: OK (68264756 / 68264756)
+DO
+RESULTADO: APROVADO

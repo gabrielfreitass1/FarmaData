@@ -1,6 +1,6 @@
 # Orquestração do pipeline — Apache Airflow
 
-DAG: [`airflow/dags/farmadata_pipeline.py`](../../airflow/dags/farmadata_pipeline.py) · Airflow 2.10.5 · LocalExecutor · Docker ([`docker-compose.airflow.yml`](../../docker-compose.airflow.yml))
+DAG: [`airflow/dags/farmadata_pipeline.py`](https://github.com/gabrielfreitass1/FarmaData/blob/main/airflow/dags/farmadata_pipeline.py) · Airflow 2.10.5 · LocalExecutor · Docker ([`docker-compose.airflow.yml`](https://github.com/gabrielfreitass1/FarmaData/blob/main/docker-compose.airflow.yml))
 
 Todas as evidências desta página foram geradas no Docker (container `farmadata_airflow`), em 08/11/2026.
 
@@ -97,7 +97,7 @@ AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTT
 | Recuperação: tentativas 1 e 2 em vermelho, 3 em verde | ![](img/02b_retry_recuperado_log.png) |
 | Gantt: intervalos crescentes entre tentativas, downstream só depois do sucesso | ![](img/02c_retry_gantt.png) |
 
-Logs: [`logs/retry_202001_cli.txt`](logs/retry_202001_cli.txt) (saída da CLI) e [`logs/retry_202001/`](logs/retry_202001/) (cada tentativa).
+Logs: [`logs/retry_202001_cli.txt`](logs/retry_202001_cli.txt) (saída da CLI) e [`logs/retry_202001/`](https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/retry_202001) (cada tentativa).
 
 ## 4. Evidência — backfill histórico (jan–jun/2020)
 
@@ -129,7 +129,7 @@ airflow dags backfill farmadata_pipeline -s 2020-01-01 -e 2020-06-01 --reset-dag
 
 Arquivos:
 - [`logs/backfill_cli.txt`](logs/backfill_cli.txt): saída completa da CLI.
-- [`logs/backfill_202003/`](logs/backfill_202003/): logs por task e tentativa do mês com retry.
+- [`logs/backfill_202003/`](https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/backfill_202003): logs por task e tentativa do mês com retry.
 - [`logs/estado_pos_backfill.txt`](logs/estado_pos_backfill.txt): `list-runs`, tentativas por task instance, `carga_arquivo`, contagens venda × fato e a confirmação de que o banco `farmadata` não foi tocado.
 
 ## 5. Evidência — falha definitiva (retries esgotados + alerta de falha)
@@ -150,7 +150,7 @@ Depois disso, `extrair_sngpc`, `transformar_modelo_dimensional` e `validar_quali
 | 4 tentativas em vermelho; log da última com `[ALERTA FALHA]` | ![](img/04a_falha_definitiva_log.png) |
 | Gantt das 4 tentativas | ![](img/04b_falha_definitiva_gantt.png) |
 
-Logs: [`logs/falha_definitiva_202007_cli.txt`](logs/falha_definitiva_202007_cli.txt) e [`logs/falha_definitiva_202007/`](logs/falha_definitiva_202007/).
+Logs: [`logs/falha_definitiva_202007_cli.txt`](logs/falha_definitiva_202007_cli.txt) e [`logs/falha_definitiva_202007/`](https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/falha_definitiva_202007).
 
 ## 6. Como reproduzir (Docker)
 
@@ -180,8 +180,8 @@ No Windows com Git Bash, o `MSYS_NO_PATHCONV=1` é necessário. Sem ele, o Git B
 
 Para usar os dados reais, rode `make airflow-up`. Ele aponta para o banco `farmadata` e baixa os CSVs da Anvisa para `tmp/`.
 
-Há também um script sem Docker, para Linux/WSL sem root: [`airflow/local/airflow_local.sh`](../../airflow/local/airflow_local.sh).
+Há também um script sem Docker, para Linux/WSL sem root: [`airflow/local/airflow_local.sh`](https://github.com/gabrielfreitass1/FarmaData/blob/main/airflow/local/airflow_local.sh).
 
 ## 7. Escopo da evidência
 
-- As execuções usaram as fixtures [`scripts/fixtures/orquestracao/`](../../scripts/fixtures/orquestracao/) (de 4 a 5 dispensações por mês), num banco de testes separado (`farmadata_orquestracao`), e não os CSVs completos da Anvisa (centenas de MB por mês). O código executado é o mesmo que roda com os dados reais. Mudam apenas `FARMADATA_SNGPC_DIR` e `FARMADATA_DB`.
+- As execuções usaram as fixtures [`scripts/fixtures/orquestracao/`](https://github.com/gabrielfreitass1/FarmaData/tree/main/scripts/fixtures/orquestracao) (de 4 a 5 dispensações por mês), num banco de testes separado (`farmadata_orquestracao`), e não os CSVs completos da Anvisa (centenas de MB por mês). O código executado é o mesmo que roda com os dados reais. Mudam apenas `FARMADATA_SNGPC_DIR` e `FARMADATA_DB`.

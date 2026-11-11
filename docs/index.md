@@ -3,7 +3,7 @@
 > Projeto da disciplina Sistemas de Bancos de Dados 2 — UnB.  
 > Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, ano configurável).
 
-**Pergunta de gestão:** Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em um ano, e como esses padrões se distribuem por região e faixa etária?
+**Pergunta de gestão:** Quais princípios ativos, classes terapêuticas e municípios concentram o maior volume de dispensações no Brasil, e de que forma indicadores demográficos per capita (IBGE População e Faixa Etária), condições clínicas diagnósticas (DATASUS CID-10) e dinâmicas meteorológicas sazonais (INMET Temperatura e Precipitação) explicam os padrões territoriais e os picos de consumo?
 
 <center>
 <table style="width: 100%;">
@@ -86,11 +86,16 @@
 * [Release E1 — Modelagem e Fonte Transacional (Tag e1)](entregas/E1.md)
 
 ### Arquitetura, Decisões e Execução
-* [Diário de Bordo (Semanas 7 a 10)](diario/DIARIO_DE_BORDO.md)
+* [Diário de Bordo (Semanas 7 a 13)](diario/DIARIO_DE_BORDO.md)
 * [ADR-001: Modelagem do Sistema de Origem FarmaData](adr/ADR-001.md)
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](adr/ADR-002.md)
-* [ADR-003: Dado atrasado e janela da dispensação](adr/ADR-003.md)
+* [ADR-003: Realocar eventos atrasados para o período da dispensação](adr/ADR-003.md)
+* [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](adr/ADR-004.md)
+* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](adr/ADR-005.md)
+* [Modelo Dimensional e SCD2](MODELO_DIMENSIONAL.md)
+* [Orquestração (Airflow)](orchestration/README.md)
 * [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)
+* [Otimização de Performance e Planos de Execução](performance/RELATORIO_PERFORMANCE.md)
 * [Bases Públicas Complementares](BASES_PUBLICAS.md)
 * [Arquitetura](ARQUITETURA.md)
 * [Captura de Mudanças (CDC)](CDC.md)
@@ -136,7 +141,7 @@ make lakehouse        # exporta para data/lakehouse/delta, compacta e valida com
 make lakehouse-bench  # benchmark de layout antes/depois
 ```
 
-Detalhes e justificativas em [`docs/CAMADA_ANALITICA.md`](docs/CAMADA_ANALITICA.md).
+Detalhes e justificativas em [Camada Analítica](CAMADA_ANALITICA.md).
 
 ---
 
@@ -248,7 +253,7 @@ de linhas gera bloat — a evolução natural é particionar `venda_medicamento`
 
 ## Dado atrasado
 
-A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Decisão e motivos em [`docs/adr/ADR-003-dado-atrasado.md`](docs/adr/ADR-003-dado-atrasado.md).
+A janela da linha é o mês da venda (`nu_ano_venda`, `nu_mes_venda`), não o mês do CSV. Decisão e motivos em [ADR-003](adr/ADR-003.md).
 
 | Situação | O que a carga faz |
 |---|---|

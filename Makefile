@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 checar-freshness test-freshness test-freshness-airflow airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 otimizar-performance benchmark-performance checar-freshness test-freshness test-freshness-airflow airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha test-qualidade dashboard benchmark-painel
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -77,6 +77,24 @@ modelo-dimensional:
 test-scd2:
 	bash ./test_scd2_municipio.sh
 
+# Suíte estrutural, domínio, volume e anomalia estatística; gera log versionável.
+test-qualidade:
+	MIN_VENDAS=$(or $(MIN_VENDAS),1000000) bash ./tests/test_qualidade.sh
+
+# Otimização de performance da camada de consumo (issue #28). Reaplica sql/11 (idempotente:
+# garante sk_* persistida em periodo/medicamento num banco criado antes da emenda ao ADR-004),
+# cria os índices do sql/14 e atualiza o Visibility Map. Não rode durante uma carga
+# (CREATE INDEX bloqueia escritas na fato).
+otimizar-performance:
+	docker compose exec -T db psql -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-farmadata} -v ON_ERROR_STOP=1 -q < sql/11_dimensional_dim_municipio_scd.sql
+	docker compose exec -T db psql -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-farmadata} -v ON_ERROR_STOP=1 -q < sql/14_otimizacao_performance.sql
+	docker compose exec -T db psql -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-farmadata} -v ON_ERROR_STOP=1 -c "SET max_parallel_maintenance_workers = 0;" -c "VACUUM fato_venda_medicamento;"
+
+# Reproduz planos de execução (docs/performance/explain_before.txt e explain_after.txt).
+# O "antes" roda dentro de BEGIN ... ROLLBACK: o banco real não é alterado.
+benchmark-performance:
+	bash ./scripts/gerar_explain_performance.sh
+
 # Freshness da tabela de consumo (padrão: fato_venda_medicamento). Ex.: make checar-freshness TABELA=fato_venda_medicamento
 checar-freshness:
 	bash ./scripts/checar_freshness.sh $(TABELA)
@@ -116,3 +134,11 @@ airflow-falha:
 
 airflow-sem-falha:
 	$(AIRFLOW) exec airflow airflow variables delete farmadata_falha_injetada
+
+# Painel Analítico e Benchmark (Issue #30)
+dashboard:
+	docker compose up -d db
+	docker compose up dashboard
+
+benchmark-painel:
+	docker compose run --rm dashboard sh -c "pip install -q -r src/dashboard/requirements.txt duckdb==1.1.3 && python scripts/benchmark_painel.py"

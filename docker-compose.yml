@@ -29,6 +29,7 @@ services:
       - ./sql/11_dimensional_dim_municipio_scd.sql:/docker-entrypoint-initdb.d/11_dimensional_dim_municipio_scd.sql:ro
       - ./sql/12_dimensional_fato_venda.sql:/docker-entrypoint-initdb.d/12_dimensional_fato_venda.sql:ro
       - ./sql/13_controle_build.sql:/docker-entrypoint-initdb.d/13_controle_build.sql:ro
+      - ./sql/14_otimizacao_performance.sql:/docker-entrypoint-initdb.d/14_otimizacao_performance.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-farmadata}"]
       interval: 10s
@@ -78,6 +79,24 @@ services:
       LAKEHOUSE_DIR: /app/data/lakehouse
     entrypoint: ["sh", "-c", "pip install -q -r scripts/lakehouse/requirements.txt && cd scripts/lakehouse && exec \"$$@\"", "--"]
     command: ["sh", "-c", "python exportar_delta.py && python compactar_delta.py && python validar_duckdb.py"]
+    restart: "no"
+
+  # ---------------------------------------------------------------------------
+  # Painel Analítico Streamlit (Issue #30)
+  # ---------------------------------------------------------------------------
+  dashboard:
+    image: python:3.12-slim
+    container_name: farmadata_dashboard
+    working_dir: /app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+      - pip_cache:/root/.cache/pip
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
+    command: >
+      sh -c "pip install -q -r src/dashboard/requirements.txt && streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true"
     restart: "no"
 
 volumes:

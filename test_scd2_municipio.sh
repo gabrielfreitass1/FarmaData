@@ -20,7 +20,7 @@ ID_MUNICIPIO=999001
 mkdir -p docs/evidencias
 exec > >(tee docs/evidencias/scd2.txt) 2>&1
 
-Q() { docker compose exec -T db psql -U "$PGU" -d "$PGD" -v ON_ERROR_STOP=1 -tA -c "$1"; }
+Q() { docker compose exec -T db psql -U "$PGU" -d "$PGD" -v ON_ERROR_STOP=1 -q -tA -c "$1"; }
 
 limpar() {
   docker compose exec -T db psql -U "$PGU" -d postgres -v ON_ERROR_STOP=1 -c \
@@ -54,6 +54,33 @@ do
   docker compose exec -T db psql -U "$PGU" -d "$PGD" -v ON_ERROR_STOP=1 \
     -f "/docker-entrypoint-initdb.d/${f}" >/dev/null
 done
+
+# Idempotência da camada dimensional (issue #28): sql/11 (sk_* persistida em
+# periodo/medicamento + views), sql/12, sql/13 e sql/14 (índices) reaplicados
+# duas vezes sobre o banco já criado, inclusive sql/11 depois de sql/14.
+for rodada in 1 2; do
+  for f in 11_dimensional_dim_municipio_scd.sql 12_dimensional_fato_venda.sql 13_controle_build.sql 14_otimizacao_performance.sql; do
+    docker compose exec -T -e PGOPTIONS="-c client_min_messages=warning" db \
+      psql -U "$PGU" -d "$PGD" -v ON_ERROR_STOP=1 -q < "sql/$f"
+  done
+done
+echo "[idempotência] sql/11, 12, 13 e 14 aplicados duas vezes sem erro ✓"
+echo "  dim_tempo.sk_tempo: $(Q "SELECT format_type(atttypid, atttypmod) FROM pg_attribute WHERE attrelid = 'dim_tempo'::regclass AND attname = 'sk_tempo';")"
+echo "  dim_medicamento.sk_medicamento: $(Q "SELECT format_type(atttypid, atttypmod) FROM pg_attribute WHERE attrelid = 'dim_medicamento'::regclass AND attname = 'sk_medicamento';")"
+
+# Coluna gerada não aceita valor explícito: a carga (carregar_sngpc.js) insere
+# em medicamento/periodo com lista de colunas, então a sk_* é gerada sozinha.
+MED="$(Q "INSERT INTO medicamento (principio_ativo, descricao_apresentacao) VALUES ('TESTE_SK', 'TESTE_SK') RETURNING id_medicamento || '|' || length(sk_medicamento) || '|' || (sk_medicamento = md5('medicamento|' || id_medicamento));")"
+PER="$(Q "INSERT INTO periodo (id_periodo, ano, mes, nome_mes, trimestre, semestre, data_inicio, data_fim) VALUES (209901, 2099, 1, 'Janeiro', 1, 1, '2099-01-01', '2099-01-31') RETURNING length(sk_tempo) || '|' || (sk_tempo = md5('tempo|209901'));")"
+echo "  INSERT medicamento (lista de colunas) -> id|len(sk)|sk=md5: ${MED}"
+echo "  INSERT periodo (lista de colunas)     -> len(sk)|sk=md5: ${PER}"
+if [[ "$MED" == *"|32|true" ]] && [ "$PER" = "32|true" ]; then
+  echo "[colunas geradas] sk_medicamento e sk_tempo gerados automaticamente ✓"
+else
+  echo "[colunas geradas] divergência"
+  exit 1
+fi
+echo
 
 echo "[1] Município de teste: insere e aplica SCD2 (1a versão)"
 Q "INSERT INTO municipio (id_municipio, nome_municipio, sigla_uf, codigo_ibge) VALUES (${ID_MUNICIPIO}, 'Vila Antiga', 'GO', 5200001) ON CONFLICT DO NOTHING;" >/dev/null
