@@ -1,4 +1,4 @@
-.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 otimizar-performance benchmark-performance checar-freshness test-freshness airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha
+.PHONY: up down logs ps psql carga reset carga-sngpc carga-incremental test-idempotencia test-idempotencia-dimensoes simular-atraso reprocessar-janela lakehouse lakehouse-export lakehouse-compact lakehouse-validate lakehouse-bench modelo-dimensional test-scd2 otimizar-performance benchmark-performance checar-freshness test-freshness airflow-up airflow-demo airflow-down airflow-backfill airflow-falha airflow-sem-falha test-qualidade
 
 # Sobe o banco + roda a carga (build implícito, detached)
 up:
@@ -76,6 +76,10 @@ modelo-dimensional:
 # Prova de versionamento SCD2 em dim_municipio (gera docs/evidencias/scd2.txt)
 test-scd2:
 	bash ./test_scd2_municipio.sh
+
+# Suíte estrutural, domínio, volume e anomalia estatística; gera log versionável.
+test-qualidade:
+	MIN_VENDAS=$(or $(MIN_VENDAS),1000000) bash ./tests/test_qualidade.sh
 
 # Otimização de performance da camada de consumo (issue #28). Reaplica sql/11 (idempotente:
 # garante sk_* persistida em periodo/medicamento num banco criado antes da emenda ao ADR-004),

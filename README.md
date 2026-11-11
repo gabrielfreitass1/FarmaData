@@ -39,6 +39,7 @@
 * [Captura de Mudanças no OLTP — CDC](docs/CDC.md)
 * [Camada Analítica Lakehouse e Benchmark](docs/CAMADA_ANALITICA.md)
 * [Modelo Dimensional e SCD2](docs/MODELO_DIMENSIONAL.md)
+* [Suíte de Qualidade dos Dados](docs/QUALIDADE_DADOS.md)
 * [Otimização de Performance e Planos de Execução (EXPLAIN)](docs/performance/RELATORIO_PERFORMANCE.md)
 * [Orquestração (Airflow): retry, backfill e evidências](docs/orchestration/README.md)
 * [Bases Públicas Complementares](docs/BASES_PUBLICAS.md)
