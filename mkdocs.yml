@@ -1,6 +1,6 @@
 
-site_name: Documentação do Projeto
-site_description: Documentação técnica do projeto
+site_name: FarmaData
+site_description: Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)
 site_author: Equipe de desenvolvimento
 
 theme:
@@ -41,6 +41,8 @@ nav:
   - Camada Analítica: CAMADA_ANALITICA.md
   - Modelo Dimensional: MODELO_DIMENSIONAL.md
   - Qualidade dos Dados: QUALIDADE_DADOS.md
+  - Otimização de Performance: performance/RELATORIO_PERFORMANCE.md
+  - Orquestração: orchestration/README.md
   - Consultas: QUERIES.md
   - Arquitetura: ARQUITETURA.md
   

@@ -1,0 +1,23 @@
+name: freshness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Teste de freshness (atraso induzido dispara WARN e ERRO)
+        run: make test-freshness
+
+      - name: Guardar a evidência
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: freshness-evidencia
+          path: docs/evidencias/freshness.txt
