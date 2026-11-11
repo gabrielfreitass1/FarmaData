@@ -19,6 +19,7 @@ models:
         +materialized: incremental
         +incremental_strategy: delete+insert
         +unique_key: arquivo_origem
+        +on_schema_change: fail
         +indexes:
           - columns: [id_venda]
             unique: true
