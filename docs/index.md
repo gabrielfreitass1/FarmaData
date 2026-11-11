@@ -132,6 +132,21 @@ POSTGRES_PORT=5432
 ANO_RECORTE=2020
 ```
 
+### Painel analítico (Streamlit)
+
+Com a carga terminada (`docker compose logs -f carga` até o container sair):
+
+```bash
+make modelo-dimensional   # constrói dim_municipio (SCD2) e fato_venda_medicamento
+make dashboard            # sobe o painel em http://localhost:8501
+```
+
+- Sem `make modelo-dimensional`, a fato fica vazia e o painel mostra **ERRO de freshness** em vez dos gráficos (a regra trata tabela nunca construída como ERRO).
+- Na primeira abertura, a aba de clima leva cerca de 50 s (consulta sobre 68 milhões de linhas); depois o cache responde da memória por 1 hora.
+- Sem `make` (Windows sem Git Bash/WSL): `docker compose up -d db` e depois `docker compose up dashboard`.
+
+Decisão e benchmark em [`docs/adr/ADR-005.md`](docs/adr/ADR-005.md).
+
 ### Camada analítica (Delta Lake + Parquet)
 
 Com o banco já carregado:
