@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FarmaData — Apresentação Entrega 3 (E3)</title>
+  <!-- Reveal.js CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme">
+  <!-- Highlight.js theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+  <style>
+    :root {
+      --r-background-color: #0d1117;
+      --r-main-color: #e6edf3;
+      --r-heading-color: #58a6ff;
+      --r-link-color: #2f81f7;
+      --accent-green: #3fb950;
+      --accent-orange: #d29922;
+      --accent-red: #f85149;
+      --card-bg: #161b22;
+      --border-color: #30363d;
+    }
+    .reveal {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    }
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .reveal h1 { font-size: 2.2em; color: #58a6ff; }
+    .reveal h2 { font-size: 1.5em; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px; }
+    .reveal h3 { font-size: 1.1em; color: var(--accent-orange); }
+
+    /* Custom layout helpers */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 0.55em;
+      font-weight: 600;
+      border-radius: 20px;
+      background: rgba(56, 139, 253, 0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(56, 139, 253, 0.4);
+      margin-bottom: 12px;
+      vertical-align: middle;
+    }
+    .badge-green {
+      background: rgba(63, 185, 80, 0.15);
+      color: #3fb950;
+      border-color: rgba(63, 185, 80, 0.4);
+    }
+    .badge-orange {
+      background: rgba(210, 153, 34, 0.15);
+      color: #d29922;
+      border-color: rgba(210, 153, 34, 0.4);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      text-align: left;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      text-align: left;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 0.75em;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .card-title {
+      font-weight: 600;
+      color: #58a6ff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p, .card ul {
+      margin: 0;
+      line-height: 1.45;
+      color: #8b949e;
+    }
+    .card ul {
+      padding-left: 20px;
+    }
+    .card strong {
+      color: #c9d1d9;
+    }
+
+    /* Metric callouts */
+    .metric-hero {
+      text-align: center;
+      padding: 15px;
+      background: #161b22;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    .metric-value {
+      font-size: 2.2em;
+      font-weight: 800;
+      color: var(--accent-green);
+      line-height: 1.1;
+    }
+    .metric-label {
+      font-size: 0.65em;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Tables */
+    .reveal table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.62em;
+      margin: 10px 0;
+    }
+    .reveal th {
+      background: #161b22;
+      color: #58a6ff;
+      border-bottom: 2px solid var(--border-color);
+      padding: 8px 12px;
+    }
+    .reveal td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #21262d;
+      color: #c9d1d9;
+    }
+    .reveal tr:hover td {
+      background: rgba(56, 139, 253, 0.05);
+    }
+
+    /* Quotes */
+    .callout-quote {
+      background: rgba(56, 139, 253, 0.08);
+      border-left: 4px solid #58a6ff;
+      padding: 12px 18px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.78em;
+      font-style: italic;
+      color: #e6edf3;
+      text-align: left;
+      margin: 15px 0;
+    }
+
+    .footer-note {
+      position: absolute;
+      bottom: 20px;
+      left: 30px;
+      font-size: 0.45em;
+      color: #484f58;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- SLIDE 1: Capa -->
+      <section data-background-gradient="linear-gradient(to bottom, #0d1117, #161b22)">
+        <span class="badge badge-green">Entrega 3 (E3) • Tag: e3</span>
+        <h1>FarmaData</h1>
+        <h3 style="color: #c9d1d9; font-weight: 400; font-size: 1.1em; margin-top: 10px;">
+          Camada Analítica Transformada, Testada e Orquestrada
+        </h3>
+        <p style="font-size: 0.65em; color: #8b949e; margin-top: 30px;">
+          <strong>Disciplina:</strong> Sistemas de Bancos de Dados 2 • UnB<br>
+          <strong>Equipe:</strong> Ruan Carvalho, Gabriel Freitas, Eduardo Morais, João Pedro Moraes, João Paulo Lima, Paola Rebeca, Pedro Augusto
+        </p>
+        <div class="footer-note">Repositório: github.com/gabrielfreitass1/FarmaData</div>
+      </section>
+
+      <!-- SLIDE 2: Pergunta de Gestão e Contexto -->
+      <section>
+        <span class="badge">A Pergunta de Gestão</span>
+        <h2>Da E1 ao Consumo Analítico</h2>
+        
+        <div class="callout-quote">
+          "Quais classes terapêuticas e municípios concentram a demanda de medicamentos controlados e antimicrobianos, e de que forma indicadores demográficos per capita (IBGE), dinâmicas meteorológicas sazonais (INMET) e diagnósticos clínicos (CID-10) explicam anomalias e picos de consumo?"
+        </div>
+
+        <div class="grid-3" style="margin-top: 25px;">
+          <div class="card">
+            <div class="card-title">📦 Entrega 1 (OLTP)</div>
+            <p>Ingestão normalizada em 3FN dos CSVs SNGPC/Anvisa com integridade relacional estrita.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">⚡ Entrega 2 (Lakehouse)</div>
+            <p>Camada analítica aberta em Delta Lake/Parquet com DuckDB e compactação para grandes varreduras.</p>
+          </div>
+          <div class="card" style="border-color: var(--accent-green);">
+            <div class="card-title" style="color: var(--accent-green);">🎯 Entrega 3 (Consumo)</div>
+            <p>Modelo dimensional estrela (SCD2), testes estatísticos, orquestração Airflow e painel interativo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Modelo Dimensional & Kimball -->
+      <section>
+        <span class="badge">Modelagem Dimensional</span>
+        <h2>Esquema Estrela & Granularidade</h2>
+
+        <div class="callout-quote" style="border-left-color: var(--accent-orange);">
+          <strong>Declaração de Granularidade por Extenso:</strong><br>
+          "Uma linha em <code>fato_venda_medicamento</code> = uma dispensação (venda) de medicamento registrada no SNGPC/Anvisa, atribuída à versão do município (geografia/nome) vigente na data da venda."
+        </div>
+
+        <div class="grid-2" style="margin-top: 20px;">
+          <div class="card">
+            <div class="card-title">⭐ Fato Atômica (Sem Dupla Contagem)</div>
+            <ul>
+              <li><strong>6.143.427 registros</strong> no mês de corte (Jan/2020)</li>
+              <li>Grão preservado: 1 dispensação = 1 linha</li>
+              <li>Elimina fan-out e distorção em agregações por UF ou Região</li>
+              <li>Surrogate Keys em <code>CHAR(32)</code> via <code>sk_hash()</code></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🧩 Dimensões Conformadas</div>
+            <ul>
+              <li><code>dim_tempo</code>: <code>id_periodo</code>, ano, mês, trimestre</li>
+              <li><code>dim_medicamento</code>: substância ativa, apresentação</li>
+              <li><code>dim_conselho</code> / <code>dim_tipo_receituario</code> / <code>dim_unidade_medida</code></li>
+              <li>Views leves sobre o modelo transacional da E1</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Dimensão de Variação Lenta (SCD Tipo 2) -->
+      <section>
+        <span class="badge badge-orange">Preservação Histórica</span>
+        <h2>SCD Tipo 2: <code>dim_municipio</code></h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🏛️ Por que Município no Domínio Público?</div>
+            <p>O IBGE altera periodicamente limites territoriais, desmembra distritos e renomeia municípios.</p>
+            <p style="margin-top: 10px;">Sobrescrever o município apagaria a série histórica retroativamente, gerando distorções estatísticas irreversíveis.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">⚙️ Mecanismo de Versionamento</div>
+            <ul>
+              <li>Atributos de controle: <code>valid_from</code>, <code>valid_to</code>, <code>is_current</code></li>
+              <li>Função idempotente: <code>aplicar_scd2_municipio()</code></li>
+              <li>Join temporal estrito na recarga da fato:
+                <br><code>v.data_venda &gt;= dm.valid_from AND v.data_venda &lt; COALESCE(dm.valid_to, 'infinity')</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px; text-align: center;">
+          <strong style="color: var(--accent-green);">Evidência Comprovada:</strong> <code>make test-scd2</code> simula a alteração de nome de município em data histórica e valida que vendas passadas permanecem ligadas à versão antiga, enquanto novas vendas apontam para a versão corrente.
+        </div>
+      </section>
+
+      <!-- SLIDE 5: Suíte de Qualidade dos Dados -->
+      <section>
+        <span class="badge badge-green">Confiabilidade & Governança</span>
+        <h2>Suíte de Qualidade dos Dados</h2>
+
+        <p style="font-size: 0.7em; color: #8b949e; text-align: left;">
+          Executável via <code>make test-qualidade</code> e automatizada no GitHub Actions CI/CD.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Categoria</th>
+              <th>O que testa no domínio FarmaData</th>
+              <th>Impacto Técnico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Esquema & Unicidade</strong></td>
+              <td>Constraints de PK, integridade de índices únicos e SKs</td>
+              <td>Previne duplicação silenciosa</td>
+            </tr>
+            <tr>
+              <td><strong>Integridade Referencial</strong></td>
+              <td>FKs validadas entre Fato e Dimensões</td>
+              <td>Zero órfãos no modelo dimensional</td>
+            </tr>
+            <tr>
+              <td><strong>Domínio & Negócio</strong></td>
+              <td>Quantidade &gt; 0, campos de antimicrobianos (CID-10, idade, sexo)</td>
+              <td>Barra dados corrompidos ou no futuro</td>
+            </tr>
+            <tr>
+              <td><strong>Volume</strong></td>
+              <td>Threshold mínimo (padrão: <code>MIN_VENDAS=1.000.000</code>)</td>
+              <td>Alerta se arquivo vier truncado/vazio</td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--accent-orange);">Distribuição (Estatístico)</strong></td>
+              <td><strong>Desvio &ge; 40% contra a mediana móvel do ano</strong></td>
+              <td><strong>Detecta anomalias sazonais ou perdas parciais de dados</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="card" style="margin-top: 15px;">
+          <p>🧪 <strong>Cenário Negativo Incluído:</strong> A suíte possui um teste que simula uma perda artificial de 50% de volume em um mês para provar formalmente que a asserção quebra e aborta o pipeline.</p>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: Orquestração com Apache Airflow -->
+      <section>
+        <span class="badge">Pipeline Agendado</span>
+        <h2>Orquestração com Apache Airflow</h2>
+
+        <div style="background: #161b22; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 20px;">
+          <code style="color: #58a6ff; font-size: 0.8em;">
+            verificar_fonte_sngpc ──► extrair_sngpc ──► transformar_modelo_dimensional ──► validar_qualidade
+          </code>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">📅 Agendamento</div>
+            <p>Frequência <code>@monthly</code> iniciando em <code>2020-01-01</code>. Execução serial estrita (<code>max_active_runs=1</code>) para proteger locks na recarga da fato.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">🛡️ Tolerância & Retry</div>
+            <p>4 tentativas com <strong>exponential backoff</strong> (~20s, ~40s, ~80s) e jitter. Callbacks disparam alertas estruturados em JSONL.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">🧪 Demonstração Real</div>
+            <p>Três cenários demonstrados e logados: <strong>Retry com recuperação</strong>, <strong>Backfill de 6 meses</strong> e <strong>Falha definitiva</strong>.</p>
+          </div>
+        </div>
+
+        <div class="footer-note">DAG: airflow/dags/farmadata_pipeline.py • Logs: docs/orchestration/logs/</div>
+      </section>
+
+      <!-- SLIDE 7: Evidências do Airflow -->
+      <section>
+        <span class="badge">Evidências de Orquestração</span>
+        <h2>Resiliência Comprovada na Prática</h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: var(--accent-orange);">🔥 1. Retry com Recuperação (Injeção de Falha)</div>
+            <ul>
+              <li>Injeção de HTTP 503 na Anvisa via Airflow Variable</li>
+              <li>Tentativa 1 falhou (espera 39s)</li>
+              <li>Tentativa 2 falhou (espera 79s)</li>
+              <li><strong>Tentativa 3 teve sucesso</strong> e downstream rodou normalmente</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--accent-green);">⏪ 2. Backfill Histórico (Jan–Jun/2020)</div>
+            <ul>
+              <li>Comando executado: 6 meses processados em série</li>
+              <li>Janeiro reprocessado sem duplicar registros (4 vendas mantidas)</li>
+              <li>Fato bateu 100% com a origem em todos os meses</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 15px; border-color: var(--accent-red);">
+          <div class="card-title" style="color: var(--accent-red);">🛑 3. Falha Definitiva com Bloqueio Downstream</div>
+          <p>Mês inexistente (202007) esgotou os 4 retries, disparou <code>[ALERTA FALHA]</code> e bloqueou com segurança as tasks seguintes como <code>upstream_failed</code>, impedindo dados corrompidos.</p>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: Otimização de Performance (EXPLAIN ANALYZE) -->
+      <section>
+        <span class="badge badge-green">Engenharia de Performance</span>
+        <h2>Otimização de Query (EXPLAIN BUFFERS)</h2>
+
+        <div class="callout-quote">
+          Consulta Crítica da E1: Agregação multidimensional de antimicrobianos por UF, município, período, princípio ativo e faixa etária sobre <strong>6.143.427 registros</strong> da fato.
+        </div>
+
+        <div class="grid-3" style="margin-top: 15px;">
+          <div class="metric-hero">
+            <div class="metric-value">8,1x</div>
+            <div class="metric-label">Mais Rápido (40s ➔ 4,9s)</div>
+          </div>
+          <div class="metric-hero">
+            <div class="metric-value">-73,6%</div>
+            <div class="metric-label">Leitura de Blocos de Disco</div>
+          </div>
+          <div class="metric-hero">
+            <div class="metric-value" style="color: #58a6ff;">0 MB</div>
+            <div class="metric-label">Spill em Disco (Era 1,8 GB)</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Métrica</th>
+              <th>Antes (Baseline)</th>
+              <th>Depois (Otimizado)</th>
+              <th>Ganho Real</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Execution Time</strong></td>
+              <td>39.968 ms (~40 s)</td>
+              <td><strong>4.916 ms (~4,9 s)</strong></td>
+              <td><span style="color: var(--accent-green);">-87,7%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Shared Buffers (Hit + Read)</strong></td>
+              <td>161.832 blocos (1.264 MB)</td>
+              <td><strong>42.751 blocos (334 MB)</strong></td>
+              <td><span style="color: var(--accent-green);">-73,6%</span></td>
+            </tr>
+            <tr>
+              <td><strong>Temp Disk Spill</strong></td>
+              <td>234.122 blocos (~1,8 GB)</td>
+              <td><strong>0 blocos (0 MB)</strong></td>
+              <td><span style="color: var(--accent-green);">-100%</span></td>
+            </tr>
+            <tr>
+              <td><strong>HashAggregate</strong></td>
+              <td>129 Batches em disco</td>
+              <td><strong>1 Batch (100% em RAM)</strong></td>
+              <td>Sem I/O temporário</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SLIDE 9: Estudo de Ablação da Otimização -->
+      <section>
+        <span class="badge">Isolamento de Fatores</span>
+        <h2>Estudo de Ablação: Como Otimizamos?</h2>
+
+        <p style="font-size: 0.7em; color: #8b949e; text-align: left;">
+          Aplicação incremental de 3 intervenções sobre a <strong>mesmíssima consulta SQL</strong>:
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">Fator A: Tipagem de SKs</div>
+            <p><strong>sql/11:</strong> Persistência de <code>sk_tempo</code> e <code>sk_medicamento</code> em <code>CHAR(32) STORED</code> + <code>PARALLEL SAFE</code>.</p>
+            <p style="margin-top: 8px; color: var(--accent-green);">➔ Elimina cast <code>::text</code>, erro de 31x na cardinalidade e Merge Join com Sort de 245MB. <strong>Tempo: 40s ➔ 9s</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Fator B: Índice de Cobertura</div>
+            <p><strong>sql/14:</strong> Índice B-Tree parcial composto com cláusula INCLUDE (<code>idx_fato_venda_antimicrobiano_covering</code>).</p>
+            <p style="margin-top: 8px; color: var(--accent-green);">➔ <strong>Index Only Scan (Heap Fetches: 0)</strong>. Corta 73,6% dos blocos lidos (-930 MB de disco).</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Fator C: Sessão Analítica</div>
+            <p>Alocação de <code>work_mem = '256MB'</code> e <code>jit = 'off'</code> exclusiva na sessão do painel.</p>
+            <p style="margin-top: 8px; color: var(--accent-green);">➔ Elimina o spill de 129 batches do HashAggregate. <strong>Tempo final: 4,91 s</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: SLA de Freshness & Auditoria -->
+      <section>
+        <span class="badge">Governança & SLA</span>
+        <h2>Métrica de Freshness dos Dados</h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">⏱️ Regra Formal de Freshness</div>
+            <p>Implementada na função canônica <code>checar_freshness(tabela, warn_h, erro_h)</code> em <code>sql/13_controle_build.sql</code>.</p>
+            <ul style="margin-top: 10px;">
+              <li><strong style="color: var(--accent-green);">OK:</strong> Nenhuma carga pendente ou defasagem &lt; 24h</li>
+              <li><strong style="color: var(--accent-orange);">WARN:</strong> Carga pendente entre 24h e 48h</li>
+              <li><strong style="color: var(--accent-red);">ERRO:</strong> Carga pendente &gt; 48h ou tabela nunca construída</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🛡️ Integração no Painel Streamlit</div>
+            <p>O <code>app.py</code> valida o status de freshness logo na inicialização:</p>
+            <pre><code class="language-python" style="font-size: 0.85em;">status = conn.execute(text(
+    "SELECT status FROM checar_freshness("
+    " 'fato_venda_medicamento', 24, 48)"
+)).scalar()
+if status == "ERRO":
+    st.error("SLA de Freshness violado!")
+    st.stop()</code></pre>
+            <p style="margin-top: 6px;">Impede que gestores tomem decisões baseadas em dados desatualizados.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: Decisões de Arquitetura (ADRs) -->
+      <section>
+        <span class="badge">Decisões Registradas</span>
+        <h2>Registros de Decisão (ADRs da E3)</h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">📜 ADR-004: Modelo Dimensional & SCD2</div>
+            <p><strong>Decisão:</strong> Star Schema relacional nativo no PostgreSQL com SCD2 em PL/pgSQL e surrogate keys via <code>md5()</code> determinístico.</p>
+            <p style="margin-top: 8px;"><strong>Por que não Data Vault ou OBT pura?</strong> A OBT já existia no Delta Lake (E2). O star schema relacional preserva integridade referencial, reaproveita constraints e entrega máxima compatibilidade SQL.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📜 ADR-005: Streamlit sobre Star Schema</div>
+            <p><strong>Decisão:</strong> Streamlit conectado diretamente ao PostgreSQL Star Schema via SQLAlchemy/psycopg2 com caching em memória (<code>@st.cache_data</code>).</p>
+            <p style="margin-top: 8px;"><strong>Por que não BI externo pesado?</strong> Infraestrutura leve de 1 comando (<code>make dashboard</code>), sem clusters adicionais, reduzindo latência repetida de 4,9s para <strong>&lt; 15 ms via cache</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: O Painel Analítico em Ação -->
+      <section>
+        <span class="badge badge-green">Visualização Interativa</span>
+        <h2>Painel Analítico Streamlit (<code>make dashboard</code>)</h2>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">📍 1. Territorial & IBGE</div>
+            <p><strong>Volume Absoluto vs. Taxa per Capita</strong></p>
+            <p style="margin-top: 6px;">Elimina a ilusão das metrópoles: mostra que municípios menores e polos regionais possuem consumo por habitante muito superior às capitais.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">❄️ 2. Sazonalidade INMET</div>
+            <p><strong>Temperatura vs. Antimicrobianos</strong></p>
+            <p style="margin-top: 6px;">Gráfico de eixo duplo e dispersão com regressão OLS comprovando o pico acentuado de antibióticos nos meses de inverno (queda térmica).</p>
+          </div>
+          <div class="card">
+            <div class="card-title">🩺 3. Clínica & CID-10</div>
+            <p><strong>Diagnósticos Mais Prescritos</strong></p>
+            <p style="margin-top: 6px;">Mapeamento das principais patologias vinculadas a antimicrobianos (Infecções respiratórias, Faringite, Sinusite e Trato Urinário).</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px; text-align: center; border-color: var(--accent-green);">
+          <strong style="color: var(--accent-green);">Resolução de Ponta a Ponta:</strong> Todas as visualizações respondem diretamente à pergunta formulada na E1, alimentadas pelo Star Schema otimizado.
+        </div>
+      </section>
+
+      <!-- SLIDE 13: Checklist de Aceite da Monitoria -->
+      <section>
+        <span class="badge badge-green">Conformidade Total</span>
+        <h2>Checklist de Aceite da Entrega 3</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Item Exigido na E3</th>
+              <th>Implementação no Repositório</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Modelo dimensional com fato, dimensão, granularidade e SCD2</td>
+              <td><code>sql/11</code>, <code>sql/12</code>, <code>docs/MODELO_DIMENSIONAL.md</code></td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Transformações versionadas e organizadas em camadas</td>
+              <td>Camadas Raw/Silver/Gold orquestradas via Makefile e Airflow</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Testes: esquema, volume, unicidade, integridade e distribuição</td>
+              <td><code>tests/qualidade_dados.sql</code> e CI GitHub Actions</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Orquestração agendada com grafo, retry e backfill demonstrado</td>
+              <td>DAG <code>farmadata_pipeline.py</code>, Airflow 2.10, logs em <code>docs/orchestration/</code></td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Consulta otimizada com <code>EXPLAIN BUFFERS</code> antes/depois</td>
+              <td><code>docs/performance/</code> (Ganho de 8,1x, -73,6% I/O, -100% temp spill)</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Métrica de freshness e SLA declarado</td>
+              <td><code>sql/13_controle_build.sql</code>, <code>checar_freshness()</code> e validação no app</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>ADR sobre modelagem ou transformação</td>
+              <td>ADR-004 (Star Schema / SCD2) e ADR-005 (Painel Streamlit)</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+            <tr>
+              <td>Painel analítico respondendo à pergunta da E1</td>
+              <td><code>src/dashboard/app.py</code> (3 visões interativas completas)</td>
+              <td><span style="color: var(--accent-green);">✅ Atendido</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SLIDE 14: Encerramento -->
+      <section data-background-gradient="linear-gradient(to bottom, #161b22, #0d1117)">
+        <h1>FarmaData</h1>
+        <h3 style="color: #58a6ff;">Obrigado!</h3>
+        <p style="font-size: 0.75em; color: #c9d1d9; margin-top: 25px;">
+          Perguntas & Demonstração ao Vivo
+        </p>
+        <div style="margin-top: 30px; font-size: 0.6em; color: #8b949e;">
+          <code>make dashboard</code> • <code>make airflow-demo</code> • <code>make test-qualidade</code>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide',
+      plugins: [ RevealHighlight ]
+    });
+  </script>
+</body>
+</html>
