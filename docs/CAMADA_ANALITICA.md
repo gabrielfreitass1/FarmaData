@@ -122,9 +122,18 @@ Prova do atraso induzido: `make test-freshness`, evidência em `docs/evidencias/
 - WARN: a DAG grava um alerta `FRESHNESS_WARN` em `alertas_farmadata.jsonl` (mesmo destino
   dos alertas da `farmadata_pipeline`) e a task passa. A squad reconstrói a fato
   (`make modelo-dimensional` ou rerun de `transformar_modelo_dimensional`).
-- ERRO: a task falha sem retry e gera alerta `FALHA`. Tasks a jusante não rodam, então a
-  atualização do painel, que entra depois de `checar_freshness_fato`, fica bloqueada até a
-  reconstrução. A falha é tratada como incidente.
+- ERRO: a task falha sem retry e gera alerta `FALHA`. A task a jusante `atualizar_painel`
+  (`checar_freshness_fato >> atualizar_painel`) fica `upstream_failed` e não roda, então o
+  painel não publica dado defasado até a reconstrução. A falha é tratada como incidente.
+  `atualizar_painel` é um marcador (`EmptyOperator`) do ponto onde entra a publicação real
+  do painel. No WARN ela roda normalmente: o alerta avisa, mas não bloqueia.
+
+O painel (`src/dashboard/app.py`) também chama `checar_freshness()` ao abrir. No ERRO, mostra
+o erro e não exibe os gráficos; no WARN, mostra um aviso e segue. Assim o bloqueio vale nos dois
+pontos: na DAG (`atualizar_painel` fica `upstream_failed`) e no próprio painel.
+
+Prova no Airflow: `make test-freshness-airflow`, evidência em
+`docs/evidencias/freshness_airflow.txt` (no cenário de ERRO, `atualizar_painel = upstream_failed`).
 
 **Integração.** O teste de freshness roda no CI a cada push e pull request
 (`.github/workflows/freshness.yml`). Em produção, a checagem roda todo dia pela DAG
