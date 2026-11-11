@@ -1,0 +1,18 @@
+=== Freshness no banco real (farmadata) — 2026-11-09T02:45:52-03:00 ===
+
+--- tamanho das tabelas ---
+        relname         | total 
+------------------------+-------
+ venda_medicamento      | 11 GB
+ fato_venda_medicamento | 16 GB
+(2 rows)
+
+--- builds registrados pela carga da fato ---
+         tabela         |         construido_em         |  linhas  
+------------------------+-------------------------------+----------
+ fato_venda_medicamento | 2026-11-09 00:50:49.088244+00 | 68264756
+(1 row)
+
+--- checagem de freshness ---
+[OK] fato_venda_medicamento | última carga: 2026-11-08 04:34:01.918203+00 | última construção: 2026-11-09 00:50:49.088244+00 | limites: warn 24h, erro 48h
+código de saída: 0

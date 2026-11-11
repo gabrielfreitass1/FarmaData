@@ -1,0 +1,1850 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
+      
+      
+        <meta name="author" content="Equipe de desenvolvimento">
+      
+      
+      
+        <link rel="prev" href="../../QUALIDADE_DADOS/">
+      
+      
+        <link rel="next" href="../../orchestration/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Otimização de Performance - FarmaData</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#otimizacao-de-performance-com-analise-de-plano-de-execucao-issue-28" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FarmaData
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Otimização de Performance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../adr/ADR-001/" class="md-tabs__link">
+          
+  
+  
+  ADR
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../entregas/E1/" class="md-tabs__link">
+          
+  
+  
+  Entregas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Diario de Bordo
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../BASES_PUBLICAS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bases de Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Camada Analítica
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../MODELO_DIMENSIONAL/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Modelo Dimensional
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../orchestration/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Orquestração
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../QUERIES/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Consultas
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ARQUITETURA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Arquitetura
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FarmaData
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-001 — Modelagem do Sistema de Origem FarmaData
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-002 — Mecanismo de Ingestão e Formato de Armazenamento Aberto (Issue #9)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Entregas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Entregas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entregas/E1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 1 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../entregas/E2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes 2 — Banco de Dados 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diario/DIARIO_DE_BORDO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diario de Bordo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BASES_PUBLICAS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bases de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CAMADA_ANALITICA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Camada Analítica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MODELO_DIMENSIONAL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-identificacao-da-query-critica-e-escopo-do-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Identificação da Query Crítica e Escopo do Dataset
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Identificação da Query Crítica e Escopo do Dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-consulta-analitica-avaliada-100-identica-antes-e-depois" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1. Consulta Analítica Avaliada (100% Idêntica Antes e Depois)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-escopo-dos-dados-no-benchmark-janeiro2020-202001-vs-ano-completo-202001202012" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2. Escopo dos Dados no Benchmark: Janeiro/2020 (202001) vs. Ano Completo (202001–202012)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-diagnostico-do-plano-pre-otimizacao-explain_beforetxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Diagnóstico do Plano Pré-Otimização (explain_before.txt)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Diagnóstico do Plano Pré-Otimização (explain_before.txt)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-seq-scan-massivo-na-tabela-fato-126-gb-lidos-da-heap" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1. Seq Scan Massivo na Tabela Fato (1,26 GB lidos da Heap)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-impedancia-de-tipos-char32-vs-text-e-erro-de-cardinalidade-de-31x-nos-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2. Impedância de Tipos (CHAR(32) vs. TEXT) e Erro de Cardinalidade de 31x nos Joins
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-merge-join-custoso-com-sort-externo-em-disco-245-mb-de-spill" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3. Merge Join Custoso com Sort Externo em Disco (245 MB de Spill)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-hashaggregate-particionado-em-129-batches-255-mb-de-spill-e-bloqueio-de-paralelismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4. HashAggregate Particionado em 129 Batches (255 MB de Spill) e Bloqueio de Paralelismo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-intervencoes-aplicadas-sql11-sql14-sessao-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Intervenções Aplicadas (sql/11 + sql/14 + Sessão Analítica)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-analise-do-plano-pos-otimizacao-e-isolamento-de-fatores-ablacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Análise do Plano Pós-Otimização e Isolamento de Fatores (Ablação)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Análise do Plano Pós-Otimização e Isolamento de Fatores (Ablação)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-plano-de-execucao-pos-otimizacao-explain_aftertxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1. Plano de Execução Pós-Otimização (explain_after.txt)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-estudo-de-ablacao-isolamento-do-ganho-de-cada-intervencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2. Estudo de Ablação — Isolamento do Ganho de Cada Intervenção
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-por-que-o-plano-usa-seq-scan-nas-dimensoes-e-inner-unique-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3. Por que o Plano Usa Seq Scan nas Dimensões e Inner Unique: true?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-relatorio-comparativo-de-metricas-antes-vs-depois-mesma-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Relatório Comparativo de Métricas (Antes vs. Depois — Mesma Query)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-projecao-de-escalabilidade-para-o-ano-completo-12-meses-6826-milhoes-de-linhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Projeção de Escalabilidade para o Ano Completo (12 Meses — 68,26 Milhões de Linhas)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Projeção de Escalabilidade para o Ano Completo (12 Meses — 68,26 Milhões de Linhas)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-projecao-quantitativa-1-mes-614m-vs-12-meses-6826m" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1. Projeção Quantitativa: 1 Mês (6,14M) vs. 12 Meses (68,26M)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-arquitetura-recomendada-para-os-6826-milhoes-de-linhas-ano-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2. Arquitetura Recomendada para os 68,26 Milhões de Linhas (Ano Completo)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-como-reproduzir-com-seguranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Como Reproduzir com Segurança
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orquestração
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../QUERIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ARQUITETURA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-identificacao-da-query-critica-e-escopo-do-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Identificação da Query Crítica e Escopo do Dataset
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Identificação da Query Crítica e Escopo do Dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-consulta-analitica-avaliada-100-identica-antes-e-depois" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1. Consulta Analítica Avaliada (100% Idêntica Antes e Depois)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-escopo-dos-dados-no-benchmark-janeiro2020-202001-vs-ano-completo-202001202012" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2. Escopo dos Dados no Benchmark: Janeiro/2020 (202001) vs. Ano Completo (202001–202012)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-diagnostico-do-plano-pre-otimizacao-explain_beforetxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Diagnóstico do Plano Pré-Otimização (explain_before.txt)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Diagnóstico do Plano Pré-Otimização (explain_before.txt)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-seq-scan-massivo-na-tabela-fato-126-gb-lidos-da-heap" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1. Seq Scan Massivo na Tabela Fato (1,26 GB lidos da Heap)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-impedancia-de-tipos-char32-vs-text-e-erro-de-cardinalidade-de-31x-nos-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2. Impedância de Tipos (CHAR(32) vs. TEXT) e Erro de Cardinalidade de 31x nos Joins
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-merge-join-custoso-com-sort-externo-em-disco-245-mb-de-spill" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3. Merge Join Custoso com Sort Externo em Disco (245 MB de Spill)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-hashaggregate-particionado-em-129-batches-255-mb-de-spill-e-bloqueio-de-paralelismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4. HashAggregate Particionado em 129 Batches (255 MB de Spill) e Bloqueio de Paralelismo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-intervencoes-aplicadas-sql11-sql14-sessao-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Intervenções Aplicadas (sql/11 + sql/14 + Sessão Analítica)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-analise-do-plano-pos-otimizacao-e-isolamento-de-fatores-ablacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Análise do Plano Pós-Otimização e Isolamento de Fatores (Ablação)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Análise do Plano Pós-Otimização e Isolamento de Fatores (Ablação)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-plano-de-execucao-pos-otimizacao-explain_aftertxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1. Plano de Execução Pós-Otimização (explain_after.txt)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-estudo-de-ablacao-isolamento-do-ganho-de-cada-intervencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2. Estudo de Ablação — Isolamento do Ganho de Cada Intervenção
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-por-que-o-plano-usa-seq-scan-nas-dimensoes-e-inner-unique-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3. Por que o Plano Usa Seq Scan nas Dimensões e Inner Unique: true?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-relatorio-comparativo-de-metricas-antes-vs-depois-mesma-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Relatório Comparativo de Métricas (Antes vs. Depois — Mesma Query)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-projecao-de-escalabilidade-para-o-ano-completo-12-meses-6826-milhoes-de-linhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Projeção de Escalabilidade para o Ano Completo (12 Meses — 68,26 Milhões de Linhas)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Projeção de Escalabilidade para o Ano Completo (12 Meses — 68,26 Milhões de Linhas)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-projecao-quantitativa-1-mes-614m-vs-12-meses-6826m" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1. Projeção Quantitativa: 1 Mês (6,14M) vs. 12 Meses (68,26M)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-arquitetura-recomendada-para-os-6826-milhoes-de-linhas-ano-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2. Arquitetura Recomendada para os 68,26 Milhões de Linhas (Ano Completo)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-como-reproduzir-com-seguranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Como Reproduzir com Segurança
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="otimizacao-de-performance-com-analise-de-plano-de-execucao-issue-28">Otimização de Performance com Análise de Plano de Execução (Issue #28)</h1>
+<p><strong>Entrega:</strong> E3 — Camada Analítica Transformada e Testada<br />
+<strong>Banco de Dados:</strong> PostgreSQL 16 (<code>farmadata_db</code>)<br />
+<strong>Camada Analisada:</strong> Camada de Consumo — Esquema Estrela (<code>fato_venda_medicamento</code> + <code>dim_municipio</code> + <code>dim_tempo</code> + <code>dim_medicamento</code>)<br />
+<strong>Recorte de Dados do Benchmark:</strong> Lote SNGPC <code>202001</code> (<strong>Janeiro/2020</strong> — <code>6.143.427</code> registros na <code>fato_venda_medicamento</code>, ocupando <code>1.263 MB</code> de heap / <code>161.683</code> páginas de 8 KB; <code>4.898</code> linhas em <code>dim_municipio</code>; <code>4.590</code> apresentações em <code>dim_medicamento</code>; <code>12</code> meses cadastrados em <code>dim_tempo</code>).<br />
+<em>(A projeção de capacidade e comportamento para o ano completo de 12 meses — <code>68.264.756</code> registros — encontra-se detalhada na <a href="#6-projecao-de-escalabilidade-para-o-ano-completo-12-meses--6826-milhoes-de-linhas">Seção 6</a>).</em></p>
+<hr />
+<h2 id="1-identificacao-da-query-critica-e-escopo-do-dataset">1. Identificação da Query Crítica e Escopo do Dataset</h2>
+<h3 id="11-consulta-analitica-avaliada-100-identica-antes-e-depois">1.1. Consulta Analítica Avaliada (100% Idêntica Antes e Depois)</h3>
+<p>A pergunta central de gestão do projeto declarada na E1 é:</p>
+<blockquote>
+<p><em>"Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em um ano, e como esses padrões se distribuem por região e faixa etária?"</em></p>
+</blockquote>
+<p>Na camada de consumo modelada em Esquema Estrela (<a href="../../sql/11_dimensional_dim_municipio_scd.sql"><code>sql/11_dimensional_dim_municipio_scd.sql</code></a> e <a href="../../sql/12_dimensional_fato_venda.sql"><code>sql/12_dimensional_fato_venda.sql</code></a>), a consulta crítica que alimenta o painel analítico cruza a tabela fato (<code>fato_venda_medicamento</code>) com as três dimensões do modelo estrela (<code>dim_tempo</code>, <code>dim_municipio</code> e <code>dim_medicamento</code>) <strong>utilizando exclusivamente as chaves substitutas (<code>sk_tempo</code>, <code>sk_municipio</code>, <code>sk_medicamento</code>)</strong>.</p>
+<p>Para garantir rigor metodológico na comparação, <strong>exatamente a mesma consulta SQL</strong> (sem alterar uma única linha) foi executada antes (<a href="../explain_before.txt"><code>explain_before.txt</code></a>) e depois (<a href="../explain_after.txt"><code>explain_after.txt</code></a>) das intervenções estruturais:</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">mes</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">trimestre</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">sigla_uf</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">nome_municipio</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">principio_ativo</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;0-11 (criança)&#39;</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;12-17 (adolescente)&#39;</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;18-59 (adulto)&#39;</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;60+ (idoso)&#39;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">faixa_etaria</span><span class="p">,</span>
+<span class="w">    </span><span class="k">SUM</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">quantidade_vendida</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">volume_total_dispensado</span><span class="p">,</span>
+<span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_dispensacoes</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">fato_venda_medicamento</span><span class="w"> </span><span class="n">f</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_tempo</span><span class="w"> </span><span class="n">t</span><span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">sk_tempo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_tempo</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_municipio</span><span class="w"> </span><span class="n">dm</span><span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">sk_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_municipio</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_medicamento</span><span class="w"> </span><span class="n">m</span><span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">sk_medicamento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_medicamento</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">eh_antimicrobiano</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">TRUE</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2020</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Sudeste&#39;</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">mes</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">trimestre</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="p">,</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">sigla_uf</span><span class="p">,</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">nome_municipio</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">principio_ativo</span><span class="p">,</span>
+<span class="w">    </span><span class="n">faixa_etaria</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">volume_total_dispensado</span><span class="w"> </span><span class="k">DESC</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="12-escopo-dos-dados-no-benchmark-janeiro2020-202001-vs-ano-completo-202001202012">1.2. Escopo dos Dados no Benchmark: Janeiro/2020 (<code>202001</code>) vs. Ano Completo (<code>202001–202012</code>)</h3>
+<ul>
+<li>O ambiente local de benchmark contém carregado o lote oficial SNGPC <strong><code>202001</code> (Janeiro/2020)</strong>, que possui exatamente <strong><code>6.143.427</code> linhas</strong> na <code>fato_venda_medicamento</code> (<code>4.593.047</code> das quais são dispensações de antimicrobianos com <code>idade_paciente IS NOT NULL</code>, e <code>2.122.690</code> pertencem à região Sudeste).</li>
+<li>Embora a consulta filtre <code>t.ano = 2020</code> e a tabela <code>periodo</code> possua os 12 meses de 2020 pré-cadastrados (<code>id_periodo</code> de <code>202001</code> a <code>202012</code>), todas as <code>6.143.427</code> linhas presentes na fato pertencem à competência <strong>Janeiro/2020 (<code>id_periodo = 202001</code>)</strong>.</li>
+<li>A base anual completa de 2020 no SNGPC soma <strong><code>68.264.756</code> linhas</strong> (<code>11,11x</code> o volume de janeiro). Na <a href="#6-projecao-de-escalabilidade-para-o-ano-completo-12-meses--6826-milhoes-de-linhas">Seção 6</a>, demonstramos matematicamente como cada estrutura de armazenamento e cada operador do plano escalam para os 12 meses completos.</li>
+</ul>
+<hr />
+<h2 id="2-diagnostico-do-plano-pre-otimizacao-explain_beforetxt">2. Diagnóstico do Plano Pré-Otimização (<code>explain_before.txt</code>)</h2>
+<p>O plano de execução completo antes da intervenção encontra-se em <a href="../explain_before.txt"><code>docs/performance/explain_before.txt</code></a>. A execução levou <strong>39.968,84 ms (~40,0 s)</strong> na 1ª execução e <strong>45.191,54 ms (~45,2 s)</strong> na execução com <code>VERBOSE, SETTINGS</code>.</p>
+<p>A inspeção do <code>EXPLAIN (ANALYZE, BUFFERS)</code> revelou <strong>quatro gargalos estruturais severos</strong>:</p>
+<h3 id="21-seq-scan-massivo-na-tabela-fato-126-gb-lidos-da-heap">2.1. <code>Seq Scan</code> Massivo na Tabela Fato (<code>1,26 GB</code> lidos da Heap)</h3>
+<p><div class="highlight"><pre><span></span><code>-&gt; Seq Scan on public.fato_venda_medicamento f (cost=0.00..223118.66 rows=3440258 width=106) (actual time=0.134..2659.722 rows=4593047 loops=1)
+     Filter: (f.eh_antimicrobiano AND (f.idade_paciente IS NOT NULL))
+     Rows Removed by Filter: 1550380
+     Buffers: shared hit=11040 read=150643
+</code></pre></div>
+* A tabela <code>fato_venda_medicamento</code> armazena 6 chaves substitutas MD5 (<code>CHAR(32)</code>) além das chaves naturais e atributos degenerados, ocupando <strong>1.263 MB (<code>161.683</code> blocos de 8 KB)</strong> apenas para Janeiro/2020.
+* A <code>fato_venda_medicamento</code> possuía apenas três índices B-Tree simples isolados (<code>sk_tempo</code>, <code>sk_municipio</code>, <code>sk_medicamento</code>) e <strong>nenhum índice parcial para <code>eh_antimicrobiano = TRUE</code></strong> nem índice composto de cobertura (<em>covering index</em>).
+* Como a tabela (<code>1.263 MB</code>) é muito maior que o <code>shared_buffers</code> padrão do container (<code>128 MB</code>), o PostgreSQL utiliza um <em>ring buffer</em> restrito para varreduras sequenciais, forçando <strong><code>150.643</code> leituras de blocos do disco/SO (<code>shared read</code>)</strong> e descartando <code>1.550.380</code> linhas em CPU.</p>
+<h3 id="22-impedancia-de-tipos-char32-vs-text-e-erro-de-cardinalidade-de-31x-nos-joins">2.2. Impedância de Tipos (<code>CHAR(32)</code> vs. <code>TEXT</code>) e Erro de Cardinalidade de 31x nos Joins</h3>
+<p><div class="highlight"><pre><span></span><code>-&gt; Hash Join (cost=150.64..379902.76 rows=67808 width=74) (actual time=20.282..25938.250 rows=2122690 loops=1)
+     Hash Cond: ((f.sk_tempo)::text = sk_hash(&#39;tempo&#39;::text, periodo.id_periodo))
+</code></pre></div>
+* Na <code>fato_venda_medicamento</code>, <code>sk_tempo</code> e <code>sk_medicamento</code> foram declaradas como <code>CHAR(32)</code> (<code>bpchar</code>), enquanto nas views <code>dim_tempo</code> e <code>dim_medicamento</code> a função <code>sk_hash()</code> calculava o MD5 em tempo de execução retornando <code>TEXT</code> (dívida técnica documentada no <a href="../../adr/ADR-004/"><code>ADR-004.md</code></a>, seção 5: <em>"As dimensões conformadas (views) não têm <code>sk_*</code> persistida"</em>).
+* Ao juntar <code>t.sk_tempo = f.sk_tempo</code> e <code>m.sk_medicamento = f.sk_medicamento</code>, o otimizador é forçado a aplicar o cast <code>(f.sk_tempo)::text</code> e <code>(f.sk_medicamento)::text</code> em todas as <code>4.593.047</code> linhas da fato e avaliar <code>sk_hash()</code> sem estatísticas de coluna.
+* Sem estatísticas para a expressão, o otimizador <strong>subestima em 31 vezes a cardinalidade pós-join</strong> (<code>rows=67808</code> estimadas contra <strong><code>rows=2122690</code> reais</strong>), gastando <strong>~22 segundos</strong> apenas na conversão e comparação de hashes em CPU.</p>
+<h3 id="23-merge-join-custoso-com-sort-externo-em-disco-245-mb-de-spill">2.3. <code>Merge Join</code> Custoso com <code>Sort</code> Externo em Disco (<code>245 MB</code> de Spill)</h3>
+<p><div class="highlight"><pre><span></span><code>-&gt; Merge Join (cost=388744.64..818049.44 rows=1556194 width=97) (actual time=33984.822..38214.485 rows=2122690 loops=1)
+     Merge Cond: ((sk_hash(&#39;medicamento&#39;::text, medicamento.id_medicamento)) = ((f.sk_medicamento)::text))
+     -&gt; Sort (cost=388357.57..388527.09 rows=67808 width=74) (actual time=33916.824..34896.259 rows=2122690 loops=1)
+          Sort Key: ((f.sk_medicamento)::text)
+          Sort Method: external merge  Disk: 245320kB
+          Buffers: shared hit=11112 read=150643, temp read=61326 written=61409
+</code></pre></div>
+* Enganado pela subestimativa de <code>67.808</code> linhas do passo anterior e impedido de usar estatísticas devido ao cast <code>::text</code>, o planejador escolhe um <strong><code>Merge Join</code></strong> precedido por um <strong><code>Sort</code></strong> e um <strong><code>Materialize</code></strong>.
+* Ordenar <code>2.122.690</code> linhas por uma chave MD5 de 32 caracteres estoura o <code>work_mem</code> padrão (<code>4 MB</code>) e despeja <strong>245.320 KB (~240 MB) em arquivos temporários de disco</strong> (<code>temp read=61326 written=90409</code>).</p>
+<h3 id="24-hashaggregate-particionado-em-129-batches-255-mb-de-spill-e-bloqueio-de-paralelismo">2.4. <code>HashAggregate</code> Particionado em 129 Batches (<code>255 MB</code> de Spill) e Bloqueio de Paralelismo</h3>
+<p><div class="highlight"><pre><span></span><code>-&gt; HashAggregate (cost=1074821.45..1154576.39 rows=1556194 width=132) (actual time=41904.666..43458.689 rows=216358 loops=1)
+     Planned Partitions: 128  Batches: 129  Memory Usage: 8209kB  Disk Usage: 255040kB
+     Buffers: shared hit=11186 read=150643, temp read=86753 written=147369
+</code></pre></div>
+* A agregação final de <code>216.358</code> grupos com <code>work_mem = 4MB</code> particiona a tabela hash em <strong>129 batches em disco</strong>, consumindo mais <strong>255.040 KB (~249 MB) de disco temporário</strong>.
+* Além disso, a função <code>sk_hash()</code> havia sido criada sem a cláusula <code>PARALLEL SAFE</code> (assumindo o padrão <code>PARALLEL UNSAFE</code> do PostgreSQL), <strong>bloqueando completamente o uso de workers paralelos</strong>.</p>
+<hr />
+<h2 id="3-intervencoes-aplicadas-sql11-sql14-sessao-analitica">3. Intervenções Aplicadas (<code>sql/11</code> + <code>sql/14</code> + Sessão Analítica)</h2>
+<p>Para manter a separação limpa entre <strong>modelo dimensional</strong> e <strong>índices de performance</strong> (e garantir idempotência em qualquer ordem de reaplicação de scripts):
+* As colunas geradas armazenadas (<code>CHAR(32) STORED</code>) e as views <code>dim_tempo</code> e <code>dim_medicamento</code> têm <strong>definição única</strong> em <a href="../../sql/11_dimensional_dim_municipio_scd.sql"><code>sql/11_dimensional_dim_municipio_scd.sql</code></a> (formalizada na Emenda ao <a href="../../adr/ADR-004/"><code>ADR-004.md</code></a> e no dicionário de <a href="../../MODELO_DIMENSIONAL/"><code>MODELO_DIMENSIONAL.md</code></a>).
+* O script <a href="../../sql/14_otimizacao_performance.sql"><code>sql/14_otimizacao_performance.sql</code></a> contém <strong>exclusivamente índices e estatísticas (<code>ANALYZE</code>)</strong>.
+* O ajuste de <code>work_mem</code> e <code>jit</code> é aplicado <strong>apenas na sessão analítica</strong> (ou no <code>ROLE</code> do painel via <code>ALTER ROLE painel SET work_mem = '256MB'</code>), nunca via <code>ALTER DATABASE</code>, para não impactar conexões de carga/ETL.</p>
+<p>Cada intervenção tem participação direta e verificável no plano de execução pós-otimização:</p>
+<ol>
+<li><strong>Fator A — Materialização e Tipagem Estrita <code>CHAR(32)</code> das Surrogate Keys nas Dimensões Conformadas (<code>sql/11</code>) + Índices <code>UNIQUE</code> (<code>sql/14</code>):</strong>
+   <div class="highlight"><pre><span></span><code><span class="c1">-- Em sql/11_dimensional_dim_municipio_scd.sql:</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sk_hash</span><span class="p">(</span><span class="n">p_dimensao</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">p_chave_natural</span><span class="w"> </span><span class="n">ANYELEMENT</span><span class="p">)</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">md5</span><span class="p">(</span><span class="n">p_dimensao</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;|&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p_chave_natural</span><span class="p">);</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="k">sql</span><span class="w"> </span><span class="k">IMMUTABLE</span><span class="w"> </span><span class="n">PARALLEL</span><span class="w"> </span><span class="n">SAFE</span><span class="p">;</span>
+
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">periodo</span>
+<span class="w">    </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">sk_tempo</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="w">    </span><span class="k">GENERATED</span><span class="w"> </span><span class="n">ALWAYS</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="n">sk_hash</span><span class="p">(</span><span class="s1">&#39;tempo&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">id_periodo</span><span class="p">)::</span><span class="nb">char</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span><span class="w"> </span><span class="n">STORED</span><span class="p">;</span>
+
+<span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">medicamento</span>
+<span class="w">    </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">sk_medicamento</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="w">    </span><span class="k">GENERATED</span><span class="w"> </span><span class="n">ALWAYS</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="n">sk_hash</span><span class="p">(</span><span class="s1">&#39;medicamento&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">id_medicamento</span><span class="p">)::</span><span class="nb">char</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span><span class="w"> </span><span class="n">STORED</span><span class="p">;</span>
+
+<span class="k">DROP</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">dim_tempo</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">dim_tempo</span><span class="w"> </span><span class="k">AS</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">sk_tempo</span><span class="p">,</span><span class="w"> </span><span class="n">id_periodo</span><span class="p">,</span><span class="w"> </span><span class="n">ano</span><span class="p">,</span><span class="w"> </span><span class="n">mes</span><span class="p">,</span><span class="w"> </span><span class="n">nome_mes</span><span class="p">,</span><span class="w"> </span><span class="n">trimestre</span><span class="p">,</span><span class="w"> </span><span class="n">semestre</span><span class="p">,</span><span class="w"> </span><span class="n">data_inicio</span><span class="p">,</span><span class="w"> </span><span class="n">data_fim</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">periodo</span><span class="p">;</span>
+
+<span class="k">DROP</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">dim_medicamento</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">dim_medicamento</span><span class="w"> </span><span class="k">AS</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">sk_medicamento</span><span class="p">,</span><span class="w"> </span><span class="n">id_medicamento</span><span class="p">,</span><span class="w"> </span><span class="n">principio_ativo</span><span class="p">,</span><span class="w"> </span><span class="n">descricao_apresentacao</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">medicamento</span><span class="p">;</span>
+
+<span class="c1">-- Em sql/14_otimizacao_performance.sql:</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_periodo_sk_tempo</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">periodo</span><span class="w"> </span><span class="p">(</span><span class="n">sk_tempo</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_medicamento_sk_medicamento</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">medicamento</span><span class="w"> </span><span class="p">(</span><span class="n">sk_medicamento</span><span class="p">);</span>
+</code></pre></div></li>
+<li><strong>Efeito:</strong> Resolve a dívida técnica do <a href="../../adr/ADR-004/"><code>ADR-004.md</code></a> persistindo <code>sk_tempo</code> e <code>sk_medicamento</code> com o mesmo tipo <code>CHAR(32)</code> (<code>bpchar</code>) da tabela fato e expondo-as nas views <code>dim_tempo</code> e <code>dim_medicamento</code>. Isso <strong>elimina o cast <code>(f.sk_*)::text</code></strong> sem tocar na query SQL, corrige o erro de estimativa de cardinalidade de 31x, substitui o <code>Merge Join + Sort (245 MB)</code> por <code>Hash Join</code> em memória e ativa a propriedade <strong><code>Inner Unique: true</code></strong> no otimizador graças aos índices <code>UNIQUE</code>.</li>
+<li>
+<p><strong>Compatibilidade com a Carga e Idempotência:</strong> Como <code>sql/03_tempo_periodo.sql</code> e <code>scripts/carregar_sngpc.js</code> inserem em <code>periodo</code> e <code>medicamento</code> declarando explicitamente a lista de colunas, as colunas <code>GENERATED ALWAYS ... STORED</code> são populadas automaticamente sem quebrar a ingestão nem a exportação Delta/CDC (comprovado automaticamente em <code>make test-scd2</code>, que aplica <code>sql/11</code>, <code>sql/12</code> e <code>sql/14</code> duas vezes seguidas e testa <code>INSERT</code> em <code>medicamento</code> e <code>periodo</code>).</p>
+</li>
+<li>
+<p><strong>Fator B — Índice B-Tree Composto Parcial com Cobertura (<code>INCLUDE</code> / Covering Index) na Fato (<code>sql/14</code>):</strong>
+   <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_fato_venda_antimicrobiano_covering</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">fato_venda_medicamento</span><span class="w"> </span><span class="p">(</span><span class="n">sk_municipio</span><span class="p">,</span><span class="w"> </span><span class="n">sk_tempo</span><span class="p">,</span><span class="w"> </span><span class="n">sk_medicamento</span><span class="p">)</span>
+<span class="w">    </span><span class="n">INCLUDE</span><span class="w"> </span><span class="p">(</span><span class="n">idade_paciente</span><span class="p">,</span><span class="w"> </span><span class="n">quantidade_vendida</span><span class="p">)</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">eh_antimicrobiano</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">TRUE</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">idade_paciente</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+<li><strong>Efeito:</strong> Indexa diretamente as três surrogate keys usadas nos joins da query original (<code>sk_municipio</code>, <code>sk_tempo</code>, <code>sk_medicamento</code>), filtra nativamente o predicado <code>WHERE eh_antimicrobiano = TRUE AND idade_paciente IS NOT NULL</code> e inclui no <em>payload</em> das páginas-folha (<code>INCLUDE</code>) as colunas <code>idade_paciente</code> e <code>quantidade_vendida</code>. Após <code>VACUUM ANALYZE</code>, permite responder à consulta via <strong><code>Index Only Scan</code> com <code>Heap Fetches: 0</code></strong>, reduzindo os blocos compartilhados lidos de <strong><code>161.832</code> para <code>42.751</code> (-73,6%)</strong>.</li>
+<li>
+<p><strong>Ressalva Operacional:</strong> Como <code>CREATE INDEX</code> (sem <code>CONCURRENTLY</code>) adquire lock de escrita na <code>fato_venda_medicamento</code> durante a construção, <code>make otimizar-performance</code> deve ser executado após o término da carga, nunca concorrentemente a ela.</p>
+</li>
+<li>
+<p><strong>Fator C — Ajuste de Memória de Trabalho na Sessão Analítica / Role do Painel (<code>work_mem = '256MB'</code> e <code>jit = 'off'</code>):</strong>
+   <div class="highlight"><pre><span></span><code><span class="c1">-- Na sessão do benchmark/painel (ou via ALTER ROLE painel SET work_mem = &#39;256MB&#39;):</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">work_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;256MB&#39;</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">jit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;off&#39;</span><span class="p">;</span>
+</code></pre></div></p>
+</li>
+<li><strong>Efeito:</strong> Permite que o <code>HashAggregate</code> final aloque <code>131.089 KB (~128 MB)</code> em RAM e consolide os <code>216.358</code> grupos em <strong>1 único lote (<code>Batches: 1</code>)</strong>, reduzindo o <em>spill to disk</em> de <code>234.122</code> blocos temporários (<code>1,83 GB</code>) para <strong>zero (<code>temp read=0, written=0</code>)</strong>, sem alterar o <code>work_mem</code> global do banco (<code>4MB</code>) usado pelos processos de ingestão.</li>
+</ol>
+<hr />
+<h2 id="4-analise-do-plano-pos-otimizacao-e-isolamento-de-fatores-ablacao">4. Análise do Plano Pós-Otimização e Isolamento de Fatores (Ablação)</h2>
+<h3 id="41-plano-de-execucao-pos-otimizacao-explain_aftertxt">4.1. Plano de Execução Pós-Otimização (<code>explain_after.txt</code>)</h3>
+<p>O plano pós-otimização completo (executando <strong>exatamente a mesma query SQL</strong>) está registrado em <a href="../explain_after.txt"><code>docs/performance/explain_after.txt</code></a>:</p>
+<div class="highlight"><pre><span></span><code> Limit  (cost=248982.01..248982.14 rows=50 width=132) (actual time=4860.728..4860.740 rows=50 loops=1)
+   Buffers: shared hit=4819 read=37932
+   -&gt;  Sort  (cost=248982.01..251805.88 rows=1129548 width=132) (actual time=4860.726..4860.734 rows=50 loops=1)
+         Sort Key: (sum(f.quantidade_vendida)) DESC
+         Sort Method: top-N heapsort  Memory: 37kB
+         Buffers: shared hit=4819 read=37932
+         -&gt;  HashAggregate  (cost=188868.28..211459.24 rows=1129548 width=132) (actual time=4656.105..4780.018 rows=216358 loops=1)
+               Group Key: periodo.mes, periodo.trimestre, dm.sigla_uf, dm.nome_municipio, medicamento.principio_ativo, CASE ...
+               Batches: 1  Memory Usage: 131089kB
+               Buffers: shared hit=4819 read=37932
+               -&gt;  Hash Join  (cost=233.13..166277.32 rows=1129548 width=97) (actual time=15.425..2798.269 rows=2122690 loops=1)
+                     Inner Unique: true
+                     Hash Cond: (f.sk_medicamento = medicamento.sk_medicamento)
+                     Buffers: shared hit=4819 read=37932
+                     -&gt;  Hash Join  (cost=1.86..154606.64 rows=1129548 width=74) (actual time=9.591..1885.395 rows=2122690 loops=1)
+                           Inner Unique: true
+                           Hash Cond: (f.sk_tempo = periodo.sk_tempo)
+                           Buffers: shared hit=4817 read=37806
+                           -&gt;  Nested Loop  (cost=0.56..150593.09 rows=1129548 width=95) (actual time=9.492..1086.583 rows=2122690 loops=1)
+                                 Buffers: shared hit=4817 read=37805
+                                 -&gt;  Seq Scan on public.dim_municipio dm  (cost=0.00..129.22 rows=1609 width=55) (actual time=9.388..16.462 rows=1609 loops=1)
+                                       Filter: ((dm.regiao)::text = &#39;Sudeste&#39;::text)
+                                       Rows Removed by Filter: 3289
+                                       Buffers: shared read=68
+                                 -&gt;  Index Only Scan using idx_fato_venda_antimicrobiano_covering on public.fato_venda_medicamento f  (cost=0.56..82.89 rows=1062 width=106) (actual time=0.019..0.449 rows=1319 loops=1609)
+                                       Index Cond: (f.sk_municipio = dm.sk_municipio)
+                                       Heap Fetches: 0
+                                       Buffers: shared hit=4817 read=37737
+                           -&gt;  Hash  (cost=1.15..1.15 rows=12 width=45) (actual time=0.067..0.067 rows=12 loops=1)
+                                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                 Buffers: shared read=1
+                                 -&gt;  Seq Scan on public.periodo  (cost=0.00..1.15 rows=12 width=45) (actual time=0.038..0.043 rows=12 loops=1)
+                                       Filter: (periodo.ano = 2020)
+                                       Buffers: shared read=1
+                     -&gt;  Hash  (cost=173.90..173.90 rows=4590 width=59) (actual time=5.747..5.748 rows=4590 loops=1)
+                           Buckets: 8192  Batches: 1  Memory Usage: 473kB
+                           Buffers: shared hit=2 read=126
+                           -&gt;  Seq Scan on public.medicamento  (cost=0.00..173.90 rows=4590 width=59) (actual time=0.014..2.055 rows=4590 loops=1)
+                                 Buffers: shared hit=2 read=126
+ Settings: work_mem = &#39;256MB&#39;, jit = &#39;off&#39;
+ Planning Time: 3.572 ms
+ Execution Time: 4916.431 ms
+</code></pre></div>
+<h3 id="42-estudo-de-ablacao-isolamento-do-ganho-de-cada-intervencao">4.2. Estudo de Ablação — Isolamento do Ganho de Cada Intervenção</h3>
+<p>Para comprovar exatamente quanto cada fator contribui para o resultado final sem misturar efeitos, as três intervenções foram aplicadas incrementalmente sobre a <strong>mesma query SQL</strong>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Etapa Incremental (Mesma Query SQL)</th>
+<th style="text-align: left;">Operadores Principais Escolhidos pelo Planejador</th>
+<th style="text-align: left;">Blocos <code>shared</code> (<code>hit + read</code>)</th>
+<th style="text-align: left;">Blocos <code>temp</code> (<code>read + written</code>)</th>
+<th style="text-align: left;">Tempo dos Scans + Joins</th>
+<th style="text-align: left;">Tempo Total (<code>Execution Time</code>)</th>
+<th style="text-align: left;">O que Esta Etapa Isoladamente Resolve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>0. Baseline Pré-Otimização</strong> (<code>explain_before.txt</code>)</td>
+<td style="text-align: left;"><code>Seq Scan</code> na fato + <code>Hash Join (::text)</code> + <code>Sort (245MB disk)</code> + <code>Merge Join</code> + <code>HashAggregate (129 batches)</code></td>
+<td style="text-align: left;"><code>161.832</code> (<code>1.264,3 MB</code>)</td>
+<td style="text-align: left;"><code>234.122</code> (<code>1.829,1 MB</code>)</td>
+<td style="text-align: left;"><code>32.571,34 ms</code></td>
+<td style="text-align: left;"><strong><code>39.968,84 ms</code></strong> <em>(45.191,54 ms verbose)</em></td>
+<td style="text-align: left;">Estado inicial: cast <code>CHAR(32)::text</code>, erro de 31x na cardinalidade, 2 spills em disco e leitura total da heap.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>1. + Fator A</strong> <em>(Persistência <code>CHAR(32)</code> de <code>sk_tempo</code> e <code>sk_medicamento</code> + <code>UNIQUE</code> + <code>PARALLEL SAFE</code>, sem índice na fato, <code>work_mem=4MB</code>)</em></td>
+<td style="text-align: left;"><code>Parallel Seq Scan</code> (2 workers) + 3 <code>Hash Joins</code> diretos (<code>bpchar = bpchar</code>) + <code>Parallel Sort</code> + <code>GroupAggregate</code></td>
+<td style="text-align: left;"><code>162.397</code> (<code>1.268,7 MB</code>)</td>
+<td style="text-align: left;"><code>102.791</code> (<code>803,1 MB</code>)</td>
+<td style="text-align: left;"><code>2.673,83 ms</code> <em>(por worker)</em></td>
+<td style="text-align: left;"><strong><code>9.025,99 ms</code></strong> <strong>(-77,4%)</strong></td>
+<td style="text-align: left;"><strong>Elimina o cast <code>::text</code> e o <code>Merge Join + Sort (245 MB)</code></strong>, reduzindo o tempo em <strong>-30,9 s</strong> e o temp I/O em <strong>-56,1%</strong>, mas <strong>continua lendo 100% da heap da fato (<code>161.683</code> blocos)</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2. + Fator B</strong> <em>(+ Índice de Cobertura Parcial <code>idx_fato_venda_antimicrobiano_covering</code> + <code>VACUUM ANALYZE</code>, mantendo <code>work_mem=4MB</code>)</em></td>
+<td style="text-align: left;"><code>Nested Loop</code> + <strong><code>Index Only Scan (Heap Fetches: 0)</code></strong> + 2 <code>Hash Joins (Inner Unique)</code> + <code>HashAggregate (65 batches disk)</code></td>
+<td style="text-align: left;"><strong><code>42.751</code></strong> (<code>334,0 MB</code>) <strong>(-73,6%)</strong></td>
+<td style="text-align: left;"><code>84.188</code> (<code>657,7 MB</code>)</td>
+<td style="text-align: left;"><strong><code>4.690,33 ms</code></strong> <em>(1 processo)</em></td>
+<td style="text-align: left;"><strong><code>9.554,63 ms</code></strong> <em>(4,69s joins + 4,86s spill)</em></td>
+<td style="text-align: left;"><strong>Corta 73,6% dos blocos compartilhados lidos (<code>-119.081</code> blocos / <code>-930,3 MB</code>)</strong> e zera acessos à heap (<code>Heap Fetches: 0</code>), mas com <code>work_mem=4MB</code> a agregação final ainda gasta <code>4,86 s</code> gravando <code>65 batches</code> em disco.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3. + Fator C</strong> <em>(+ <code>work_mem = '256MB'</code> e <code>jit = 'off'</code> — <code>explain_after.txt</code>)</em></td>
+<td style="text-align: left;"><code>Nested Loop</code> + <strong><code>Index Only Scan (Heap Fetches: 0)</code></strong> + 2 <code>Hash Joins (Inner Unique)</code> + <strong><code>HashAggregate (Batches: 1, RAM)</code></strong></td>
+<td style="text-align: left;"><strong><code>42.751</code></strong> (<code>334,0 MB</code>) <strong>(-73,6%)</strong></td>
+<td style="text-align: left;"><strong><code>0</code></strong> (<code>0 MB</code>) <strong>(-100%)</strong></td>
+<td style="text-align: left;"><strong><code>2.798,27 ms</code></strong></td>
+<td style="text-align: left;"><strong><code>4.916,43 ms</code></strong> <em>(4.920,51 ms 1ª exec)</em> <strong>(-87,7% / -89,1%)</strong></td>
+<td style="text-align: left;"><strong>Elimina 100% do spill do <code>HashAggregate</code> (<code>Batches: 1</code>)</strong>, consolidando a redução estrutural de blocos (<code>-73,6%</code> em <code>shared</code>) com zero I/O temporário (<code>-4,63 s</code> adicionais).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusão do isolamento de fatores:</strong>
+1. <strong>O Fator A (tipagem/persistência de <code>sk_*</code> nas dimensões)</strong> é o responsável por eliminar o erro de planejamento do <code>Merge Join</code> e derrubar o tempo de CPU/ordenação de <code>~40 s</code> para <code>~9 s</code>, porém <strong>não reduz a leitura de blocos da tabela fato (<code>162.397</code> blocos)</strong>.
+2. <strong>O Fator B (índice parcial de cobertura <code>idx_fato_venda_antimicrobiano_covering</code>)</strong> é a intervenção estrutural que <strong>reduz em 73,6% a leitura de blocos compartilhados (<code>161.832</code> → <code>42.751</code> blocos)</strong> e elimina 100% dos acessos à heap (<code>Heap Fetches: 0</code>), entregando todas as <code>2.122.690</code> linhas já juntadas em <code>2,80 s</code>.
+3. <strong>O Fator C (<code>work_mem = 256MB</code>)</strong> remove o último gargalo remanescente (<code>4,86 s</code> de <em>spill to disk</em> nos <code>65 batches</code> do <code>HashAggregate</code>), levando o tempo total para <strong><code>4,92 s</code></strong>.</p>
+<h3 id="43-por-que-o-plano-usa-seq-scan-nas-dimensoes-e-inner-unique-true">4.3. Por que o Plano Usa <code>Seq Scan</code> nas Dimensões e <code>Inner Unique: true</code>?</h3>
+<p>Uma leitura atenta do <a href="../explain_after.txt"><code>explain_after.txt</code></a> mostra <code>Seq Scan</code> nas três tabelas dimensionais (<code>periodo</code>, <code>dim_municipio</code> e <code>medicamento</code>). Isso ocorre porque o otimizador de custos do PostgreSQL escolhe o acesso mais barato para tabelas pequenas:
+* <strong><code>periodo</code> ocupa apenas <code>1</code> bloco de 8 KB</strong> (<code>12</code> linhas): ler 1 página sequencialmente leva <code>0,04 ms</code> (um índice B-Tree exigiria ler pelo menos 2 páginas: raiz + folha).
+* <strong><code>medicamento</code> ocupa <code>128</code> blocos (<code>1 MB</code>, <code>4.590</code> linhas)</strong>: como a consulta agrupa por todos os princípios ativos sem filtrar um medicamento específico, 100% das linhas são necessárias para construir a tabela hash em memória (<code>473 KB</code>), lida sequencialmente em <code>2,05 ms</code>.
+* <strong><code>dim_municipio</code> ocupa <code>68</code> blocos (<code>544 KB</code>, <code>4.898</code> linhas)</strong>: o filtro <code>regiao = 'Sudeste'</code> seleciona <code>1.609</code> municípios (<strong>32,8% da tabela</strong>). Com seletividade de 32,8% distribuída nas 68 páginas, ler os 68 blocos contíguos via <code>Seq Scan</code> é mais rápido que saltar entre páginas de índice e tabela.
+* <strong>Papel ativo dos índices <code>idx_periodo_sk_tempo</code> e <code>idx_medicamento_sk_medicamento</code> no plano:</strong> Embora o PostgreSQL leia <code>periodo</code> e <code>medicamento</code> via <code>Seq Scan</code> para montar as tabelas hash, ele utiliza os índices <code>UNIQUE</code> criados em <code>sk_tempo</code> e <code>sk_medicamento</code> durante o planejamento para ativar a otimização <strong><code>Inner Unique: true</code></strong> nos dois <code>Hash Joins</code> (linhas 68 e 73 de <a href="../explain_after.txt"><code>explain_after.txt</code></a>), garantindo que cada linha da fato interrompa a busca no bucket hash imediatamente após o primeiro match.</p>
+<hr />
+<h2 id="5-relatorio-comparativo-de-metricas-antes-vs-depois-mesma-query">5. Relatório Comparativo de Métricas (Antes vs. Depois — Mesma Query)</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Métrica / Indicador do Plano</th>
+<th style="text-align: left;">Pré-Otimização (<code>explain_before.txt</code>)</th>
+<th style="text-align: left;">Pós-Otimização (<code>explain_after.txt</code>)</th>
+<th style="text-align: left;">Variação / Ganho Obtido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tempo Total (<code>Execution Time</code> — 1ª Execução)</strong></td>
+<td style="text-align: left;"><code>39.968,842 ms</code> (~40,0 s)</td>
+<td style="text-align: left;"><strong><code>4.920,514 ms</code></strong> (~4,9 s)</td>
+<td style="text-align: left;"><strong>-87,7% (<code>8,12x</code> mais rápido)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tempo Total (<code>Execution Time</code> — <code>VERBOSE, SETTINGS</code>)</strong></td>
+<td style="text-align: left;"><code>45.191,538 ms</code> (~45,2 s)</td>
+<td style="text-align: left;"><strong><code>4.916,431 ms</code></strong> (~4,9 s)</td>
+<td style="text-align: left;"><strong>-89,1% (<code>9,19x</code> mais rápido)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Custo Estimado pelo Otimizador (<code>Total Cost</code>)</strong></td>
+<td style="text-align: left;"><code>1.206.272,16</code></td>
+<td style="text-align: left;"><strong><code>248.982,14</code></strong></td>
+<td style="text-align: left;"><strong>-79,4% no custo estimado</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operador de Leitura na <code>fato_venda_medicamento</code></strong></td>
+<td style="text-align: left;"><code>Seq Scan</code> (varre 6,14M linhas + filtra 1,55M)</td>
+<td style="text-align: left;"><strong><code>Index Only Scan</code></strong> (<code>Heap Fetches: 0</code>)</td>
+<td style="text-align: left;"><strong>100% dos acessos à heap eliminados</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operador de Junção com <code>dim_medicamento</code></strong></td>
+<td style="text-align: left;"><code>Sort (external merge 245MB)</code> + <code>Merge Join</code></td>
+<td style="text-align: left;"><strong><code>Hash Join (Inner Unique)</code> em RAM (<code>473 KB</code>)</strong></td>
+<td style="text-align: left;"><strong>Eliminação do Sort externo e do cast <code>::text</code></strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Buffers Compartilhados Totais (<code>shared hit + read</code>)</strong></td>
+<td style="text-align: left;"><code>161.832</code> blocos (<code>1.264,3 MB</code>)</td>
+<td style="text-align: left;"><strong><code>42.751</code> blocos (<code>334,0 MB</code>)</strong></td>
+<td style="text-align: left;"><strong>-73,6% (<code>-119.081</code> blocos / <code>-930,3 MB</code>)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Leituras Físicas/SO (<code>shared read</code>)</strong></td>
+<td style="text-align: left;"><code>150.643</code> blocos (<code>1.176,9 MB</code>)</td>
+<td style="text-align: left;"><strong><code>37.932</code> blocos (<code>296,3 MB</code>)</strong></td>
+<td style="text-align: left;"><strong>-74,8% de leitura de disco/SO</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Buffers Temporários Lidos (<code>temp read</code>)</strong></td>
+<td style="text-align: left;"><code>86.753</code> blocos (<code>677,8 MB</code>)</td>
+<td style="text-align: left;"><strong><code>0</code> blocos (<code>0 MB</code>)</strong></td>
+<td style="text-align: left;"><strong>-100% (Spill to Disk eliminado)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Buffers Temporários Escritos (<code>temp written</code>)</strong></td>
+<td style="text-align: left;"><code>147.369</code> blocos (<code>1.151,3 MB</code>)</td>
+<td style="text-align: left;"><strong><code>0</code> blocos (<code>0 MB</code>)</strong></td>
+<td style="text-align: left;"><strong>-100% (Spill to Disk eliminado)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Partições do <code>HashAggregate</code> (<code>Batches</code>)</strong></td>
+<td style="text-align: left;"><code>129</code> batches (<code>Disk Usage: 255.040 KB</code>)</td>
+<td style="text-align: left;"><strong><code>1</code> batch (<code>Disk Usage: 0 KB</code>)</strong></td>
+<td style="text-align: left;"><strong>100% processado em RAM</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Volume Total de I/O de Blocos (<code>shared + temp</code>)</strong></td>
+<td style="text-align: left;"><code>395.954</code> blocos (<strong><code>3.093,4 MB</code> / <code>3,02 GB</code></strong>)</td>
+<td style="text-align: left;"><strong><code>42.751</code> blocos (</strong><code>334,0 MB</code><strong>)</strong></td>
+<td style="text-align: left;"><strong>-89,2% de I/O total (<code>9,26x</code> menos blocos)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-projecao-de-escalabilidade-para-o-ano-completo-12-meses-6826-milhoes-de-linhas">6. Projeção de Escalabilidade para o Ano Completo (12 Meses — 68,26 Milhões de Linhas)</h2>
+<p>Como destacado na Seção 1.2, o lote avaliado no container local (<code>202001</code>) contém <strong><code>6.143.427</code> linhas</strong> (Janeiro/2020), enquanto os 12 arquivos mensais de 2020 somam <strong><code>68.264.756</code> linhas</strong> — um fator de escala exato de <strong><code>11,11x</code></strong>.</p>
+<p>Abaixo apresentamos o comportamento projetado para os 12 meses completos e as decisões de engenharia necessárias para manter a performance em escala anual e plurianual:</p>
+<h3 id="61-projecao-quantitativa-1-mes-614m-vs-12-meses-6826m">6.1. Projeção Quantitativa: 1 Mês (<code>6,14M</code>) vs. 12 Meses (<code>68,26M</code>)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente / Métrica</th>
+<th style="text-align: left;">Medido em 1 Mês (<code>202001</code> — <code>6,14M</code> linhas)</th>
+<th style="text-align: left;">Projetado para 12 Meses (<code>202001–202012</code> — <code>68,26M</code> linhas)</th>
+<th style="text-align: left;">Impacto Técnico em Escala Anual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tamanho da Heap (<code>fato_venda_medicamento</code>)</strong></td>
+<td style="text-align: left;"><code>1.263 MB</code> (<code>161.683</code> blocos)</td>
+<td style="text-align: left;"><strong><code>~14,03 GB</code></strong> (<code>~1.796.000</code> blocos)</td>
+<td style="text-align: left;">Um <code>Seq Scan</code> pré-otimização leria <code>14 GB</code> do disco a cada consulta.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Linhas no Filtro (<code>eh_antimicrobiano</code> + Sudeste)</strong></td>
+<td style="text-align: left;"><code>2.122.690</code> linhas</td>
+<td style="text-align: left;"><strong><code>~23.583.000</code> linhas</strong></td>
+<td style="text-align: left;">O <code>Merge Join</code> pré-otimização despejaria <strong>~2,7 GB</strong> no <code>Sort</code> externo + <strong>~2,8 GB</strong> no <code>HashAggregate</code> (<strong>&gt; 34 GB</strong> de I/O total e <strong>7 a 9 minutos</strong> de execução).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Grupos na Agregação (<code>GROUP BY</code> mensal)</strong></td>
+<td style="text-align: left;"><code>216.358</code> grupos (1 mês)</td>
+<td style="text-align: left;"><strong><code>~2.400.000</code> grupos</strong> (12 meses × ~200k combin. municipais/princípio ativo/faixa)</td>
+<td style="text-align: left;">Em 12 meses, <code>2,4M</code> grupos exigiriam <code>~1,4 GB</code> de RAM no <code>HashAggregate</code> (voltando a fazer <em>spill</em> se <code>work_mem = 256MB</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Índice Covering com 3 chaves <code>CHAR(32)</code> MD5</strong> <code>(sk_municipio, sk_tempo, sk_medicamento)</code></td>
+<td style="text-align: left;"><code>622 MB</code> (<code>4,59M</code> linhas indexadas)</td>
+<td style="text-align: left;"><strong><code>~6,91 GB</code></strong> (<code>~51,0M</code> linhas indexadas)</td>
+<td style="text-align: left;">Cada tupla do índice carrega <code>3 × 33 = 99 bytes</code> só em strings MD5. Em 12 meses, os blocos lidos do Sudeste no índice passariam de <code>334 MB</code> para <strong><code>~3,7 GB</code></strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Índice Covering com chaves inteiras</strong> <code>(sk_municipio, id_periodo, id_medicamento)</code></td>
+<td style="text-align: left;"><code>339 MB</code> <em>(medido experimentalmente)</em></td>
+<td style="text-align: left;"><strong><code>~3,76 GB</code></strong> (<strong>-45,5% menor</strong>)</td>
+<td style="text-align: left;">Trocar <code>sk_tempo CHAR(32)</code> e <code>sk_medicamento CHAR(32)</code> por <code>id_periodo INT</code> (4B) e <code>id_medicamento BIGINT</code> (8B) economiza <strong>54 bytes por entrada</strong> (<code>-3,15 GB</code> no ano).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-arquitetura-recomendada-para-os-6826-milhoes-de-linhas-ano-completo">6.2. Arquitetura Recomendada para os 68,26 Milhões de Linhas (Ano Completo)</h3>
+<p>Quando os 12 meses (<code>68,26M</code> linhas) estão carregados, três ajustes complementares evitam o crescimento linear do índice de cobertura (<code>6,91 GB</code>) e o estouro de memória dos <code>2,4M</code> grupos:</p>
+<ol>
+<li><strong>Particionamento Declarativo Mensal da Tabela Fato (<code>PARTITION BY RANGE (id_periodo)</code>):</strong></li>
+<li>Dividir <code>fato_venda_medicamento</code> em 12 partições mensais mantém cada partição exatamente do tamanho medido neste benchmark (<code>~1,17 GB</code> de heap e <code>~310–570 MB</code> de índice local).</li>
+<li>Consultas filtradas por mês/trimestre acionam <em>Partition Pruning</em> imediato, e o PostgreSQL 16 pode executar <strong><code>Partitionwise Aggregate</code></strong>, agregando cada mês separadamente (<code>~216k</code> grupos / <code>128 MB</code> de <code>work_mem</code> por partição) sem nunca precisar manter <code>2,4 milhões</code> de grupos simultâneos na memória.</li>
+<li><strong>Substituição de Surrogate Keys <code>CHAR(32)</code> MD5 por Chaves Inteiras (<code>INT</code>/<code>BIGINT</code>) ou <code>UUID</code> Nativo (16 bytes):</strong></li>
+<li>Na modelagem atual da E3, 6 colunas <code>CHAR(32)</code> na tabela fato consomem <code>198 bytes</code> por linha (<strong>&gt; 60% do tamanho da tabela</strong>). Se a chave substituta for armazenada como <code>BIGINT</code> (8 bytes) ou <code>UUID</code> nativo do PostgreSQL (<code>16 bytes</code> binários em vez de <code>32 bytes</code> texto hex), a heap anual cai de <code>14 GB</code> para <strong><code>~8,2 GB</code></strong> e o índice de cobertura anual cai de <code>6,91 GB</code> para <strong><code>~3,76 GB</code></strong>.</li>
+<li><strong>Materialized View na Camada Gold para o Painel de Gestão (<code>mv_consumo_antimicrobiano_mensal</code>):</strong></li>
+<li>Como a carga do SNGPC é mensal em lote (batch), pré-agregar o grão <code>(id_periodo, sk_municipio, sk_medicamento, faixa_etaria)</code> reduz as <code>68.264.756</code> transações individuais do ano inteiro para <strong><code>~2,6 milhões</code> de linhas pré-agregadas</strong> (<strong>redução de 96% no volume</strong>), permitindo que qualquer filtro do painel responda em <strong><code>&lt; 100 ms</code></strong> com menos de <code>150 MB</code> em disco.</li>
+</ol>
+<hr />
+<h2 id="7-como-reproduzir-com-seguranca">7. Como Reproduzir com Segurança</h2>
+<p>Com o banco carregado e o modelo dimensional populado (<code>make modelo-dimensional</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Aplicar o modelo dimensional atualizado (sql/11), índices (sql/14) e VACUUM ANALYZE</span>
+make<span class="w"> </span>otimizar-performance
+
+<span class="c1"># 2. Executar o benchmark completo (gera explain_before.txt, explain_ablacao.txt e explain_after.txt)</span>
+<span class="c1">#    O estado &quot;antes&quot; e as etapas intermediárias da ablação rodam dentro de transações</span>
+<span class="c1">#    BEGIN ... ROLLBACK com SET LOCAL, de modo que o banco real nunca perde as colunas</span>
+<span class="c1">#    geradas nem o índice de cobertura e não altera o work_mem global.</span>
+make<span class="w"> </span>benchmark-performance
+
+<span class="c1"># 3. Validar idempotência de sql/11, sql/12 e sql/14 (aplicados 2x seguidas) e INSERT nas colunas geradas</span>
+make<span class="w"> </span>test-scd2
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>

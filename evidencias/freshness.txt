@@ -1,0 +1,21 @@
+=== Teste de freshness — 2026-11-09T01:42:44-03:00 ===
+ Container farmadata_db Running 
+ Container farmadata_db Waiting 
+ Container farmadata_db Healthy 
+NOTICE:  database "farmadata_sim_freshness" does not exist, skipping
+[1] Tabela nunca construída (esperado: ERRO)
+[ERRO] fato_teste | última carga: 2026-11-09 04:42:46.34845+00 | última construção: nunca construída | limites: warn 24h, erro 48h
+   ✓ código de saída 2, como esperado
+[2] Tabela construída depois da carga (esperado: OK)
+[OK] fato_teste | última carga: 2026-11-09 04:42:46.34845+00 | última construção: 2026-11-09 04:42:46.695873+00 | limites: warn 24h, erro 48h
+   ✓ código de saída 0, como esperado
+[3] Carga nova há 30h, tabela construída antes dela (esperado: WARN)
+[WARN] fato_teste | última carga: 2026-11-07 22:42:47.400439+00 | última construção: 2026-11-07 12:42:47.239553+00 | limites: warn 24h, erro 48h
+   ✓ código de saída 1, como esperado
+[4] Mesma carga pendente há 50h (esperado: ERRO)
+[ERRO] fato_teste | última carga: 2026-11-07 02:42:47.736765+00 | última construção: 2026-11-06 16:42:47.894133+00 | limites: warn 24h, erro 48h
+   ✓ código de saída 2, como esperado
+[5] Reconstrução após a mitigação (esperado: OK)
+[OK] fato_teste | última carga: 2026-11-07 02:42:47.736765+00 | última construção: 2026-11-09 04:42:48.210429+00 | limites: warn 24h, erro 48h
+   ✓ código de saída 0, como esperado
+=== RESULTADO: atraso induzido dispara WARN e ERRO; reconstruir volta a OK ✓ ===

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Documentação do Projeto</title>
+        <title>FarmaData</title>
       
     
     
@@ -78,7 +78,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href="." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -92,7 +92,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -310,6 +310,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="orchestration/" class="md-tabs__link">
         
   
@@ -383,13 +421,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -501,6 +539,15 @@
   
     <nav class="md-nav" aria-label="Como rodar">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#painel-analitico-streamlit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Painel analítico (Streamlit)
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#camada-analitica-delta-lake-parquet" class="md-nav__link">
@@ -703,7 +750,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -727,6 +774,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -935,6 +1005,50 @@
   
   
     <li class="md-nav__item">
+      <a href="QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="orchestration/" class="md-nav__link">
         
   
@@ -1073,6 +1187,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#painel-analitico-streamlit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Painel analítico (Streamlit)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#camada-analitica-delta-lake-parquet" class="md-nav__link">
     <span class="md-ellipsis">
       Camada analítica (Delta Lake + Parquet)
@@ -1185,7 +1308,7 @@
 <p>Projeto da disciplina Sistemas de Bancos de Dados 2 — UnB.<br />
 Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC/Anvisa, ano configurável).</p>
 </blockquote>
-<p><strong>Pergunta de gestão:</strong> Quais princípios ativos, municípios e períodos concentram o maior volume de dispensações em um ano, e como esses padrões se distribuem por região e faixa etária?</p>
+<p><strong>Pergunta de gestão:</strong> Quais princípios ativos, classes terapêuticas e municípios concentram o maior volume de dispensações no Brasil, e de que forma indicadores demográficos per capita (IBGE População e Faixa Etária), condições clínicas diagnósticas (DATASUS CID-10) e dinâmicas meteorológicas sazonais (INMET Temperatura e Precipitação) explicam os padrões territoriais e os picos de consumo?</p>
 <center>
 <table style="width: 100%;">
     <tr>
@@ -1267,11 +1390,16 @@ Análise de venda de medicamentos controlados e antimicrobianos no Brasil (SNGPC
 </ul>
 <h3 id="arquitetura-decisoes-e-execucao">Arquitetura, Decisões e Execução</h3>
 <ul>
-<li><a href="diario/DIARIO_DE_BORDO/">Diário de Bordo (Semanas 7 a 10)</a></li>
+<li><a href="diario/DIARIO_DE_BORDO/">Diário de Bordo (Semanas 7 a 13)</a></li>
 <li><a href="adr/ADR-001/">ADR-001: Modelagem do Sistema de Origem FarmaData</a></li>
 <li><a href="adr/ADR-002/">ADR-002: Mecanismo de Ingestão e Formato Aberto</a></li>
-<li><a href="adr/ADR-003/">ADR-003: Dado atrasado e janela da dispensação</a></li>
+<li><a href="adr/ADR-003/">ADR-003: Realocar eventos atrasados para o período da dispensação</a></li>
+<li><a href="adr/ADR-004/">ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)</a></li>
+<li><a href="adr/ADR-005/">ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico</a></li>
+<li><a href="MODELO_DIMENSIONAL/">Modelo Dimensional e SCD2</a></li>
+<li><a href="orchestration/">Orquestração (Airflow)</a></li>
 <li><a href="CAMADA_ANALITICA/">Camada Analítica e Benchmark</a></li>
+<li><a href="performance/RELATORIO_PERFORMANCE/">Otimização de Performance e Planos de Execução</a></li>
 <li><a href="BASES_PUBLICAS/">Bases Públicas Complementares</a></li>
 <li><a href="ARQUITETURA/">Arquitetura</a></li>
 <li><a href="CDC/">Captura de Mudanças (CDC)</a></li>
@@ -1309,12 +1437,23 @@ POSTGRES_DB=farmadata
 POSTGRES_PORT=5432
 ANO_RECORTE=2020
 </code></pre></div>
+<h3 id="painel-analitico-streamlit">Painel analítico (Streamlit)</h3>
+<p>Com a carga terminada (<code>docker compose logs -f carga</code> até o container sair):</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>modelo-dimensional<span class="w">   </span><span class="c1"># constrói dim_municipio (SCD2) e fato_venda_medicamento</span>
+make<span class="w"> </span>dashboard<span class="w">            </span><span class="c1"># sobe o painel em http://localhost:8501</span>
+</code></pre></div>
+<ul>
+<li>Sem <code>make modelo-dimensional</code>, a fato fica vazia e o painel mostra <strong>ERRO de freshness</strong> em vez dos gráficos (a regra trata tabela nunca construída como ERRO).</li>
+<li>Na primeira abertura, a aba de clima leva cerca de 50 s (consulta sobre 68 milhões de linhas); depois o cache responde da memória por 1 hora.</li>
+<li>Sem <code>make</code> (Windows sem Git Bash/WSL): <code>docker compose up -d db</code> e depois <code>docker compose up dashboard</code>.</li>
+</ul>
+<p>Decisão e benchmark em <a href="docs/adr/ADR-005.md"><code>docs/adr/ADR-005.md</code></a>.</p>
 <h3 id="camada-analitica-delta-lake-parquet">Camada analítica (Delta Lake + Parquet)</h3>
 <p>Com o banco já carregado:</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>lakehouse<span class="w">        </span><span class="c1"># exporta para data/lakehouse/delta, compacta e valida com DuckDB</span>
 make<span class="w"> </span>lakehouse-bench<span class="w">  </span><span class="c1"># benchmark de layout antes/depois</span>
 </code></pre></div>
-<p>Detalhes e justificativas em <a href="docs/CAMADA_ANALITICA.md"><code>docs/CAMADA_ANALITICA.md</code></a>.</p>
+<p>Detalhes e justificativas em <a href="CAMADA_ANALITICA/">Camada Analítica</a>.</p>
 <hr />
 <h2 id="estrutura">Estrutura</h2>
 <div class="highlight"><pre><span></span><code>FarmaData/
@@ -1494,7 +1633,7 @@ ausentes (<code>make carga-incremental</code>). Um mês novo publicado pela Anvi
 <p><strong>Limitações assumidas:</strong> a granularidade de reprocessamento é o arquivo mensal (não a linha); o <code>DELETE</code> de ~6 milhões
 de linhas gera bloat — a evolução natural é particionar <code>venda_medicamento</code> por <code>id_periodo</code> e usar <code>TRUNCATE</code> da partição.</p>
 <h2 id="dado-atrasado">Dado atrasado</h2>
-<p>A janela da linha é o mês da venda (<code>nu_ano_venda</code>, <code>nu_mes_venda</code>), não o mês do CSV. Decisão e motivos em <a href="docs/adr/ADR-003-dado-atrasado.md"><code>docs/adr/ADR-003-dado-atrasado.md</code></a>.</p>
+<p>A janela da linha é o mês da venda (<code>nu_ano_venda</code>, <code>nu_mes_venda</code>), não o mês do CSV. Decisão e motivos em <a href="adr/ADR-003/">ADR-003</a>.</p>
 <table>
 <thead>
 <tr>

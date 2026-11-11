@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Consultas - Documentação do Projeto</title>
+        <title>Consultas - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -310,6 +310,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -519,7 +557,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -543,6 +581,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -751,6 +812,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../orchestration/" class="md-nav__link">
         
   
@@ -912,6 +1017,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#11-consulta-principal-da-camada-de-consumo-esquema-estrela-e3-issue-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Consulta principal da camada de consumo (Esquema Estrela — E3 / Issue #28)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1058,6 +1172,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#11-consulta-principal-da-camada-de-consumo-esquema-estrela-e3-issue-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. Consulta principal da camada de consumo (Esquema Estrela — E3 / Issue #28)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1189,6 +1312,40 @@ e como esses padrões se distribuem por região e faixa etária.</p>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">populacao</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
 </code></pre></div>
 <p>Insight Analítico: A importação da pirâmide etária do IBGE revela que o DF tem uma forte concentração populacional entre os 20 e 49 anos, e uma base estreita (queda de natalidade em 0-4 anos). Isto viabiliza a transformação do volume absoluto de vendas de antimicrobianos (Query 5) em taxas de consumo proporcional por habitante de cada faixa etária, revelando o verdadeiro padrão de medicalização da população.</p>
+<h2 id="11-consulta-principal-da-camada-de-consumo-esquema-estrela-e3-issue-28">11. Consulta principal da camada de consumo (Esquema Estrela — E3 / Issue #28)</h2>
+<p>Responde de forma integrada à pergunta de gestão da E1 sobre o modelo dimensional (<code>fato_venda_medicamento</code> + <code>dim_tempo</code> + <code>dim_municipio</code> SCD2 + <code>dim_medicamento</code>), otimizada para execução via <em>Index-Only Scan</em> (<code>Heap Fetches: 0</code>) e agregação em memória sem <em>spill to disk</em> (análise completa em <a href="../performance/RELATORIO_PERFORMANCE/"><code>docs/performance/RELATORIO_PERFORMANCE.md</code></a>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">mes</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">trimestre</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">sigla_uf</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">nome_municipio</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">principio_ativo</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;0-11 (criança)&#39;</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;12-17 (adolescente)&#39;</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;18-59 (adulto)&#39;</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;60+ (idoso)&#39;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">faixa_etaria</span><span class="p">,</span>
+<span class="w">    </span><span class="k">SUM</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">quantidade_vendida</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">volume_total_dispensado</span><span class="p">,</span>
+<span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_dispensacoes</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">fato_venda_medicamento</span><span class="w"> </span><span class="n">f</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_tempo</span><span class="w"> </span><span class="n">t</span><span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">sk_tempo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_tempo</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_municipio</span><span class="w"> </span><span class="n">dm</span><span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">sk_municipio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_municipio</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">dim_medicamento</span><span class="w"> </span><span class="n">m</span><span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">sk_medicamento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">sk_medicamento</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">eh_antimicrobiano</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">TRUE</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">idade_paciente</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2020</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Sudeste&#39;</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">ano</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">mes</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">trimestre</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dm</span><span class="p">.</span><span class="n">regiao</span><span class="p">,</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">sigla_uf</span><span class="p">,</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="n">nome_municipio</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">principio_ativo</span><span class="p">,</span>
+<span class="w">    </span><span class="n">faixa_etaria</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">volume_total_dispensado</span><span class="w"> </span><span class="k">DESC</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+</code></pre></div>
 
 
 

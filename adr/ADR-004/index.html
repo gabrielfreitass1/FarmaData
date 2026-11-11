@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -16,7 +16,7 @@
         <link rel="prev" href="../ADR-003/">
       
       
-        <link rel="next" href="../../entregas/E1/">
+        <link rel="next" href="../ADR-005/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD) - Documentação do Projeto</title>
+        <title>ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD) - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -312,6 +312,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -524,7 +562,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -636,10 +674,42 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#emenda-08112026-issue-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emenda (08/11/2026, issue #28)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -843,6 +913,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../orchestration/" class="md-nav__link">
         
   
@@ -973,6 +1087,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#emenda-08112026-issue-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emenda (08/11/2026, issue #28)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1088,7 +1211,35 @@ builtin, SCD2 por tabela + função PL/pgSQL idempotente.</strong></p>
 <p><strong>Dívidas técnicas:</strong>
 - As dimensões conformadas (views) não têm <code>sk_*</code> persistida — qualquer
   motor que precise de índice sobre a surrogate key terá que materializá-la
-  (fora de escopo da E3; a fato já carrega a <code>sk_*</code> resolvida).</p>
+  (fora de escopo da E3; a fato já carrega a <code>sk_*</code> resolvida).
+  <em>Paga para <code>dim_tempo</code> e <code>dim_medicamento</code> — ver emenda abaixo.</em></p>
+<hr />
+<h2 id="emenda-08112026-issue-28">Emenda (08/11/2026, issue #28)</h2>
+<p>A dívida técnica "dimensões conformadas sem <code>sk_*</code> persistida" foi paga para
+<code>dim_tempo</code> e <code>dim_medicamento</code>. <code>periodo.sk_tempo</code> e
+<code>medicamento.sk_medicamento</code> agora são colunas geradas (<code>CHAR(32)</code>,
+<code>GENERATED ALWAYS AS (sk_hash(...)::char(32)) STORED</code>) e as views as expõem.</p>
+<p><strong>Motivo:</strong> calculada na view, a <code>sk_*</code> saía como <code>TEXT</code>, enquanto a fato a
+guarda como <code>CHAR(32)</code>. O join virava <code>(f.sk_*)::text = sk_hash(...)</code>, sem
+estatística utilizável: erro de cardinalidade de 31x e um <code>Sort</code> externo de
+245 MB na consulta crítica do painel
+(<a href="../../performance/RELATORIO_PERFORMANCE/">docs/performance/RELATORIO_PERFORMANCE.md</a>).</p>
+<p><strong>Onde fica:</strong> a definição é parte do modelo, não ajuste de performance —
+está em <code>sql/11_dimensional_dim_municipio_scd.sql</code> (única definição das
+views). <code>sql/14_otimizacao_performance.sql</code> contém apenas índices e
+estatísticas. <code>sql/11</code> é idempotente (<code>ADD COLUMN IF NOT EXISTS</code> +
+<code>DROP VIEW IF EXISTS</code>) e pode ser reaplicado antes ou depois do <code>sql/14</code>;
+<code>make test-scd2</code> prova isso aplicando 11, 12 e 14 duas vezes.</p>
+<p><strong>Consequências:</strong>
+- <code>periodo</code> e <code>medicamento</code> (tabelas do OLTP) ganham uma coluna cada. Coluna
+  gerada não aceita valor explícito: todo <code>INSERT</code>/<code>COPY</code> nelas precisa de
+  lista de colunas (já é o caso em <code>sql/03</code> e <code>scripts/carregar_sngpc.js</code>;
+  CDC e exportação Delta leem só <code>venda_medicamento</code>).
+- <code>sk_hash()</code> passa a ser declarada <code>PARALLEL SAFE</code>.
+- O restante da decisão não muda: as demais dimensões imutáveis
+  (<code>dim_conselho</code>, <code>dim_tipo_receituario</code>, <code>dim_unidade_medida</code>) seguem como
+  views finas com <code>sk_*</code> calculada, e <code>dim_municipio</code> segue como única tabela
+  SCD2.</p>
 
 
 

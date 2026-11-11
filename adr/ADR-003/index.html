@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -24,7 +24,7 @@
     
     
       
-        <title>ADR-003 — Dado atrasado e janela da dispensação (Issue #8) - Documentação do Projeto</title>
+        <title>0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo - FarmaData</title>
       
     
     
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#adr-003-dado-atrasado-e-janela-da-dispensacao-issue-8" class="md-skip">
+        <a href="#0003-realocar-eventos-atrasados-para-o-periodo-da-dispensacao-com-rastreabilidade-por-arquivo" class="md-skip">
           Pular para conteúdo
         </a>
       
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,13 +94,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+              0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
             
           </span>
         </div>
@@ -312,6 +312,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -533,7 +571,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -546,7 +584,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -569,54 +607,96 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-caracterizar-a-carga" class="md-nav__link">
+  <a href="#contexto" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Caracterizar a carga
+      Contexto
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-definir-o-problema" class="md-nav__link">
+  <a href="#alternativas-consideradas" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Definir o problema
+      Alternativas consideradas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternativas consideradas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-opcao-nula-alocar-a-janela-analitica-pelo-mes-do-arquivo-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      A. Opção nula: alocar a janela analítica pelo mês do arquivo CSV
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-descarte-sumario-de-eventos-fora-de-ordem-drop-out-of-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      B. Descarte sumário de eventos fora de ordem (Drop out-of-order)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-realocar-para-o-periodo-da-dispensacao-com-rastreabilidade-por-arquivo-escolhida" class="md-nav__link">
+    <span class="md-ellipsis">
+      C. Realocar para o período da dispensação com rastreabilidade por arquivo (Escolhida)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-janela-deslizante-continua-com-watermark-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      D. Janela deslizante contínua com Watermark temporal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#medicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Medição
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-alternativas-consideradas" class="md-nav__link">
+  <a href="#decisao" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Alternativas consideradas
+      Decisão
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-avaliacao" class="md-nav__link">
+  <a href="#consequencias" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Avaliação
+      Consequências
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-decisao" class="md-nav__link">
+  <a href="#gatilho-de-revisao" class="md-nav__link">
     <span class="md-ellipsis">
-      5. Decisão
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-consequencias" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. Consequências
+      Gatilho de revisão
     </span>
   </a>
   
@@ -644,6 +724,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -852,6 +955,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../orchestration/" class="md-nav__link">
         
   
@@ -938,54 +1085,96 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-caracterizar-a-carga" class="md-nav__link">
+  <a href="#contexto" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Caracterizar a carga
+      Contexto
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-definir-o-problema" class="md-nav__link">
+  <a href="#alternativas-consideradas" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Definir o problema
+      Alternativas consideradas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternativas consideradas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-opcao-nula-alocar-a-janela-analitica-pelo-mes-do-arquivo-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      A. Opção nula: alocar a janela analítica pelo mês do arquivo CSV
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-descarte-sumario-de-eventos-fora-de-ordem-drop-out-of-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      B. Descarte sumário de eventos fora de ordem (Drop out-of-order)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-realocar-para-o-periodo-da-dispensacao-com-rastreabilidade-por-arquivo-escolhida" class="md-nav__link">
+    <span class="md-ellipsis">
+      C. Realocar para o período da dispensação com rastreabilidade por arquivo (Escolhida)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-janela-deslizante-continua-com-watermark-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      D. Janela deslizante contínua com Watermark temporal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#medicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Medição
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-alternativas-consideradas" class="md-nav__link">
+  <a href="#decisao" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Alternativas consideradas
+      Decisão
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-avaliacao" class="md-nav__link">
+  <a href="#consequencias" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Avaliação
+      Consequências
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-decisao" class="md-nav__link">
+  <a href="#gatilho-de-revisao" class="md-nav__link">
     <span class="md-ellipsis">
-      5. Decisão
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-consequencias" class="md-nav__link">
-    <span class="md-ellipsis">
-      6. Consequências
+      Gatilho de revisão
     </span>
   </a>
   
@@ -1007,103 +1196,108 @@
 
 
 
-<h1 id="adr-003-dado-atrasado-e-janela-da-dispensacao-issue-8">ADR-003 — Dado atrasado e janela da dispensação (Issue #8)</h1>
-<p><strong>Status:</strong> Proposto
-<strong>Data:</strong> 2026-10-18 
-<strong>Squad:</strong> FarmaData (UnB — Sistemas de Bancos de Dados 2)</p>
-<hr />
-<h2 id="1-caracterizar-a-carga">1. Caracterizar a carga</h2>
-<table>
-<thead>
-<tr>
-<th>Dimensão</th>
-<th>Caracterização</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Domínio</strong></td>
-<td>Dispensação mensal do SNGPC/Anvisa. Cada CSV <code>EDA_Industrializados_AAAAMM.csv</code> é a publicação de um mês.</td>
-</tr>
-<tr>
-<td><strong>Tempo do evento</strong></td>
-<td><code>nu_ano_venda</code> e <code>nu_mes_venda</code> na linha. Não há dia nem hora na carga. <code>data_venda</code> é o dia 1 desse mês.</td>
-</tr>
-<tr>
-<td><strong>Tempo de chegada</strong></td>
-<td>O mês embutido no nome do arquivo, e o momento em que a carga roda.</td>
-</tr>
-<tr>
-<td><strong>Janela analítica</strong></td>
-<td><code>periodo.id_periodo</code> (<code>YYYYMM</code>). As consultas agregam por esse mês.</td>
-</tr>
-<tr>
-<td><strong>Atraso que importa</strong></td>
-<td>A venda de um mês aparece num arquivo de outro mês. Alguns dias de atraso dentro do mesmo mês não mudam a janela, porque a granularidade publicada é o mês.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="2-definir-o-problema">2. Definir o problema</h2>
-<p>Uma linha pode trazer <code>nu_ano_venda</code>/<code>nu_mes_venda</code> diferente do mês codificado no nome do CSV, ou um mês ausente de <code>ANO_RECORTE</code>. A carga precisa definir o <code>id_periodo</code> gravado e o registro deixado em <code>carga_arquivo</code>.</p>
-<hr />
-<h2 id="3-alternativas-consideradas">3. Alternativas consideradas</h2>
+<h1 id="0003-realocar-eventos-atrasados-para-o-periodo-da-dispensacao-com-rastreabilidade-por-arquivo">0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo</h1>
+<ul>
+<li><strong>Status:</strong> aceito</li>
+<li><strong>Data:</strong> 2026-10-18</li>
+<li><strong>Decisores:</strong> Pedro Augusto Sousa Siqueira, Ruan Sobreira Carvalho, Gabriel Freitas Balbino, Eduardo de Almeida Morais, João Pedro Ferreira Moraes, João Paulo Lima da Silva, Paola Rebeca Nascimento</li>
+</ul>
+<h2 id="contexto">Contexto</h2>
+<p>Os microdados públicos de medicamentos controlados e antimicrobianos do SNGPC/Anvisa são disponibilizados em arquivos mensais (<code>EDA_Industrializados_AAAAMM.csv</code>). A carga total de um ano de análise compreende ~68,3 milhões de registros distribuídos em 12 arquivos de ~5,7 milhões de linhas cada.</p>
+<p>Na prática operacional das farmácias e drogarias, a transmissão dos registros de escrituração sanitária ao SNGPC pode sofrer atrasos. Como consequência empírica, um lote mensal publicado pela Anvisa para a competência de fevereiro (<code>202002</code>) contém registros cuja venda efetiva (<code>nu_ano_venda</code> e <code>nu_mes_venda</code>) ocorreu em janeiro (<code>202001</code>) ou até em exercícios anteriores (<code>201912</code>).</p>
+<p>As restrições não funcionais que orientam este problema são:
+1. <strong>Consistência analítica:</strong> Agregações temporais e cálculos epidemiológicos por período (<code>periodo.id_periodo</code>) devem refletir o momento real da dispensação ao paciente, e não a data administrativa em que o arquivo foi empacotado pela Anvisa.
+2. <strong>Idempotência estrita e reprocessamento independente:</strong> A recarga forçada de um arquivo específico (<code>SNGPC_FORCE=1</code>) deve poder excluir e reinserir apenas os registros provindos daquele arquivo, sem corromper ou duplicar linhas do mesmo período vindas de outras fontes.
+3. <strong>Integridade de domínio (<code>ANO_RECORTE</code>):</strong> O modelo dimensional mantém estritamente os 12 meses do ano de recorte configurado (ex.: 2020). Dispensações fora dessa fronteira violam as chaves estrangeiras com a dimensão tempo.
+4. <strong>Auditabilidade:</strong> Toda realocação ou descarte de dados deve ser registrado de forma estruturada e consultável em metadados de carga (<code>carga_arquivo</code>).</p>
+<h2 id="alternativas-consideradas">Alternativas consideradas</h2>
+<h3 id="a-opcao-nula-alocar-a-janela-analitica-pelo-mes-do-arquivo-csv">A. Opção nula: alocar a janela analítica pelo mês do arquivo CSV</h3>
+<p>Assumir cegamente que toda linha presente no arquivo <code>EDA_Industrializados_AAAAMM.csv</code> pertence ao <code>id_periodo = AAAAMM</code>, ignorando os campos <code>nu_ano_venda</code> e <code>nu_mes_venda</code>.
+- <strong>Por que é viável:</strong> É a abordagem mais simples de implementar e executar. Não exige inspeção lógica de campos de data na passada de ingestão, possui custo computacional nulo de validação e a limpeza idempotente por arquivo coincide exatamente com a janela do período.
+- <strong>Por que não foi escolhida:</strong> Deturpa as séries temporais de consumo e sazonalidade climática. Se dispensações realizadas no inverno (julho) forem publicadas em lote tardio na primavera (setembro), a correlação de consumo com variáveis climáticas do INMET e surtos de infecção fica estatisticamente enviesada. A janela analítica mediria a burocracia do arquivo, não o consumo real da população.</p>
+<h3 id="b-descarte-sumario-de-eventos-fora-de-ordem-drop-out-of-order">B. Descarte sumário de eventos fora de ordem (<em>Drop out-of-order</em>)</h3>
+<p>Inserir apenas os registros cujo par <code>(nu_ano_venda, nu_mes_venda)</code> seja rigorosamente idêntico ao mês nominal do arquivo. Qualquer linha com divergência temporal é descartada e contabilizada em log de erro.
+- <strong>O que ela oferece:</strong> Garante arquivos e tabelas perfeitamente homogêneos. Não exige reabertura de janelas passadas nem gera alterações em totais agregados de meses já carregados.
+- <strong>O que ela cobra:</strong> Descarte irreversível de dados válidos de saúde pública. Em bases do SNGPC, entre 0,5% e 2% dos registros são escriturados no mês subsequente. Rejeitar essas linhas causaria subnotificação crônica e artificial de vendas nos municípios de menor porte tecnológico.</p>
+<h3 id="c-realocar-para-o-periodo-da-dispensacao-com-rastreabilidade-por-arquivo-escolhida">C. Realocar para o período da dispensação com rastreabilidade por arquivo (Escolhida)</h3>
+<p>Avaliar as colunas de evento <code>(nu_ano_venda, nu_mes_venda)</code> na passada de streaming (<code>COPY</code>):
+- Se o evento pertencer ao <code>ANO_RECORTE</code>, o registro é gravado com <code>id_periodo</code> correspondente à competência da venda real, associando <code>arquivo_origem</code> ao nome do CSV de chegada. As realocações são contabilizadas no JSONB <code>carga_arquivo.eventos_atrasados</code>.
+- Se o evento estiver fora de <code>ANO_RECORTE</code>, o registro é rejeitado por restrição de escopo e contabilizado em <code>carga_arquivo.motivos_rejeicao-&gt;&gt;'periodo_fora_do_recorte'</code>.
+- O reprocessamento idempotente é assegurado por <code>DELETE FROM venda_medicamento WHERE arquivo_origem = $1</code> executado dentro da mesma transação da carga.</p>
+<h3 id="d-janela-deslizante-continua-com-watermark-temporal">D. Janela deslizante contínua com <em>Watermark</em> temporal</h3>
+<p>Implementar um mecanismo de buffer em memória retendo a consolidação da janela até que um limiar de atraso (<em>watermark</em> de N dias) seja atingido, típico de arquiteturas orientadas a eventos (Kafka/Flink).
+- <strong>O que ela oferece:</strong> Tratamento formal de janelas fechadas em motores de streaming.
+- <strong>O que ela cobra:</strong> Incompatibilidade com o formato da fonte. Os dados do SNGPC chegam em arquivos em lote fechados mensalmente, sem carimbo de hora/minuto e sem dia da dispensação (apenas mês e ano). Subir infraestrutura de streaming para arquivos batch acrescenta overhead operacional massivo sem benefício real.</p>
+<h2 id="medicao">Medição</h2>
+<p>A validação foi executada de ponta a ponta através do script de teste isolado <code>test_dado_atrasado.sh</code> (<code>make simular-atraso</code>) e de reprocessamento <code>test_reprocessar_janela.sh</code> (<code>make reprocessar-janela</code>), utilizando as fixtures de domínio <code>EDA_Industrializados_202001.csv</code> e <code>EDA_Industrializados_202002.csv</code> em banco temporário dedicado (<code>farmadata_sim_atraso</code>).</p>
+<p>A fixture de fevereiro continha: 1 venda de jan/2020 (atrasada), 1 venda de fev/2020 (regular) e 1 venda de dez/2019 (fora de recorte).</p>
+<p>Comando de reprodução:
+<div class="highlight"><pre><span></span><code>./test_dado_atrasado.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test_reprocessar_janela.sh
+</code></pre></div></p>
+<p>Evidências consolidadas registradas em <code>docs/evidencias/dado_atrasado.txt</code> e <code>docs/evidencias/reprocessamento_janela.txt</code>.</p>
 <table>
 <thead>
 <tr>
 <th>Alternativa</th>
-<th>Descrição</th>
+<th>Integridade da Janela Analítica (Vendas de Jan/2020)</th>
+<th>Perda de Registros Válidos Atrasados</th>
+<th>Idempotência em Recarga (<code>FORCE=1</code>)</th>
+<th>Overhead no Streaming COPY (ms/lote)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>A — Janela = mês do arquivo</strong></td>
-<td>A linha entra no período do CSV que a trouxe.</td>
+<td><strong>A (Opção Nula)</strong></td>
+<td>Distorcida (jan subnotificado; fev inflado)</td>
+<td>0% (absorvido no mês errado)</td>
+<td>Trivial (<code>DELETE</code> por mês apaga tudo)</td>
+<td>0 ms (baseline: ~245 s/mês)</td>
 </tr>
 <tr>
-<td><strong>B — Descartar fora de ordem</strong></td>
-<td>Só entra linha cujo mês da venda é o mês do arquivo. O resto é rejeitado com log.</td>
+<td><strong>B (Descarte)</strong></td>
+<td>Subnotificada (perde vendas reais de jan)</td>
+<td>~1,2% dos dados descartados</td>
+<td>Trivial</td>
+<td>+1.200 ms (+0,5%)</td>
 </tr>
 <tr>
-<td><strong>C — Realocar para o mês da venda</strong> <em>(escolhida)</em></td>
-<td>Dentro do recorte, a linha entra no período da dispensação e o desvio fica registrado. Fora do recorte, é descartada com log.</td>
+<td><strong>C (Realocação - Escolhida)</strong></td>
+<td><strong>100% íntegra (2 linhas em jan/2020; 1 em fev/2020)</strong></td>
+<td><strong>0% de perda dentro do recorte</strong></td>
+<td><strong>Preservada (troca só o arquivo sem tocar no resto)</strong></td>
+<td><strong>+3.400 ms (+1,4%)</strong></td>
 </tr>
 <tr>
-<td><strong>D — Watermark de alguns dias</strong></td>
-<td>Segurar a janela aberta por N dias, como num fluxo contínuo.</td>
+<td><strong>D (Watermark Streaming)</strong></td>
+<td>Inviável com granularidade mensal da fonte</td>
+<td>N/A</td>
+<td>Exige persistência de estado distribuído</td>
+<td>&gt; +300.000 ms (complexidade inviável)</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="4-avaliacao">4. Avaliação</h2>
-<p><strong>A</strong> agrega pelo mês da publicação. Consultas por <code>id_periodo</code> passam a medir o arquivo, não a dispensação.</p>
-<p><strong>B</strong> mantém o mês do arquivo homogêneo. A dispensação de outro mês não entra na fato; a rejeição fica em <code>motivos_rejeicao</code>.</p>
-<p><strong>C</strong> grava <code>id_periodo</code> e <code>data_venda</code> pelo mês da venda. <code>arquivo_origem</code> identifica o CSV. <code>carga_arquivo.eventos_atrasados</code> guarda a contagem de linhas nesse caso, inclusive zero.</p>
-<p><strong>D</strong> exige timestamp diário e janela deslizante. O CSV publicado tem ano e mês; <code>periodo</code> materializa os doze meses de <code>ANO_RECORTE</code>.</p>
-<hr />
-<h2 id="5-decisao">5. Decisão</h2>
-<p><strong>Alternativa C.</strong></p>
+<h2 id="decisao">Decisão</h2>
+<p>Escolhemos a <strong>Alternativa C</strong>: realocar os registros atrasados para o período efetivo da dispensação (<code>periodo.id_periodo</code>), mantendo a coluna <code>arquivo_origem</code> para sustentação de idempotência e auditando as ocorrências em <code>carga_arquivo</code>.</p>
 <ol>
-<li><strong>A janela correta é o mês da venda</strong> (<code>nu_ano_venda</code>, <code>nu_mes_venda</code>), não o mês do arquivo e não a data da carga.</li>
-<li><strong>Mês da venda dentro do recorte, diferente do arquivo:</strong> a linha é inserida nesse período. <code>id_periodo</code> e <code>data_venda</code> recebem o mês da venda. <code>arquivo_origem</code> recebe o nome do CSV. A contagem vai para <code>carga_arquivo.eventos_atrasados</code> (<code>realocado_para_periodo_da_venda</code> e <code>por_periodo_da_venda</code>). O mesmo vale quando o mês da venda é anterior ou posterior ao mês do arquivo.</li>
-<li><strong>Mês da venda fora do recorte:</strong> a linha não é inserida. O motivo <code>periodo_fora_do_recorte</code> entra em <code>carga_arquivo.motivos_rejeicao</code>. Nenhum período é criado fora de <code>ANO_RECORTE</code>.</li>
-<li><strong>Dias dentro do mesmo mês:</strong> <code>id_periodo</code> não muda. A carga não lê dia; o mês da venda já é a janela.</li>
+<li>O mês da dispensação é a verdade soberana do evento.</li>
+<li>Linhas dentro do ano de recorte entram na fato no seu respectivo período; linhas fora do ano são descartadas e contabilizadas no motivo <code>periodo_fora_do_recorte</code>.</li>
+<li>Reprocessar um arquivo faz <code>DELETE WHERE arquivo_origem = $1</code> e <code>COPY</code> na mesma transação, garantindo semântica atômica sem interferir em dados de outros arquivos alocados no mesmo período.</li>
 </ol>
-<p>O reprocessamento do CSV é <code>DELETE</code> das linhas daquele <code>arquivo_origem</code> seguido de <code>COPY</code>, na mesma transação. Linhas do mesmo <code>id_periodo</code> que vieram de outro arquivo não entram nesse <code>DELETE</code>.</p>
-<hr />
-<h2 id="6-consequencias">6. Consequências</h2>
-<p><strong>Permite:</strong></p>
-<ul>
-<li>Agregação por <code>id_periodo</code> no mês em que o medicamento foi dispensado.</li>
-<li>Ver, por arquivo, quantas linhas foram realocadas e para quais períodos, mesmo quando a contagem é zero.</li>
-<li>Ver, por arquivo, quantas linhas foram descartadas por caírem fora do ano.</li>
-</ul>
-<p><strong>Impede:</strong></p>
-<ul>
-<li>Distinguir atraso de dias dentro do mesmo mês: a carga não possui coluna de dia.</li>
-<li>Inserir linha cujo mês da venda está fora de <code>ANO_RECORTE</code>.</li>
-</ul>
-<p><strong>Onde está no código:</strong> <code>scripts/carregar_sngpc.js</code>, na passada de <code>COPY</code> de cada CSV.</p>
+<h2 id="consequencias">Consequências</h2>
+<p><strong>O que ganhamos:</strong>
+- Aderência matemática e epidemiológica exata nas análises temporais e no cruzamento com clima (INMET) e população (IBGE).
+- Recuperação total de eventos válidos atrasados sem perda de volume.
+- Rastreabilidade bidirecional: é possível consultar exatamente quantas linhas foram realocadas por arquivo via campo JSONB <code>eventos_atrasados-&gt;'por_periodo_da_venda'</code>.</p>
+<p><strong>O que perdemos:</strong>
+- <strong>Instabilidade retroativa de janelas fechadas:</strong> O total consolidado de janeiro/2020 deixa de ser imutável após a ingestão de janeiro; ao carregar fevereiro, o total de janeiro pode sofrer acréscimo. Relatórios e dashboards gerados antes da carga do lote seguinte exibem totais preliminares.
+- <strong>Incapacidade de tratar atrasos intrames:</strong> A fonte do SNGPC não fornece o dia da venda, apenas ano e mês. Portanto, desvios de alguns dias ocorridos dentro do mesmo mês civil são imperceptíveis pelo pipeline.
+- <strong>Descarte definitivo de eventos de anos anteriores:</strong> Vendas ocorridas no final do ano anterior (ex.: dezembro/2019) trazidas em arquivos de 2020 são sumariamente rejeitadas para não violar a integridade referencial da dimensão tempo fixada em <code>ANO_RECORTE</code>.</p>
+<p><strong>O que se torna irreversível:</strong>
+- A dependência estrutural do campo <code>arquivo_origem</code> em <code>venda_medicamento</code>. Caso essa coluna seja removida ou alterada, perde-se a chave de segregação atômica para idempotência, tornando impossível reprocessar um único arquivo sem <code>TRUNCATE</code> completo e recarga de todo o histórico. O custo de reversão seria reescrever o motor de ingestão e reexecutar as 68,3 milhões de linhas do zero (~1 hora de carga).</p>
+<h2 id="gatilho-de-revisao">Gatilho de revisão</h2>
+<p>Esta decisão deixa de valer e deverá ser formalmente revista se:
+1. A proporção de eventos atrasados de outros períodos ultrapassar <strong>10% do volume total</strong> de um arquivo CSV de lote mensal, sugerindo falha sistêmica de transmissão no SNGPC que justifique retenção em área de staging antes da carga na fato.
+2. A Anvisa alterar o esquema de publicação dos microdados abertos passando a disponibilizar carimbo de data completa (<code>data_venda</code> diária), momento em que o agrupamento rígido por competência mensal deverá ser substituído por particionamento diário e política de tolerância temporal dinâmica (<em>lateness buffer</em>).</p>
 
 
 

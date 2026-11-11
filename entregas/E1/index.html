@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
       
       
       
-        <link rel="prev" href="../../adr/ADR-004/">
+        <link rel="prev" href="../../adr/ADR-005/">
       
       
         <link rel="next" href="../E2/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Release Notes 1 — Banco de Dados 2 - Documentação do Projeto</title>
+        <title>Release Notes 1 — Banco de Dados 2 - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href="../.." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -312,6 +312,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href="../.." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -519,7 +557,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -543,6 +581,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -834,6 +895,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../orchestration/" class="md-nav__link">
         
   
@@ -985,30 +1090,22 @@
 <hr />
 <h2 id="1-dominio-perguntas-e-valor-de-negocio">1. Domínio, perguntas e valor de negócio</h2>
 <p>Domínio de aplicação:
-Nosso projeto tem como objetivo auxiliar a indústria farmacêutica, fornecedores e farmácias com o gerenciamento/fabricação de medicamentos. Com os nossos dados, podemos analisar como o consumo de medicamentos se distribui ao longo do tempo, território, perfil dos pacientes e condições clínicas.</p>
-<p>Perguntas que o projeto pretende responder:</p>
+Nosso projeto tem como objetivo auxiliar a indústria farmacêutica, fornecedores, farmácias e gestores de saúde pública no monitoramento e planejamento do abastecimento de medicamentos. Integrando os microdados de vendas do SNGPC/Anvisa com bases públicas demográficas (IBGE), climáticas (INMET) e clínicas (DATASUS CID-10), analisamos como a demanda real se distribui no território nacional, eliminando distorções de tamanho populacional e identificando o impacto de sazonalidades climáticas e perfis etários.</p>
+<p><strong>Pergunta Central de Gestão:</strong></p>
+<blockquote>
+<p><em>Quais princípios ativos, classes terapêuticas e municípios concentram o maior volume de dispensações no Brasil, e de que forma indicadores demográficos per capita (IBGE População e Faixa Etária), condições clínicas diagnósticas (DATASUS CID-10) e dinâmicas meteorológicas sazonais (INMET Temperatura e Precipitação) explicam os padrões territoriais e os picos de consumo?</em></p>
+</blockquote>
+<p>Perguntas específicas que o projeto responde:</p>
 <ol>
-<li>
-<p>Como prever a demanda para reduzir falta ou excesso de estoque?</p>
-</li>
-<li>
-<p>Como melhorar o planejamento e a distribuição de medicamentos de acordo com a demanda real da população?</p>
-</li>
-<li>
-<p>Onde existe crescimento de demanda e quais medicamentos estão ganhando ou perdendo relevância?</p>
-</li>
-<li>
-<p>Quais regiões apresentam maior consumo de cada tipo de medicamento?</p>
-</li>
-<li>
-<p>Como surtos sazonais (viroses de inverno, epidemias de dengue) impactam imediatamente a curva de consumo de categorias específicas de medicamentos em cada estado?</p>
-</li>
-<li>
-<p>Quais condições clínicas estão mais associadas ao consumo de determinados medicamentos e como esse padrão varia ao longo do tempo e entre diferentes regiões?</p>
-</li>
+<li><strong>Consumo Absoluto vs. Demanda per Capita (SNGPC + IBGE População):</strong> O volume elevado de dispensações em determinados municípios decorre estritamente do porte populacional ou reflete uma taxa de consumo per capita (dispensações/1.000 hab.) desproporcional?</li>
+<li><strong>Sazonalidade Climática e Picos de Consumo (SNGPC + INMET):</strong> De que maneira as variações sazonais de temperatura média e precipitação mensal correlacionam-se com o aumento na dispensação de antimicrobianos e medicamentos respiratórios em cada UF?</li>
+<li><strong>Distribuição Demográfica e Perfil Etário (SNGPC + IBGE Faixa Etária):</strong> Como o consumo de antimicrobianos por faixa etária se comporta frente à pirâmide etária real do município, revelando faixas com sobreconsumo relativo (ex.: crianças e idosos)?</li>
+<li><strong>Associação Clínica e Condições Diagnósticas (SNGPC + DATASUS CID-10):</strong> Quais capítulos e diagnósticos do CID-10 concentram a prescrição de antimicrobianos e como esse perfil patológico varia regionalmente e ao longo do ano?</li>
+<li><strong>Concentração Regional e Classes Terapêuticas (SNGPC + IBGE Municípios):</strong> Quais regiões e estados concentram a demanda por classes específicas (antimicrobianos, controlados e agonistas de GLP-1)?</li>
+<li><strong>Planejamento de Demanda e Gestão de Estoques:</strong> Quais princípios ativos apresentam tendência de crescimento contínuo de demanda ao longo dos meses, subsidiando a indústria e distribuidoras na prevenção de desabastecimento?</li>
 </ol>
 <p>Valor de negócio dos dados gerados:
-Os dados analisados podem apoiar diferentes atores do setor farmacêutico e da saúde pública na tomada de decisões relacionadas à previsão de demanda, gestão de estoques, distribuição de medicamentos e identificação de padrões sazonais de consumo.</p>
+Os dados analisados apoiam diferentes atores do setor farmacêutico e da saúde pública na tomada de decisões estratégicas de abastecimento, logística e vigilância:</p>
 <table>
 <thead>
 <tr>
@@ -1020,23 +1117,23 @@ Os dados analisados podem apoiar diferentes atores do setor farmacêutico e da s
 <tbody>
 <tr>
 <td><strong>Indústria farmacêutica, distribuidores e fornecedores</strong></td>
-<td>Prever a demanda e identificar tendências regionais para ajustar produção, aquisição e distribuição de medicamentos.</td>
-<td>Redução de <strong>excesso de estoque e risco de desabastecimento</strong>, além de melhor planejamento da produção e distribuição.</td>
+<td>Prever demanda com base em taxas per capita reais e variações climáticas para ajustar produção e logística.</td>
+<td>Redução de <strong>excesso de estoque e risco de desabastecimento</strong> nas regiões críticas.</td>
 </tr>
 <tr>
-<td><strong>Farmácias, hospitais e demais estabelecimentos de saúde</strong></td>
-<td>Planejar estoques com base em padrões históricos, sazonais e regionais de consumo.</td>
-<td>Redução de perdas por <strong>excesso de estoque ou vencimento</strong> e menor ocorrência de falta de medicamentos de alta demanda.</td>
+<td><strong>Farmácias, hospitais e redes de saúde</strong></td>
+<td>Planejar compras com antecedência baseando-se em padrões sazonais (INMET) e perfil etário local (IBGE).</td>
+<td>Menor ocorrência de falta de antimicrobianos no inverno e redução de perdas por vencimento.</td>
 </tr>
 <tr>
 <td><strong>Gestores públicos de saúde</strong></td>
-<td>Identificar regiões e períodos de aumento de demanda para orientar compras, distribuição e alocação de recursos.</td>
-<td>Melhor utilização dos recursos públicos e maior capacidade de <strong>abastecer regiões com aumento de demanda</strong>.</td>
+<td>Alocar recursos e fiscalizar dispensações anômalas per capita e prescrições por CID-10.</td>
+<td>Melhor direcionamento do orçamento público e identificação de municípios com sobreconsumo atípico.</td>
 </tr>
 <tr>
 <td><strong>Órgãos de vigilância epidemiológica</strong></td>
-<td>Identificar alterações sazonais ou anormais no consumo de medicamentos que possam estar associadas a determinadas condições clínicas ou surtos.</td>
-<td>Maior capacidade de <strong>antecipação e preparação</strong> para períodos de aumento de demanda e possíveis cenários epidemiológicos.</td>
+<td>Cruzar surtos sazonais de infecções respiratórias com temperatura e volume de antimicrobianos prescritos.</td>
+<td>Capacidade antecipada de resposta e combate à resistência bacteriana por uso desmedido.</td>
 </tr>
 </tbody>
 </table>
@@ -1048,20 +1145,44 @@ Os dados analisados podem apoiar diferentes atores do setor farmacêutico e da s
 <th>Link</th>
 <th>Formato</th>
 <th>Pergunta(s) que apoia</th>
+<th>Papel no Projeto</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Venda de Medicamentos Controlados, Antimicrobianos e Agonistas de GLP-1(Jan/2019 ate Dez/2019)</td>
-<td>https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados</td>
-<td>CSV</td>
+<td><strong>SNGPC / Anvisa</strong></td>
+<td><a href="https://dados.gov.br/dados/conjuntos-dados/venda-de-medicamentos-controlados-e-antimicrobianos---medicamentos-industrializados">Dados Abertos Anvisa</a></td>
+<td>CSV (mensal)</td>
 <td>P1, P2, P3, P4, P5, P6</td>
+<td>Tabela fato central de dispensações de controlados e antimicrobianos.</td>
 </tr>
 <tr>
-<td>Catálogo CID-10 (DATASUS / Ministério da Saúde)</td>
-<td>https://github.com/SidneyBissoli/cid10-br-mcp</td>
-<td>CSV (via Script Node.js)</td>
-<td>P5, P6</td>
+<td><strong>IBGE — População Municipal</strong></td>
+<td><a href="https://sidra.ibge.gov.br/">SIDRA / Censo IBGE</a></td>
+<td>API REST / CSV</td>
+<td>P1</td>
+<td>Normalização per capita por município para comparação justa entre regiões.</td>
+</tr>
+<tr>
+<td><strong>IBGE — População por Faixa Etária</strong></td>
+<td><a href="https://sidra.ibge.gov.br/">SIDRA Tabela 9514</a></td>
+<td>API REST</td>
+<td>P3</td>
+<td>Comparação entre o consumo de antimicrobianos e a pirâmide etária municipal.</td>
+</tr>
+<tr>
+<td><strong>INMET — Séries Meteorológicas</strong></td>
+<td><a href="https://portal.inmet.gov.br/dadoshistoricos">Portal INMET</a></td>
+<td>API / CSV</td>
+<td>P2</td>
+<td>Temperatura média e precipitação mensal por UF para comprovação de sazonalidade.</td>
+</tr>
+<tr>
+<td><strong>DATASUS — Catálogo CID-10</strong></td>
+<td><a href="https://github.com/SidneyBissoli/cid10-br-mcp">DATASUS / MS</a></td>
+<td>CSV</td>
+<td>P4</td>
+<td>Diagnósticos clínicos associados exclusivamente às receitas de antimicrobianos.</td>
 </tr>
 </tbody>
 </table>

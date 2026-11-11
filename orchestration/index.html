@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
       
       
       
-        <link rel="prev" href="../MODELO_DIMENSIONAL/">
+        <link rel="prev" href="../performance/RELATORIO_PERFORMANCE/">
       
       
         <link rel="next" href="../QUERIES/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Orquestração - Documentação do Projeto</title>
+        <title>Orquestração - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -308,6 +308,44 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -519,7 +557,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -543,6 +581,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -735,6 +796,50 @@
   
   <span class="md-ellipsis">
     Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
     
   </span>
   
@@ -1021,7 +1126,7 @@
 
 
 <h1 id="orquestracao-do-pipeline-apache-airflow">Orquestração do pipeline — Apache Airflow</h1>
-<p>DAG: <a href="../../airflow/dags/farmadata_pipeline.py"><code>airflow/dags/farmadata_pipeline.py</code></a> · Airflow 2.10.5 · LocalExecutor · Docker (<a href="../../docker-compose.airflow.yml"><code>docker-compose.airflow.yml</code></a>)</p>
+<p>DAG: <a href="https://github.com/gabrielfreitass1/FarmaData/blob/main/airflow/dags/farmadata_pipeline.py"><code>airflow/dags/farmadata_pipeline.py</code></a> · Airflow 2.10.5 · LocalExecutor · Docker (<a href="https://github.com/gabrielfreitass1/FarmaData/blob/main/docker-compose.airflow.yml"><code>docker-compose.airflow.yml</code></a>)</p>
 <p>Todas as evidências desta página foram geradas no Docker (container <code>farmadata_airflow</code>), em 08/11/2026.</p>
 <h2 id="1-grafo-de-dependencias-e-agendamento">1. Grafo de dependências e agendamento</h2>
 <div class="highlight"><pre><span></span><code>verificar_fonte_sngpc ──► extrair_sngpc ──► transformar_modelo_dimensional ──► validar_qualidade
@@ -1205,7 +1310,7 @@ AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTT
 </tr>
 </tbody>
 </table>
-<p>Logs: <a href="logs/retry_202001_cli.txt"><code>logs/retry_202001_cli.txt</code></a> (saída da CLI) e <a href="logs/retry_202001/"><code>logs/retry_202001/</code></a> (cada tentativa).</p>
+<p>Logs: <a href="logs/retry_202001_cli.txt"><code>logs/retry_202001_cli.txt</code></a> (saída da CLI) e <a href="https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/retry_202001"><code>logs/retry_202001/</code></a> (cada tentativa).</p>
 <h2 id="4-evidencia-backfill-historico-janjun2020">4. Evidência — backfill histórico (jan–jun/2020)</h2>
 <div class="highlight"><pre><span></span><code>airflow<span class="w"> </span>dags<span class="w"> </span>backfill<span class="w"> </span>farmadata_pipeline<span class="w"> </span>-s<span class="w"> </span><span class="m">2020</span>-01-01<span class="w"> </span>-e<span class="w"> </span><span class="m">2020</span>-06-01<span class="w"> </span>--reset-dagruns<span class="w"> </span>-y
 </code></pre></div>
@@ -1251,7 +1356,7 @@ AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTT
 </table>
 <p>Arquivos:
 - <a href="logs/backfill_cli.txt"><code>logs/backfill_cli.txt</code></a>: saída completa da CLI.
-- <a href="logs/backfill_202003/"><code>logs/backfill_202003/</code></a>: logs por task e tentativa do mês com retry.
+- <a href="https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/backfill_202003"><code>logs/backfill_202003/</code></a>: logs por task e tentativa do mês com retry.
 - <a href="logs/estado_pos_backfill.txt"><code>logs/estado_pos_backfill.txt</code></a>: <code>list-runs</code>, tentativas por task instance, <code>carga_arquivo</code>, contagens venda × fato e a confirmação de que o banco <code>farmadata</code> não foi tocado.</p>
 <h2 id="5-evidencia-falha-definitiva-retries-esgotados-alerta-de-falha">5. Evidência — falha definitiva (retries esgotados + alerta de falha)</h2>
 <p>Este caso não usa injeção. <code>airflow dags backfill ... -s 2020-07-01 -e 2020-07-01</code> pede o mês 202007, cujo CSV não existe na fonte:</p>
@@ -1310,7 +1415,7 @@ AirflowException: [FALHA INJETADA] fonte SNGPC indisponível (simulação de HTT
 </tr>
 </tbody>
 </table>
-<p>Logs: <a href="logs/falha_definitiva_202007_cli.txt"><code>logs/falha_definitiva_202007_cli.txt</code></a> e <a href="logs/falha_definitiva_202007/"><code>logs/falha_definitiva_202007/</code></a>.</p>
+<p>Logs: <a href="logs/falha_definitiva_202007_cli.txt"><code>logs/falha_definitiva_202007_cli.txt</code></a> e <a href="https://github.com/gabrielfreitass1/FarmaData/tree/main/docs/orchestration/logs/falha_definitiva_202007"><code>logs/falha_definitiva_202007/</code></a>.</p>
 <h2 id="6-como-reproduzir-docker">6. Como reproduzir (Docker)</h2>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>airflow-demo<span class="w">     </span><span class="c1"># cria o banco de testes farmadata_orquestracao e sobe db + Airflow com as fixtures</span>
 </code></pre></div>
@@ -1328,10 +1433,10 @@ docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> 
 </code></pre></div>
 <p>No Windows com Git Bash, o <code>MSYS_NO_PATHCONV=1</code> é necessário. Sem ele, o Git Bash reescreve <code>/opt/...</code> como <code>C:/Program Files/Git/opt/...</code>.</p>
 <p>Para usar os dados reais, rode <code>make airflow-up</code>. Ele aponta para o banco <code>farmadata</code> e baixa os CSVs da Anvisa para <code>tmp/</code>.</p>
-<p>Há também um script sem Docker, para Linux/WSL sem root: <a href="../../airflow/local/airflow_local.sh"><code>airflow/local/airflow_local.sh</code></a>.</p>
+<p>Há também um script sem Docker, para Linux/WSL sem root: <a href="https://github.com/gabrielfreitass1/FarmaData/blob/main/airflow/local/airflow_local.sh"><code>airflow/local/airflow_local.sh</code></a>.</p>
 <h2 id="7-escopo-da-evidencia">7. Escopo da evidência</h2>
 <ul>
-<li>As execuções usaram as fixtures <a href="../../scripts/fixtures/orquestracao/"><code>scripts/fixtures/orquestracao/</code></a> (de 4 a 5 dispensações por mês), num banco de testes separado (<code>farmadata_orquestracao</code>), e não os CSVs completos da Anvisa (centenas de MB por mês). O código executado é o mesmo que roda com os dados reais. Mudam apenas <code>FARMADATA_SNGPC_DIR</code> e <code>FARMADATA_DB</code>.</li>
+<li>As execuções usaram as fixtures <a href="https://github.com/gabrielfreitass1/FarmaData/tree/main/scripts/fixtures/orquestracao"><code>scripts/fixtures/orquestracao/</code></a> (de 4 a 5 dispensações por mês), num banco de testes separado (<code>farmadata_orquestracao</code>), e não os CSVs completos da Anvisa (centenas de MB por mês). O código executado é o mesmo que roda com os dados reais. Mudam apenas <code>FARMADATA_SNGPC_DIR</code> e <code>FARMADATA_DB</code>.</li>
 </ul>
 
 

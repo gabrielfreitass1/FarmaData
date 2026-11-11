@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -16,7 +16,7 @@
         <link rel="prev" href="../CAMADA_ANALITICA/">
       
       
-        <link rel="next" href="../orchestration/">
+        <link rel="next" href="../QUALIDADE_DADOS/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Modelo Dimensional - Documentação do Projeto</title>
+        <title>Modelo Dimensional - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -312,6 +312,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -519,7 +557,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -543,6 +581,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -916,6 +977,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../orchestration/" class="md-nav__link">
         
   
@@ -1220,6 +1325,12 @@ surrogate key. Determinístico = reprocessar a carga nunca gera uma chave
 diferente para o mesmo dado, e a fato pode ser truncada/recarregada sem
 depender de sequência ou estado externo. Trade-offs e alternativas
 avaliadas em <a href="../adr/ADR-004/">ADR-004</a>.</p>
+<p>Nas views <code>dim_conselho</code>, <code>dim_tipo_receituario</code> e <code>dim_unidade_medida</code> a
+<code>sk_*</code> é calculada na própria view. Em <code>dim_tempo</code> e <code>dim_medicamento</code> ela é
+uma coluna gerada armazenada (<code>CHAR(32) STORED</code>) em <code>periodo</code> e
+<code>medicamento</code>, com o mesmo tipo da fato — evita o cast <code>CHAR(32)</code> → <code>TEXT</code>
+no join (emenda ao ADR-004, issue #28; medição em
+<a href="../performance/RELATORIO_PERFORMANCE/">docs/performance/</a>).</p>
 <h2 id="dimensao-de-variacao-lenta-dim_municipio-scd-tipo-2">Dimensão de Variação Lenta: <code>dim_municipio</code> (SCD Tipo 2)</h2>
 <p>Município é a única dimensão sujeita a alteração do domínio público (IBGE
 pode renomear, desmembrar ou alterar os limites de um município). As demais
@@ -1258,7 +1369,7 @@ make<span class="w"> </span>modelo-dimensional<span class="w">          </span><
 <tr>
 <td><code>sk_tempo</code></td>
 <td>char(32)</td>
-<td>Surrogate key (md5 de <code>id_periodo</code>)</td>
+<td>Surrogate key (md5 de <code>id_periodo</code>) — coluna gerada armazenada em <code>periodo</code> (<code>GENERATED ALWAYS ... STORED</code>, emenda ao <a href="../adr/ADR-004/">ADR-004</a>, issue #28)</td>
 </tr>
 <tr>
 <td><code>id_periodo</code></td>
@@ -1372,7 +1483,7 @@ make<span class="w"> </span>modelo-dimensional<span class="w">          </span><
 <tr>
 <td><code>sk_medicamento</code></td>
 <td>char(32)</td>
-<td>Surrogate key (md5 de <code>id_medicamento</code>)</td>
+<td>Surrogate key (md5 de <code>id_medicamento</code>) — coluna gerada armazenada em <code>medicamento</code> (<code>GENERATED ALWAYS ... STORED</code>, emenda ao <a href="../adr/ADR-004/">ADR-004</a>, issue #28)</td>
 </tr>
 <tr>
 <td><code>id_medicamento</code></td>

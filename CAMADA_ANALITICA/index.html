@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentação técnica do projeto">
+        <meta name="description" content="Documentação técnica do FarmaData — venda de medicamentos controlados e antimicrobianos (SNGPC/Anvisa)">
       
       
         <meta name="author" content="Equipe de desenvolvimento">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Camada Analítica - Documentação do Projeto</title>
+        <title>Camada Analítica - FarmaData</title>
       
     
     
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
-    <a href=".." title="Documentação do Projeto" class="md-header__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-header__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -94,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentação do Projeto
+            FarmaData
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -312,6 +312,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../QUALIDADE_DADOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Qualidade dos Dados
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Otimização de Performance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../orchestration/" class="md-tabs__link">
         
   
@@ -385,13 +423,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Documentação do Projeto" class="md-nav__button md-logo" aria-label="Documentação do Projeto" data-md-component="logo">
+    <a href=".." title="FarmaData" class="md-nav__button md-logo" aria-label="FarmaData" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Documentação do Projeto
+    FarmaData
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -519,7 +557,7 @@
   
   
   <span class="md-ellipsis">
-    ADR-003 — Dado atrasado e janela da dispensação (Issue #8)
+    0003 — Realocar eventos atrasados para o período da dispensação com rastreabilidade por arquivo
     
   </span>
   
@@ -543,6 +581,29 @@
   
   <span class="md-ellipsis">
     ADR-004 — Modelo Dimensional e Dimensão de Variação Lenta (SCD)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/ADR-005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADR-005 — Streamlit conectado ao PostgreSQL Star Schema para o painel analítico de dispensação
     
   </span>
   
@@ -819,6 +880,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sla-e-freshness-da-tabela-de-consumo-issue-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      SLA e freshness da tabela de consumo (issue #29)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -840,6 +910,50 @@
   
   <span class="md-ellipsis">
     Modelo Dimensional
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUALIDADE_DADOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Qualidade dos Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/RELATORIO_PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Otimização de Performance
     
   </span>
   
@@ -1004,6 +1118,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sla-e-freshness-da-tabela-de-consumo-issue-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      SLA e freshness da tabela de consumo (issue #29)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1146,6 +1269,72 @@ make<span class="w"> </span>lakehouse-bench<span class="w">  </span><span class=
 </tr>
 </tbody>
 </table>
+<h2 id="sla-e-freshness-da-tabela-de-consumo-issue-29">SLA e freshness da tabela de consumo (issue #29)</h2>
+<p><strong>Tabela coberta:</strong> <code>fato_venda_medicamento</code> (modelo dimensional, <code>sql/12</code>). Se a #25 criar
+uma tabela agregada para o painel, ela entra chamando <code>registrar_build('&lt;tabela&gt;', linhas)</code>
+ao fim da sua construção.</p>
+<p><strong>Definição.</strong> Freshness é a defasagem entre a última carga em <code>carga_arquivo.carregado_em</code>
+e a última construção da tabela de consumo, registrada em <code>controle_build.construido_em</code>.
+Se não há carga posterior à última construção, a tabela está em dia.
+<code>carregar_fato_venda_medicamento()</code> registra a construção na mesma transação da recarga,
+então só conta uma fato construída por inteiro.</p>
+<p><strong>SLA.</strong> A tabela de consumo é reconstruída em até <strong>24 horas</strong> após cada carga nova.
+O recorte do projeto é fixo em 2020 (<code>ANO_RECORTE</code>), então não chega um mês novo por mês:
+o SLA vale para cada recarga e backfill desses meses (<code>make carga-sngpc</code>, <code>airflow dags backfill</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Condição</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OK</td>
+<td>nenhuma carga posterior à última construção</td>
+<td>nenhuma</td>
+</tr>
+<tr>
+<td>WARN</td>
+<td>carga pendente há mais de 24 h</td>
+<td>avisar a squad e reconstruir</td>
+</tr>
+<tr>
+<td>ERRO</td>
+<td>carga pendente há mais de 48 h, ou tabela nunca construída</td>
+<td>bloquear a atualização do painel e reconstruir</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Limitação declarada.</strong> A fonte (SNGPC) é histórica e publicada mensalmente. O SLA protege contra
+falha do pipeline (carga feita e tabela não reconstruída), não contra dado desatualizado do mundo real.</p>
+<p><strong>Verificação.</strong> A regra fica numa função só, <code>checar_freshness(tabela, warn_h, erro_h)</code>
+(<code>sql/13_controle_build.sql</code>), usada pela CLI e pela orquestração:</p>
+<ul>
+<li>CLI: <code>make checar-freshness</code> (padrão <code>fato_venda_medicamento</code>; códigos de saída 0, 1 e 2).</li>
+<li>Airflow: DAG <code>farmadata_freshness</code> (<code>airflow/dags/farmadata_freshness.py</code>), <code>@daily</code>.</li>
+</ul>
+<p>Prova do atraso induzido: <code>make test-freshness</code>, evidência em <code>docs/evidencias/freshness.txt</code>.</p>
+<p><strong>Mitigação.</strong></p>
+<ul>
+<li>WARN: a DAG grava um alerta <code>FRESHNESS_WARN</code> em <code>alertas_farmadata.jsonl</code> (mesmo destino
+  dos alertas da <code>farmadata_pipeline</code>) e a task passa. A squad reconstrói a fato
+  (<code>make modelo-dimensional</code> ou rerun de <code>transformar_modelo_dimensional</code>).</li>
+<li>ERRO: a task falha sem retry e gera alerta <code>FALHA</code>. A task a jusante <code>atualizar_painel</code>
+  (<code>checar_freshness_fato &gt;&gt; atualizar_painel</code>) fica <code>upstream_failed</code> e não roda, então o
+  painel não publica dado defasado até a reconstrução. A falha é tratada como incidente.
+  <code>atualizar_painel</code> é um marcador (<code>EmptyOperator</code>) do ponto onde entra a publicação real
+  do painel. No WARN ela roda normalmente: o alerta avisa, mas não bloqueia.</li>
+</ul>
+<p>O painel (<code>src/dashboard/app.py</code>) também chama <code>checar_freshness()</code> ao abrir. No ERRO, mostra
+o erro e não exibe os gráficos; no WARN, mostra um aviso e segue. Assim o bloqueio vale nos dois
+pontos: na DAG (<code>atualizar_painel</code> fica <code>upstream_failed</code>) e no próprio painel.</p>
+<p>Prova no Airflow: <code>make test-freshness-airflow</code>, evidência em
+<code>docs/evidencias/freshness_airflow.txt</code> (no cenário de ERRO, <code>atualizar_painel = upstream_failed</code>).</p>
+<p><strong>Integração.</strong> O teste de freshness roda no CI a cada push e pull request
+(<code>.github/workflows/freshness.yml</code>). Em produção, a checagem roda todo dia pela DAG
+<code>farmadata_freshness</code>.</p>
 
 
 
