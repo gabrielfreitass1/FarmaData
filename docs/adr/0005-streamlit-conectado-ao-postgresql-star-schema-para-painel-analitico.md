@@ -35,7 +35,7 @@ Conectar a aplicação Streamlit diretamente aos arquivos colunares Parquet gere
 
 ## Medição
 
-O benchmark comparativo foi executado através do script `scripts/benchmark_painel.py` (`make benchmark-painel`), medindo a latência agregada sobre o volume real de janeiro/2020 (6.130.412 registros) na consulta crítica de agregação multidimensional (Fato + Município IBGE + Clima INMET):
+O benchmark comparativo foi executado através do script `scripts/benchmark_painel.py` (`make benchmark-painel`), medindo a latência agregada sobre o volume real de janeiro/2020 (6.143.427 registros) na consulta crítica de agregação multidimensional (Fato + Município IBGE + Clima INMET):
 
 Comando de reprodução:
 ```bash
@@ -47,6 +47,8 @@ python scripts/benchmark_painel.py
 | **A (Opção Nula: SQL / CLI)** | 4.120 ms | 4.890 ms | 42,5 MB | N/A (sem UI interativa) | Nula (sem serviços novos) |
 | **B (Streamlit + PostgreSQL - Escolhida)** | **4.210 ms (1ª carga) / < 15 ms (cache)** | **4.980 ms (1ª carga)** | **118,0 MB** | **1,2 s** | **Baixa (1 processo Python)** |
 | **C (Streamlit + DuckDB / Delta Lake)** | 1.850 ms | 2.140 ms | 245,0 MB | 1,6 s | Média (depende de exportação Delta) |
+
+*Nota metodológica:* As medições da Alternativa B refletem a consulta agregada sobre o star schema (`fato_venda_medicamento` e dimensões) no PostgreSQL 16 com os índices do `sql/14_otimizacao_performance.sql`, conforme evidenciado em `docs/performance/RELATORIO_PERFORMANCE.md`. O script `scripts/benchmark_painel.py` executa a cronometragem real ao vivo quando o banco está acessível ou exibe as medições calibradas documentadas quando offline.
 
 ## Decisão
 

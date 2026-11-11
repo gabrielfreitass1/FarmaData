@@ -94,7 +94,7 @@ services:
       - .:/app
       - pip_cache:/root/.cache/pip
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@farmadata_db:5432/${POSTGRES_DB:-farmadata}
     command: >
       sh -c "pip install -q -r src/dashboard/requirements.txt && streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true"
     restart: "no"

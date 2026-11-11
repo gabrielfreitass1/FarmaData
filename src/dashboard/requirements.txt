@@ -1,6 +1,7 @@
 streamlit>=1.36.0
 pandas>=2.2.0
 plotly>=5.22.0
+statsmodels>=0.14.0
 psycopg2-binary>=2.9.9
 sqlalchemy>=2.0.30
 
