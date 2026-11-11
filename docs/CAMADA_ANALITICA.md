@@ -128,6 +128,10 @@ Prova do atraso induzido: `make test-freshness`, evidência em `docs/evidencias/
   `atualizar_painel` é um marcador (`EmptyOperator`) do ponto onde entra a publicação real
   do painel. No WARN ela roda normalmente: o alerta avisa, mas não bloqueia.
 
+O painel (`src/dashboard/app.py`) também chama `checar_freshness()` ao abrir. No ERRO, mostra
+o erro e não exibe os gráficos; no WARN, mostra um aviso e segue. Assim o bloqueio vale nos dois
+pontos: na DAG (`atualizar_painel` fica `upstream_failed`) e no próprio painel.
+
 Prova no Airflow: `make test-freshness-airflow`, evidência em
 `docs/evidencias/freshness_airflow.txt` (no cenário de ERRO, `atualizar_painel = upstream_failed`).
 
