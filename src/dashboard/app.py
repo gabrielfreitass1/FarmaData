@@ -360,15 +360,24 @@ with tab2:
         st.plotly_chart(fig_dual, use_container_width=True)
 
     with col_clima2:
-        # Dispersão e correlação
-        fig_scatter = px.scatter(
-            df_clima,
-            x="temp_media_c",
-            y="volume_antimicrobianos",
-            trendline="ols",
-            title="Dispersão: Temp. vs Volume",
-            labels={"temp_media_c": "Temp. Média (°C)", "volume_antimicrobianos": "Embalagens dispensadas"},
-        )
+        # Dispersão e correlação (com fallback seguro caso statsmodels não esteja instalado)
+        try:
+            fig_scatter = px.scatter(
+                df_clima,
+                x="temp_media_c",
+                y="volume_antimicrobianos",
+                trendline="ols",
+                title="Dispersão: Temp. vs Volume",
+                labels={"temp_media_c": "Temp. Média (°C)", "volume_antimicrobianos": "Embalagens dispensadas"},
+            )
+        except Exception:
+            fig_scatter = px.scatter(
+                df_clima,
+                x="temp_media_c",
+                y="volume_antimicrobianos",
+                title="Dispersão: Temp. vs Volume (sem linha de tendência OLS)",
+                labels={"temp_media_c": "Temp. Média (°C)", "volume_antimicrobianos": "Embalagens dispensadas"},
+            )
         fig_scatter.update_layout(height=400)
         st.plotly_chart(fig_scatter, use_container_width=True)
 
