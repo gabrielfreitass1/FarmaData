@@ -91,7 +91,7 @@
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](adr/ADR-002.md)
 * [ADR-003: Realocar eventos atrasados para o período da dispensação](adr/ADR-003.md)
 * [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](adr/ADR-004.md)
-* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](adr/0005-streamlit-conectado-ao-postgresql-star-schema-para-painel-analitico.md)
+* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](adr/ADR-005.md)
 * [Modelo Dimensional e SCD2](MODELO_DIMENSIONAL.md)
 * [Orquestração (Airflow)](orchestration/README.md)
 * [Camada Analítica e Benchmark](CAMADA_ANALITICA.md)

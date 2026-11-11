@@ -32,7 +32,7 @@
 * [ADR-002: Mecanismo de Ingestão e Formato Aberto](docs/adr/ADR-002.md)
 * [ADR-003: Realocar eventos atrasados para o período da dispensação](docs/adr/ADR-003.md)
 * [ADR-004: Modelo dimensional e dimensão de variação lenta (SCD)](docs/adr/ADR-004.md)
-* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](docs/adr/0005-streamlit-conectado-ao-postgresql-star-schema-para-painel-analitico.md)
+* [ADR-005: Streamlit conectado ao PostgreSQL Star Schema para o painel analítico](docs/adr/ADR-005.md)
 
 ### Execução e Arquitetura
 * [Diário de Bordo (Semanas 7 a 13)](docs/diario/DIARIO_DE_BORDO.md)

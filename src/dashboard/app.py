@@ -269,7 +269,7 @@ with tab1:
             y="nome_municipio",
             orientation="h",
             color="sigla_uf",
-            labels={"dispensacoes": "Dispensações", "nome_municipio": "Município"},
+            labels={"dispensacoes": "Dispensações", "nome_municipio": "Município", "sigla_uf": "UF"},
         )
         fig_abs.update_layout(yaxis={"autorange": "reversed"}, height=350)
         st.plotly_chart(fig_abs, use_container_width=True)
@@ -287,7 +287,7 @@ with tab1:
             color_continuous_scale="Viridis",
             labels={"dispensacoes_por_1000_hab": "Dispensações por 1.000 hab.", "nome_municipio": "Município"},
         )
-        fig_pc.update_layout(yaxis={"autorange": "reversed"}, height=350)
+        fig_pc.update_layout(yaxis={"autorange": "reversed"}, height=350, coloraxis_showscale=False)
         st.plotly_chart(fig_pc, use_container_width=True)
 
     st.markdown("#### Detalhamento Municipal")
@@ -296,6 +296,14 @@ with tab1:
             ["nome_municipio", "sigla_uf", "populacao", "dispensacoes", "dispensacoes_por_1000_hab"]
         ],
         use_container_width=True,
+        hide_index=True,
+        column_config={
+            "nome_municipio": "Município",
+            "sigla_uf": "UF",
+            "populacao": st.column_config.NumberColumn("População", format="%d"),
+            "dispensacoes": st.column_config.NumberColumn("Dispensações", format="%d"),
+            "dispensacoes_por_1000_hab": st.column_config.NumberColumn("Dispensações / 1.000 hab", format="%.1f"),
+        },
     )
 
 # -----------------------------------------------------------------------------
@@ -369,7 +377,10 @@ with tab2:
         leitura = "Sem dados suficientes"
     else:
         forca = "forte" if abs(corr) >= 0.7 else "moderada" if abs(corr) >= 0.4 else "fraca"
-        sentido = "negativa (mais frio, mais antimicrobiano)" if corr < 0 else "positiva (mais calor, mais antimicrobiano)"
+        if corr < 0:
+            sentido = "negativa: meses mais frios tiveram mais antimicrobiano (a favor da hipótese)"
+        else:
+            sentido = "positiva: meses mais quentes tiveram mais antimicrobiano (contra a hipótese)"
         leitura = f"Correlação {forca} {sentido}"
     st.metric(
         label=f"Correlação de Pearson, temperatura x antimicrobianos ({len(df_clima)} meses)",
@@ -384,8 +395,9 @@ with tab2:
 with tab3:
     st.subheader("Indicação Diagnóstica (CID-10) e Perfil de Prescrição")
     st.write(
-        "A base pública do SNGPC restringe a obrigatoriedade de CID-10 e idade aos antimicrobianos. "
-        "Abaixo mapeamos os diagnósticos que concentram o uso clínico dessas substâncias."
+        "Na base pública do SNGPC, idade e sexo do paciente só vêm preenchidos nas vendas de "
+        "antimicrobianos. O CID-10 é raro: aparece em cerca de 0,6% dessas vendas (2020). "
+        "Os diagnósticos abaixo vêm dessa pequena parcela e não representam todo o uso de antimicrobianos."
     )
 
     df_cid, is_mock3, err3 = carregar_dados_clinicos()
@@ -419,11 +431,17 @@ with tab3:
         st.dataframe(
             df_cid[["cid_codigo", "cid_descricao", "volume_dispensado"]],
             use_container_width=True,
+            hide_index=True,
+            column_config={
+                "cid_codigo": "CID-10",
+                "cid_descricao": "Descrição",
+                "volume_dispensado": st.column_config.NumberColumn("Embalagens", format="%d"),
+            },
             height=380,
         )
 
 st.markdown("---")
 st.caption(
     "FarmaData — Projeto Integrado SBD2 / Universidade de Brasília (UnB). "
-    "Dados: SNGPC/Anvisa, IBGE (Censo/População), INMET (Estadas Meteorológicas) e DATASUS (CID-10)."
+    "Dados: SNGPC/Anvisa, IBGE (Censo/População), INMET (Estações Meteorológicas) e DATASUS (CID-10)."
 )
