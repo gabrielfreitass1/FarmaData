@@ -176,6 +176,19 @@ os testes passaram a ler o SQL direto do repositório. O atraso induzido dispara
 está em `docs/evidencias/freshness.txt` e roda no CI a cada push.
 
 **Transformação declarativa (#25, Pedro Augusto).** Até a #25 entrar, as transformações do modelo dimensional são funções PL/pgSQL versionadas em `sql/11` e `sql/12`; o ADR-004 descartou o dbt apenas para o versionamento SCD2 (snapshot), não para a camada de transformação como um todo.
+Pós-implementação: o projeto dbt (dbt Core 1.12 com dbt-postgres) fica em `dbt/` e lê as tabelas de `public` como sources, organizado em três camadas: staging, com 13 views que limpam texto, renomeiam colunas legadas e fixam tipos; intermediate, com 3 views que fazem os joins com UF, CID-10, população do
+IBGE e clima do INMET e aplicam a faixa etária e o cálculo per capita; e marts, com quatro dimensões
+e dois fatos em tabela, gravados nos schemas `dbt_staging`, `dbt_intermediate` e `dbt_marts`. O
+`fct_venda_medicamento` é incremental para não recopiar os cerca de 68 milhões de linhas a cada
+execução. A surpresa foi a chave do incremental: a carga do SNGPC apaga e regrava um CSV inteiro
+na recarga, e as linhas voltam com `id_venda` novo, então o incremental usa `delete+insert` por
+`arquivo_origem` e o arquivo é substituído por inteiro, sem duplicar. Uma mudança de colunas no
+modelo faz o `dbt run` falhar (`on_schema_change: fail`) em vez de ser ignorada em silêncio, e
+obriga um `--full-refresh`. A `dim_municipio` do dbt guarda só o estado atual; o histórico SCD2
+continua no PL/pgSQL, como decidido no ADR-004. Cada camada tem seu `schema.yml` descrevendo modelos
+e colunas. Em banco temporário com as fixtures de dado atrasado, o `dbt build` passou os 22 modelos
+sem erro, a venda atrasada de janeiro entrou no fato e a recarga forçada de fevereiro trocou as
+linhas sem duplicar. No grafo de linhagem, só o staging lê as tabelas de origem.
 
 **ADR e painel analítico (#30, Ruan).** Implementação do painel analítico em Streamlit (`src/dashboard/app.py`), acionável via `make dashboard`, respondendo de ponta a ponta à pergunta central de gestão da E1 através de três visões interativas: territorial e demanda per capita (cruzamento com IBGE População), sazonalidade climática (temperatura e chuva do INMET) e indicação diagnóstica (CID-10 para antimicrobianos). A decisão técnica de adotar o Streamlit conectado diretamente ao PostgreSQL Star Schema com cache em memória (`@st.cache_data`) foi registrada no ADR-005, acompanhada de benchmark comparativo reproduzível (`scripts/benchmark_painel.py`, `make benchmark-painel`). Também foi formalizado o vocabulário canônico em `GLOSSARY.md` e reestruturado o ADR-003 nos 6 passos com medição reproduzível em banco de simulação.
 

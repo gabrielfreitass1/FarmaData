@@ -1,0 +1,180 @@
+version: 2
+
+models:
+  - name: stg_venda_medicamento
+    description: Dispensações do SNGPC, uma linha por venda, com texto limpo e tipos explícitos.
+    columns:
+      - name: id_venda
+        description: Identificador da dispensação na origem.
+      - name: id_periodo
+        description: Mês da venda no formato AAAAMM.
+      - name: data_venda
+        description: Primeiro dia do mês da venda.
+      - name: id_municipio
+        description: Município da venda.
+      - name: id_medicamento
+        description: Medicamento dispensado (princípio ativo e apresentação).
+      - name: id_conselho
+        description: Conselho profissional do prescritor.
+      - name: id_tipo_receituario
+        description: Tipo de receituário.
+      - name: id_unidade_medida
+        description: Unidade de medida da quantidade.
+      - name: quantidade_vendida
+        description: Quantidade dispensada, numeric(10,3).
+      - name: codigo_cid10
+        description: CID-10 em maiúsculas; nulo quando vazio. Só antimicrobianos.
+      - name: sexo_paciente
+        description: M ou F; nulo quando vazio. Só antimicrobianos.
+      - name: idade_paciente_anos
+        description: Idade do paciente em anos (origem idade_paciente, já convertida pela carga). Só antimicrobianos.
+      - name: id_unidade_idade
+        description: Unidade da idade informada na origem.
+      - name: eh_antimicrobiano
+        description: Verdadeiro para dispensação de antimicrobiano.
+      - name: numero_notificacao
+        description: Número da notificação de receita; nulo quando vazio.
+      - name: arquivo_origem
+        description: CSV do SNGPC que trouxe a linha.
+
+  - name: stg_unidade_federativa
+    description: As 27 UFs, com colunas renomeadas.
+    columns:
+      - name: sigla_uf
+        description: Sigla da UF (origem sigla).
+      - name: codigo_ibge_uf
+        description: Código IBGE da UF (origem codigo_ibge).
+      - name: nome_uf
+        description: Nome da UF (origem nome).
+      - name: regiao
+        description: Região do país.
+
+  - name: stg_municipio
+    description: Municípios presentes nas vendas do SNGPC.
+    columns:
+      - name: id_municipio
+        description: Identificador do município.
+      - name: nome_municipio
+        description: Nome do município sem espaços nas pontas.
+      - name: sigla_uf
+        description: Sigla da UF do município.
+      - name: codigo_ibge_municipio
+        description: Código IBGE do município (origem codigo_ibge); nulo quando não houve correspondência.
+
+  - name: stg_periodo
+    description: Meses do ano de recorte.
+    columns:
+      - name: id_periodo
+        description: Mês no formato AAAAMM.
+      - name: ano
+        description: Ano.
+      - name: mes
+        description: Mês, de 1 a 12.
+      - name: nome_mes
+        description: Nome do mês em português.
+      - name: trimestre
+        description: Trimestre, de 1 a 4.
+      - name: semestre
+        description: Semestre, 1 ou 2.
+      - name: data_inicio
+        description: Primeiro dia do mês.
+      - name: data_fim
+        description: Último dia do mês.
+
+  - name: stg_medicamento
+    description: Medicamentos dispensados.
+    columns:
+      - name: id_medicamento
+        description: Identificador do medicamento.
+      - name: principio_ativo
+        description: Princípio ativo.
+      - name: descricao_apresentacao
+        description: Apresentação comercial.
+
+  - name: stg_cid10
+    description: Catálogo CID-10 do DATASUS.
+    columns:
+      - name: codigo_cid10
+        description: Código CID-10 em maiúsculas (origem codigo).
+      - name: descricao_cid10
+        description: Descrição completa (origem descricao).
+      - name: descricao_abreviada_cid10
+        description: Descrição abreviada; nulo quando vazio.
+      - name: categoria_cid10
+        description: Categoria de três caracteres; nulo quando vazio.
+      - name: restricao_sexo
+        description: M ou F quando o código se restringe a um sexo.
+      - name: eh_causa_obito
+        description: Origem causa_obito convertida de S/N para booleano.
+
+  - name: stg_conselho_profissional
+    description: Conselhos profissionais que autorizam prescrição.
+    columns:
+      - name: id_conselho
+        description: Identificador do conselho.
+      - name: sigla_conselho
+        description: Sigla, como CRM (origem sigla).
+      - name: descricao_conselho
+        description: Nome do conselho (origem descricao).
+
+  - name: stg_tipo_receituario
+    description: Tipos de receituário da Anvisa.
+    columns:
+      - name: id_tipo_receituario
+        description: Identificador do tipo de receituário.
+      - name: codigo_receituario
+        description: Código Anvisa, como B1 (origem codigo).
+      - name: descricao_receituario
+        description: Descrição do receituário (origem descricao).
+
+  - name: stg_unidade_medida
+    description: Unidades de medida da quantidade dispensada.
+    columns:
+      - name: id_unidade_medida
+        description: Identificador da unidade.
+      - name: descricao_unidade_medida
+        description: Unidade, como Caixa (origem descricao).
+
+  - name: stg_unidade_idade
+    description: Unidades de idade do paciente.
+    columns:
+      - name: id_unidade_idade
+        description: Identificador da unidade.
+      - name: descricao_unidade_idade
+        description: Anos ou Meses (origem descricao).
+
+  - name: stg_ibge_populacao_municipio
+    description: População estimada por município e ano (IBGE, tabela 6579).
+    columns:
+      - name: id_municipio
+        description: Município.
+      - name: ano
+        description: Ano da estimativa.
+      - name: populacao
+        description: População estimada.
+
+  - name: stg_ibge_populacao_faixa_etaria_municipio
+    description: População por município e faixa etária (IBGE, Censo 2022, tabela 9514).
+    columns:
+      - name: id_municipio
+        description: Município.
+      - name: ano
+        description: Ano do censo.
+      - name: faixa_etaria_ibge
+        description: Faixa etária no rótulo do IBGE (origem faixa_etaria).
+      - name: populacao
+        description: População da faixa.
+
+  - name: stg_clima_mensal_uf
+    description: Clima mensal por UF, média entre estações do INMET.
+    columns:
+      - name: sigla_uf
+        description: Sigla da UF.
+      - name: id_periodo
+        description: Mês no formato AAAAMM.
+      - name: temperatura_media_c
+        description: Temperatura média em °C (origem temp_media_c).
+      - name: precipitacao_media_mm
+        description: Precipitação média em mm.
+      - name: quantidade_estacoes
+        description: Estações com dado no mês (origem qtd_estacoes).

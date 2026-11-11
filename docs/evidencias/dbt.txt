@@ -1,0 +1,60 @@
+=== Pipeline dbt — 2026-11-11T12:29:49-0300 ===
+ Container farmadata_db  Starting
+ Container farmadata_db  Started
+ Container farmadata_db  Waiting
+ Container farmadata_db  Healthy
+NOTICE:  database "farmadata_sim_dbt" does not exist, skipping
+- installed: 1.12.6
+- postgres: 1.11.0 - Up to date!
+
+[1] Janeiro carregado; dbt build com as três camadas
+Done. PASS=22 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=22
+Relações criadas (schema | tipo | quantidade):
+dbt_intermediate | VIEW | 3
+dbt_marts | BASE TABLE | 6
+dbt_staging | VIEW | 13
+   ✓ staging e intermediate em view, marts em tabela
+
+[2] Grafo de linhagem (manifest.json do dbt)
+intermediate:
+  int_municipio_com_uf <- stg_municipio, stg_unidade_federativa
+  int_venda_classificada <- stg_venda_medicamento, stg_cid10
+  int_venda_mensal_municipio <- int_venda_classificada, stg_periodo, int_municipio_com_uf, stg_ibge_populacao_municipio, stg_clima_mensal_uf
+marts:
+  dim_cid10 <- stg_cid10
+  dim_medicamento <- stg_medicamento
+  dim_municipio <- int_municipio_com_uf
+  dim_tempo <- stg_periodo
+  fct_venda_medicamento <- int_venda_classificada
+  fct_venda_mensal_municipio <- int_venda_mensal_municipio
+   ✓ sem ciclos; só staging lê as tabelas de origem; marts não leem a origem
+
+[3] CSV de fevereiro traz uma venda de janeiro (dado atrasado); dbt build incremental
+Done. PASS=22 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=22
+fct_venda_medicamento (id_venda | id_periodo | arquivo_origem):
+1 | 202001 | EDA_Industrializados_202001.csv
+2 | 202001 | EDA_Industrializados_202002.csv
+3 | 202002 | EDA_Industrializados_202002.csv
+fct_venda_mensal_municipio (id_periodo: dispensações):
+202001: 2
+202002: 1
+   ✓ fato idêntico a venda_medicamento, sem duplicação
+
+[4] Recarga forçada de fevereiro (SNGPC_FORCE): linhas voltam com id_venda novo
+Done. PASS=22 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=22
+fct_venda_medicamento (id_venda | id_periodo | arquivo_origem):
+1 | 202001 | EDA_Industrializados_202001.csv
+4 | 202001 | EDA_Industrializados_202002.csv
+5 | 202002 | EDA_Industrializados_202002.csv
+fct_venda_mensal_municipio (id_periodo: dispensações):
+202001: 2
+202002: 1
+   ✓ fato idêntico a venda_medicamento, sem duplicação
+
+[5] Coluna nova no modelo do fato (esperado: incremental falha; --full-refresh resolve)
+The source and target schemas on this incremental model are out of sync!
+   ✓ dbt run incremental falhou (código 1)
+Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+   ✓ --full-refresh reconstrói o fato com a coluna nova
+
+=== RESULTADO: dbt build sem erros; linhagem por camadas sem ciclos; fato incremental absorve dado atrasado e recarga sem duplicar ✓ ===

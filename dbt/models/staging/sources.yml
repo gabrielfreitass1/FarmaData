@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: farmadata
+    schema: public
+    tables:
+      - name: venda_medicamento
+      - name: unidade_federativa
+      - name: municipio
+      - name: periodo
+      - name: medicamento
+      - name: cid10
+      - name: conselho_profissional
+      - name: tipo_receituario
+      - name: unidade_medida
+      - name: unidade_idade
+      - name: ibge_populacao_municipio
+      - name: ibge_populacao_faixa_etaria_municipio
+      - name: clima_mensal_uf

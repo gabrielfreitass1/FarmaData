@@ -1,0 +1,26 @@
+name: farmadata
+version: "1.0.0"
+config-version: 2
+
+profile: farmadata
+
+models:
+  farmadata:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
+      fct_venda_medicamento:
+        +materialized: incremental
+        +incremental_strategy: delete+insert
+        +unique_key: arquivo_origem
+        +on_schema_change: fail
+        +indexes:
+          - columns: [id_venda]
+            unique: true
+          - columns: [arquivo_origem]

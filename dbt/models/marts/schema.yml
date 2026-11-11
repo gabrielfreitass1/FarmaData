@@ -1,0 +1,124 @@
+version: 2
+
+models:
+  - name: dim_tempo
+    description: Dimensão de tempo mensal.
+    columns:
+      - name: id_periodo
+        description: Chave, mês no formato AAAAMM.
+      - name: ano
+        description: Ano.
+      - name: mes
+        description: Mês, de 1 a 12.
+      - name: nome_mes
+        description: Nome do mês em português.
+      - name: trimestre
+        description: Trimestre, de 1 a 4.
+      - name: semestre
+        description: Semestre, 1 ou 2.
+      - name: data_inicio
+        description: Primeiro dia do mês.
+      - name: data_fim
+        description: Último dia do mês.
+
+  - name: dim_municipio
+    description: Dimensão de município no estado atual, com UF e região. Sem histórico; o SCD2 fica em public.dim_municipio.
+    columns:
+      - name: id_municipio
+        description: Chave do município.
+      - name: nome_municipio
+        description: Nome do município.
+      - name: sigla_uf
+        description: Sigla da UF.
+      - name: nome_uf
+        description: Nome da UF.
+      - name: regiao
+        description: Região do país.
+      - name: codigo_ibge_municipio
+        description: Código IBGE do município.
+
+  - name: dim_medicamento
+    description: Dimensão de medicamento.
+    columns:
+      - name: id_medicamento
+        description: Chave do medicamento.
+      - name: principio_ativo
+        description: Princípio ativo.
+      - name: descricao_apresentacao
+        description: Apresentação comercial.
+
+  - name: dim_cid10
+    description: Dimensão de diagnóstico CID-10.
+    columns:
+      - name: codigo_cid10
+        description: Chave, código CID-10.
+      - name: descricao_cid10
+        description: Descrição completa.
+      - name: descricao_abreviada_cid10
+        description: Descrição abreviada.
+      - name: categoria_cid10
+        description: Categoria de três caracteres.
+      - name: restricao_sexo
+        description: M ou F quando o código se restringe a um sexo.
+      - name: eh_causa_obito
+        description: Verdadeiro quando o código pode ser causa de óbito.
+
+  - name: fct_venda_medicamento
+    description: Fato de dispensação, uma linha por venda. Incremental por arquivo_origem.
+    columns:
+      - name: id_venda
+        description: Chave da dispensação.
+      - name: id_periodo
+        description: Chave de dim_tempo.
+      - name: data_venda
+        description: Primeiro dia do mês da venda.
+      - name: id_municipio
+        description: Chave de dim_municipio.
+      - name: id_medicamento
+        description: Chave de dim_medicamento.
+      - name: codigo_cid10
+        description: Chave de dim_cid10; só antimicrobianos.
+      - name: categoria_cid10
+        description: Categoria do CID-10.
+      - name: quantidade_vendida
+        description: Quantidade dispensada; medida aditiva.
+      - name: eh_antimicrobiano
+        description: Verdadeiro para dispensação de antimicrobiano.
+      - name: sexo_paciente
+        description: Sexo do paciente.
+      - name: idade_paciente_anos
+        description: Idade do paciente em anos.
+      - name: faixa_etaria_paciente
+        description: Faixa etária do paciente de antimicrobiano.
+      - name: arquivo_origem
+        description: CSV do SNGPC que trouxe a linha; chave do reprocessamento incremental.
+
+  - name: fct_venda_mensal_municipio
+    description: Fato agregado por mês e município, com população e clima, para o painel.
+    columns:
+      - name: id_periodo
+        description: Chave de dim_tempo.
+      - name: ano
+        description: Ano.
+      - name: mes
+        description: Mês, de 1 a 12.
+      - name: id_municipio
+        description: Chave de dim_municipio.
+      - name: sigla_uf
+        description: Sigla da UF.
+      - name: regiao
+        description: Região do país.
+      - name: total_dispensacoes
+        description: Número de dispensações.
+      - name: dispensacoes_antimicrobiano
+        description: Número de dispensações de antimicrobiano.
+      - name: quantidade_total
+        description: Soma de quantidade_vendida.
+      - name: populacao
+        description: População do município no ano.
+      - name: dispensacoes_por_mil_habitantes
+        description: Dispensações por 1.000 habitantes.
+      - name: temperatura_media_c
+        description: Temperatura média da UF no mês.
+      - name: precipitacao_media_mm
+        description: Precipitação média da UF no mês.

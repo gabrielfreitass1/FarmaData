@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: int_municipio_com_uf
+    description: Município enriquecido com nome da UF e região.
+    columns:
+      - name: id_municipio
+        description: Identificador do município.
+      - name: nome_municipio
+        description: Nome do município.
+      - name: sigla_uf
+        description: Sigla da UF.
+      - name: nome_uf
+        description: Nome da UF.
+      - name: regiao
+        description: Região do país.
+      - name: codigo_ibge_municipio
+        description: Código IBGE do município.
+
+  - name: int_venda_classificada
+    description: Dispensação com a categoria do CID-10 e a faixa etária do paciente.
+    columns:
+      - name: id_venda
+        description: Identificador da dispensação.
+      - name: id_periodo
+        description: Mês da venda no formato AAAAMM.
+      - name: data_venda
+        description: Primeiro dia do mês da venda.
+      - name: id_municipio
+        description: Município da venda.
+      - name: id_medicamento
+        description: Medicamento dispensado.
+      - name: quantidade_vendida
+        description: Quantidade dispensada.
+      - name: eh_antimicrobiano
+        description: Verdadeiro para dispensação de antimicrobiano.
+      - name: codigo_cid10
+        description: CID-10 informado.
+      - name: categoria_cid10
+        description: Categoria do CID-10; nulo quando o código não está no catálogo.
+      - name: sexo_paciente
+        description: Sexo do paciente.
+      - name: idade_paciente_anos
+        description: Idade do paciente em anos.
+      - name: faixa_etaria_paciente
+        description: "0-11 (criança), 12-17 (adolescente), 18-59 (adulto) ou 60+ (idoso). Nulo fora de antimicrobianos ou sem idade."
+      - name: arquivo_origem
+        description: CSV do SNGPC que trouxe a linha.
+
+  - name: int_venda_mensal_municipio
+    description: Vendas agregadas por mês e município, com população do IBGE e clima do INMET.
+    columns:
+      - name: id_periodo
+        description: Mês no formato AAAAMM.
+      - name: ano
+        description: Ano.
+      - name: mes
+        description: Mês, de 1 a 12.
+      - name: id_municipio
+        description: Município.
+      - name: sigla_uf
+        description: Sigla da UF.
+      - name: regiao
+        description: Região do país.
+      - name: total_dispensacoes
+        description: Número de dispensações.
+      - name: dispensacoes_antimicrobiano
+        description: Número de dispensações de antimicrobiano.
+      - name: quantidade_total
+        description: Soma de quantidade_vendida.
+      - name: populacao
+        description: População do município no ano da venda; nulo sem estimativa do IBGE.
+      - name: dispensacoes_por_mil_habitantes
+        description: total_dispensacoes por 1.000 habitantes; nulo sem população.
+      - name: temperatura_media_c
+        description: Temperatura média da UF no mês.
+      - name: precipitacao_media_mm
+        description: Precipitação média da UF no mês.
