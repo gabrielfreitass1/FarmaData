@@ -107,7 +107,11 @@ function baixarArquivo(url, destino, redirecoes = 0) {
       res.on('data', (c) => (recebido += c.length));
       const out = fs.createWriteStream(tmp);
       res.pipe(out);
+      let encerrado = false;
       const falhar = (err) => {
+        if (encerrado) return;
+        encerrado = true;
+        res.unpipe(out);
         out.destroy();
         fs.rmSync(tmp, { force: true });
         reject(err);
@@ -116,11 +120,17 @@ function baixarArquivo(url, destino, redirecoes = 0) {
       res.on('aborted', () => falhar(new Error('conexão interrompida')));
       out.on('error', falhar);
       out.on('finish', () => {
+        if (encerrado) return;
         if (esperado && recebido !== esperado) {
           return falhar(new Error(`download incompleto (${recebido}/${esperado} bytes)`));
         }
-        fs.renameSync(tmp, destino);
-        resolve();
+        try {
+          fs.renameSync(tmp, destino);
+          encerrado = true;
+          resolve();
+        } catch (err) {
+          falhar(err);
+        }
       });
     });
     req.setTimeout(60000, () => req.destroy(new Error('timeout no download')));
